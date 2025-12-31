@@ -59,9 +59,12 @@ applications:
             - echo "PULSE build completed"
         postBuild:
           commands:
-            - echo "Build completed, artifacts ready"
+            - echo "Preparing standalone output for deployment..."
+            - cp -r .next/static .next/standalone/apps/pulse/.next/static
+            - cp -r public .next/standalone/apps/pulse/public || true
+            - echo "Standalone build ready"
       artifacts:
-        baseDirectory: .next
+        baseDirectory: .next/standalone
         files:
           - '**/*'
       cache:
