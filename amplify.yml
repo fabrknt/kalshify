@@ -59,9 +59,13 @@ applications:
             - echo "PULSE build completed"
         postBuild:
           commands:
+            - echo "Checking standalone .next contents..."
+            - ls -la .next/standalone/apps/pulse/.next/
             - echo "Copying static assets to standalone build..."
             - cp -r .next/static .next/standalone/apps/pulse/.next/static
             - cp -r public .next/standalone/apps/pulse/public || true
+            - echo "Copying trace files for Amplify..."
+            - cp .next/*.nft.json .next/standalone/apps/pulse/.next/ || true
             - echo "Copying required-server-files.json for Amplify..."
             - cp .next/standalone/apps/pulse/.next/required-server-files.json .next/standalone/apps/pulse/required-server-files.json
             - echo "Standalone build prepared for deployment"
