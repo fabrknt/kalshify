@@ -60,9 +60,10 @@ applications:
         postBuild:
           commands:
             - echo "Checking standalone build structure..."
-            - ls -la .next/
-            - ls -la .next/standalone/ || echo "No standalone directory"
-            - mkdir -p .next/standalone/.next
+            - ls -la .next/standalone/
+            - ls -la .next/standalone/apps/ || echo "No apps directory"
+            - ls -la .next/standalone/apps/pulse/ || echo "No pulse directory in apps"
+            - echo "Copying static assets..."
             - cp -r .next/static .next/standalone/.next/static
             - cp -r public .next/standalone/public || true
             - echo "Prepared standalone build for deployment"
