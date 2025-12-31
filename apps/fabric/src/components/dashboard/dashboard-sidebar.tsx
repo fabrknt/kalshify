@@ -19,16 +19,22 @@ export function DashboardSidebar() {
     <div className="flex h-full w-64 flex-col bg-muted border-r border-border">
       {/* Logo */}
       <div className="flex h-16 items-center border-b border-border px-6">
-        <Building2 className="h-8 w-8 text-green-600" />
-        <span className="ml-2 text-xl font-bold text-foreground">FABRIC</span>
+        <span className="text-4xl">🏗️</span>
+        <div className="ml-2 flex items-center gap-2">
+          <span className="text-xl font-bold text-foreground">FABRIC</span>
+          <span className="rounded bg-blue-100 px-1.5 py-0.5 text-xs font-semibold text-blue-800">
+            PREVIEW
+          </span>
+        </div>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 space-y-1 px-3 py-4">
         {navigation.map((item) => {
-          const isActive = item.href === '/dashboard'
-            ? pathname === '/dashboard'
-            : pathname === item.href || pathname.startsWith(item.href + '/');
+          const isActive =
+            item.href === '/dashboard'
+              ? pathname === '/dashboard'
+              : pathname === item.href || pathname.startsWith(item.href + '/');
           const Icon = item.icon;
 
           if (item.disabled) {
@@ -65,8 +71,11 @@ export function DashboardSidebar() {
       {/* Footer */}
       <div className="border-t border-border p-4">
         <div className="text-xs text-muted-foreground/75">
-          <div className="font-medium">FABRIC Terminal</div>
-          <div>Premium M&A for Web3</div>
+          <div className="font-medium text-foreground">FABRIC</div>
+          <div className="mt-1">
+            Part of <span className="font-semibold text-foreground">Fabrknt Suite</span>
+          </div>
+          <div className="mt-1 text-blue-700">👁️ Preview Only</div>
         </div>
       </div>
     </div>
