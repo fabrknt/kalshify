@@ -1,37 +1,41 @@
 version: 1
 frontend:
-    phases:
-        preBuild:
-            commands:
-                - npm ci
-                - echo "Installing dependencies for PULSE"
-        build:
-            commands:
-                - npm run build
-                - echo "PULSE build completed"
-        postBuild:
-            commands:
-                - echo "Post-build completed"
-    artifacts:
-        baseDirectory: .next
-        files:
-            - "**/*"
-    cache:
-        paths:
-            - node_modules/**/*
-            - .next/cache/**/*
+  phases:
+    preBuild:
+      commands:
+        - corepack enable
+        - corepack prepare pnpm@8.15.0 --activate
+        - pnpm install --frozen-lockfile
+        - echo "Installing dependencies for PULSE"
+    build:
+      commands:
+        - cd apps/pulse
+        - pnpm run build
+        - echo "PULSE build completed"
+    postBuild:
+      commands:
+        - echo "Post-build completed"
+  artifacts:
+    baseDirectory: apps/pulse/.next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - apps/pulse/.next/cache/**/*
+      - .turbo/**/*
 customHeaders:
-    - pattern: "**/*"
-      headers:
-          - key: "Cache-Control"
-            value: "public, max-age=31536000, immutable"
-    - pattern: "*.html"
-      headers:
-          - key: "Cache-Control"
-            value: "public, max-age=0, must-revalidate"
-    - pattern: "/api/**"
-      headers:
-          - key: "Cache-Control"
-            value: "no-cache, no-store, must-revalidate"
-          - key: "X-Content-Type-Options"
-            value: "nosniff"
+  - pattern: '**/*'
+    headers:
+      - key: 'Cache-Control'
+        value: 'public, max-age=31536000, immutable'
+  - pattern: '*.html'
+    headers:
+      - key: 'Cache-Control'
+        value: 'public, max-age=0, must-revalidate'
+  - pattern: '/api/**'
+    headers:
+      - key: 'Cache-Control'
+        value: 'no-cache, no-store, must-revalidate'
+      - key: 'X-Content-Type-Options'
+        value: 'nosniff'

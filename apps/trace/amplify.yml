@@ -3,23 +3,27 @@ frontend:
     phases:
         preBuild:
             commands:
-                - npm ci
+                - corepack enable
+                - corepack prepare pnpm@8.15.0 --activate
+                - pnpm install --frozen-lockfile
                 - echo "Installing dependencies for TRACE"
         build:
             commands:
-                - npm run build
+                - cd apps/trace
+                - pnpm run build
                 - echo "TRACE build completed"
         postBuild:
             commands:
                 - echo "Post-build completed"
     artifacts:
-        baseDirectory: .next
+        baseDirectory: apps/trace/.next
         files:
             - "**/*"
     cache:
         paths:
             - node_modules/**/*
-            - .next/cache/**/*
+            - apps/trace/.next/cache/**/*
+            - .turbo/**/*
 customHeaders:
     - pattern: "**/*"
       headers:

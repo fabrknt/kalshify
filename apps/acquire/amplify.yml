@@ -3,23 +3,27 @@ frontend:
   phases:
     preBuild:
       commands:
-        - npm ci
+        - corepack enable
+        - corepack prepare pnpm@8.15.0 --activate
+        - pnpm install --frozen-lockfile
         - echo "Installing dependencies for ACQUIRE"
     build:
       commands:
-        - npm run build
+        - cd apps/acquire
+        - pnpm run build
         - echo "ACQUIRE build completed"
     postBuild:
       commands:
         - echo "Post-build completed"
   artifacts:
-    baseDirectory: .next
+    baseDirectory: apps/acquire/.next
     files:
       - '**/*'
   cache:
     paths:
       - node_modules/**/*
-      - .next/cache/**/*
+      - apps/acquire/.next/cache/**/*
+      - .turbo/**/*
 customHeaders:
   - pattern: '**/*'
     headers:
