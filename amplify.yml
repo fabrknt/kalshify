@@ -58,13 +58,9 @@ applications:
             - pnpm run build
             - echo "PULSE build completed"
       artifacts:
-        baseDirectory: apps/pulse
+        baseDirectory: .next
         files:
-          - '.next/**/*'
-          - 'node_modules/**/*'
-          - 'package.json'
-          - 'next.config.js'
-          - 'public/**/*'
+          - '**/*'
       cache:
         paths:
           - node_modules/**/*
