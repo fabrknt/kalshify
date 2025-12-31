@@ -14,8 +14,8 @@ export default function ActivityPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Activity Metrics</h1>
-        <p className="text-gray-600 mt-2">
+        <h1 className="text-3xl font-bold text-foreground">Activity Metrics</h1>
+        <p className="text-muted-foreground mt-2">
           Detailed view of user activity and engagement over the last 30 days
         </p>
       </div>
@@ -55,52 +55,52 @@ export default function ActivityPage() {
       <ActivityChart data={metrics} metrics={['dau', 'wau', 'mau']} height={400} />
 
       {/* Metrics Table */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">
+      <div className="bg-card rounded-lg border border-border overflow-hidden">
+        <div className="px-6 py-4 border-b border-border">
+          <h3 className="text-lg font-semibold text-foreground">
             Activity Metrics (Last 30 Days)
           </h3>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+            <thead className="bg-muted">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground/75 uppercase tracking-wider">
                   Date
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground/75 uppercase tracking-wider">
                   DAU
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground/75 uppercase tracking-wider">
                   WAU
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground/75 uppercase tracking-wider">
                   MAU
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground/75 uppercase tracking-wider">
                   Transactions
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground/75 uppercase tracking-wider">
                   Activity Score
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-card divide-y divide-gray-200">
               {metrics.slice(0, 10).map((metric) => (
-                <tr key={metric.date} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                <tr key={metric.date} className="hover:bg-muted">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
                     {formatDate(metric.date)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground/90">
                     {formatNumber(metric.dau)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground/90">
                     {formatNumber(metric.wau)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground/90">
                     {formatNumber(metric.mau)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground/90">
                     {formatNumber(metric.txCount)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -121,8 +121,8 @@ export default function ActivityPage() {
             </tbody>
           </table>
         </div>
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-          <p className="text-sm text-gray-500">
+        <div className="px-6 py-4 bg-muted border-t border-border">
+          <p className="text-sm text-muted-foreground/75">
             Showing 10 of {metrics.length} records
           </p>
         </div>

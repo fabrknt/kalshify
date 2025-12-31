@@ -19,7 +19,7 @@ import { cn } from '@/lib/utils';
 const statusColors = {
   active: 'bg-green-100 text-green-800',
   under_offer: 'bg-yellow-100 text-yellow-800',
-  sold: 'bg-gray-100 text-gray-800',
+  sold: 'bg-muted text-gray-800',
   withdrawn: 'bg-red-100 text-red-800',
 };
 
@@ -35,13 +35,13 @@ export default function ListingDetailPage({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted">
       {/* Header */}
-      <div className="border-b border-gray-200 bg-white">
+      <div className="border-b border-border bg-card">
         <div className="p-8">
           <Link
             href="/dashboard/marketplace"
-            className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Marketplace
@@ -49,15 +49,15 @@ export default function ListingDetailPage({
 
           <div className="mt-4 flex items-start justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-foreground">
                 {listing.projectName}
               </h1>
               <div className="mt-2 flex items-center gap-3">
-                <span className="text-sm capitalize text-gray-600">
+                <span className="text-sm capitalize text-muted-foreground">
                   {listing.category}
                 </span>
                 <span className="text-gray-300">•</span>
-                <span className="text-sm capitalize text-gray-600">
+                <span className="text-sm capitalize text-muted-foreground">
                   {listing.chain}
                 </span>
                 <span className="text-gray-300">•</span>
@@ -73,7 +73,7 @@ export default function ListingDetailPage({
             </div>
 
             <div className="text-right">
-              <p className="text-sm text-gray-600">Asking Price</p>
+              <p className="text-sm text-muted-foreground">Asking Price</p>
               <p className="text-3xl font-bold text-green-600">
                 {formatUSD(listing.askingPrice)}
               </p>
@@ -87,9 +87,9 @@ export default function ListingDetailPage({
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Description */}
-            <div className="rounded-lg border border-gray-200 bg-white p-6">
-              <h2 className="text-xl font-bold text-gray-900">About</h2>
-              <p className="mt-4 text-gray-700 leading-relaxed">
+            <div className="rounded-lg border border-border bg-card p-6">
+              <h2 className="text-xl font-bold text-foreground">About</h2>
+              <p className="mt-4 text-foreground/90 leading-relaxed">
                 {listing.description}
               </p>
             </div>
@@ -108,8 +108,8 @@ export default function ListingDetailPage({
             )}
 
             {/* Key Metrics */}
-            <div className="rounded-lg border border-gray-200 bg-white p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">
+            <div className="rounded-lg border border-border bg-card p-6">
+              <h2 className="text-xl font-bold text-foreground mb-6">
                 Key Metrics
               </h2>
 
@@ -117,11 +117,11 @@ export default function ListingDetailPage({
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <DollarSign className="h-5 w-5 text-gray-400" />
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-muted-foreground">
                       Annual Recurring Revenue
                     </span>
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-foreground">
                     {formatUSD(listing.revenue)}
                   </p>
                 </div>
@@ -129,11 +129,11 @@ export default function ListingDetailPage({
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <Users className="h-5 w-5 text-gray-400" />
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-muted-foreground">
                       Monthly Active Users
                     </span>
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-foreground">
                     {formatNumber(listing.mau)}
                   </p>
                 </div>
@@ -141,9 +141,9 @@ export default function ListingDetailPage({
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <TrendingUp className="h-5 w-5 text-gray-400" />
-                    <span className="text-sm text-gray-600">Revenue Multiple</span>
+                    <span className="text-sm text-muted-foreground">Revenue Multiple</span>
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-foreground">
                     {(listing.askingPrice / listing.revenue).toFixed(1)}x
                   </p>
                 </div>
@@ -151,9 +151,9 @@ export default function ListingDetailPage({
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <Calendar className="h-5 w-5 text-gray-400" />
-                    <span className="text-sm text-gray-600">Listed Date</span>
+                    <span className="text-sm text-muted-foreground">Listed Date</span>
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-foreground">
                     {formatDate(listing.createdAt)}
                   </p>
                 </div>
@@ -161,8 +161,8 @@ export default function ListingDetailPage({
             </div>
 
             {/* Additional Details */}
-            <div className="rounded-lg border border-gray-200 bg-white p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">
+            <div className="rounded-lg border border-border bg-card p-6">
+              <h2 className="text-xl font-bold text-foreground mb-6">
                 Additional Information
               </h2>
 
@@ -170,7 +170,7 @@ export default function ListingDetailPage({
                 {listing.website && (
                   <div className="flex items-center gap-3">
                     <Globe className="h-5 w-5 text-gray-400" />
-                    <span className="text-sm text-gray-600">Website:</span>
+                    <span className="text-sm text-muted-foreground">Website:</span>
                     <a
                       href={listing.website}
                       target="_blank"
@@ -184,8 +184,8 @@ export default function ListingDetailPage({
 
                 <div className="flex items-center gap-3">
                   <Building2 className="h-5 w-5 text-gray-400" />
-                  <span className="text-sm text-gray-600">Seller Wallet:</span>
-                  <code className="text-sm font-mono text-gray-900">
+                  <span className="text-sm text-muted-foreground">Seller Wallet:</span>
+                  <code className="text-sm font-mono text-foreground">
                     {listing.sellerWallet}
                   </code>
                 </div>
@@ -193,28 +193,28 @@ export default function ListingDetailPage({
                 {listing.hasNDA && (
                   <div className="flex items-center gap-3">
                     <FileText className="h-5 w-5 text-gray-400" />
-                    <span className="text-sm text-gray-600">NDA Required:</span>
-                    <span className="text-sm font-medium text-gray-900">Yes</span>
+                    <span className="text-sm text-muted-foreground">NDA Required:</span>
+                    <span className="text-sm font-medium text-foreground">Yes</span>
                   </div>
                 )}
 
                 {listing.requiresProofOfFunds && (
                   <div className="flex items-center gap-3">
                     <Shield className="h-5 w-5 text-gray-400" />
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-muted-foreground">
                       Proof of Funds Required:
                     </span>
-                    <span className="text-sm font-medium text-gray-900">Yes</span>
+                    <span className="text-sm font-medium text-foreground">Yes</span>
                   </div>
                 )}
 
                 {listing.minBuyerCapital && (
                   <div className="flex items-center gap-3">
                     <DollarSign className="h-5 w-5 text-gray-400" />
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-muted-foreground">
                       Minimum Buyer Capital:
                     </span>
-                    <span className="text-sm font-medium text-gray-900">
+                    <span className="text-sm font-medium text-foreground">
                       {formatUSD(listing.minBuyerCapital)}
                     </span>
                   </div>
@@ -226,8 +226,8 @@ export default function ListingDetailPage({
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Action Card */}
-            <div className="rounded-lg border border-gray-200 bg-white p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
+            <div className="rounded-lg border border-border bg-card p-6">
+              <h3 className="text-lg font-bold text-foreground mb-4">
                 Interested?
               </h3>
 
@@ -236,16 +236,16 @@ export default function ListingDetailPage({
                   <button className="w-full rounded-lg bg-green-600 px-4 py-3 text-sm font-semibold text-white hover:bg-green-700">
                     Schedule Call
                   </button>
-                  <button className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50">
+                  <button className="w-full rounded-lg border border-gray-300 bg-card px-4 py-3 text-sm font-semibold text-foreground/90 hover:bg-muted">
                     Request Data Room
                   </button>
-                  <button className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50">
+                  <button className="w-full rounded-lg border border-gray-300 bg-card px-4 py-3 text-sm font-semibold text-foreground/90 hover:bg-muted">
                     Make Offer
                   </button>
                 </div>
               ) : (
-                <div className="rounded-lg bg-gray-50 p-4 text-center">
-                  <p className="text-sm text-gray-600">
+                <div className="rounded-lg bg-muted p-4 text-center">
+                  <p className="text-sm text-muted-foreground">
                     This listing is{' '}
                     <span className="font-semibold">
                       {listing.status.replace('_', ' ')}
@@ -256,8 +256,8 @@ export default function ListingDetailPage({
             </div>
 
             {/* Requirements */}
-            <div className="rounded-lg border border-gray-200 bg-white p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
+            <div className="rounded-lg border border-border bg-card p-6">
+              <h3 className="text-lg font-bold text-foreground mb-4">
                 Requirements
               </h3>
 
@@ -266,7 +266,7 @@ export default function ListingDetailPage({
                   <div
                     className={cn(
                       'mt-0.5 h-5 w-5 rounded-full flex items-center justify-center',
-                      listing.hasNDA ? 'bg-green-100' : 'bg-gray-100'
+                      listing.hasNDA ? 'bg-green-100' : 'bg-muted'
                     )}
                   >
                     {listing.hasNDA && (
@@ -274,10 +274,10 @@ export default function ListingDetailPage({
                     )}
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-foreground">
                       NDA Agreement
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-muted-foreground/75">
                       {listing.hasNDA ? 'Required' : 'Not required'}
                     </p>
                   </div>
@@ -287,7 +287,7 @@ export default function ListingDetailPage({
                   <div
                     className={cn(
                       'mt-0.5 h-5 w-5 rounded-full flex items-center justify-center',
-                      listing.requiresProofOfFunds ? 'bg-green-100' : 'bg-gray-100'
+                      listing.requiresProofOfFunds ? 'bg-green-100' : 'bg-muted'
                     )}
                   >
                     {listing.requiresProofOfFunds && (
@@ -295,10 +295,10 @@ export default function ListingDetailPage({
                     )}
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-foreground">
                       Proof of Funds
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-muted-foreground/75">
                       {listing.requiresProofOfFunds ? 'Required' : 'Not required'}
                     </p>
                   </div>
@@ -310,10 +310,10 @@ export default function ListingDetailPage({
                       <DollarSign className="h-3 w-3 text-green-600" />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-foreground">
                         Minimum Capital
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground/75">
                         {formatUSD(listing.minBuyerCapital)}
                       </p>
                     </div>

@@ -26,8 +26,8 @@ export default function DashboardPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Team Vitality Overview</h1>
-        <p className="text-gray-600 mt-2">
+        <h1 className="text-3xl font-bold text-foreground">Team Vitality Overview</h1>
+        <p className="text-muted-foreground mt-2">
           Track team health, contributions, and recognize outstanding work
         </p>
       </div>
@@ -68,15 +68,15 @@ export default function DashboardPage() {
         </div>
 
         {/* Health Components */}
-        <div className="lg:col-span-2 bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="lg:col-span-2 bg-card rounded-lg border border-border p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">
             Health Components
           </h3>
           <div className="space-y-4">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-700">Team Retention</span>
-                <span className="text-sm font-semibold text-gray-900">
+                <span className="text-sm text-foreground/90">Team Retention</span>
+                <span className="text-sm font-semibold text-foreground">
                   {healthScore.teamRetentionScore}/100
                 </span>
               </div>
@@ -90,8 +90,8 @@ export default function DashboardPage() {
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-700">Developer Activity</span>
-                <span className="text-sm font-semibold text-gray-900">
+                <span className="text-sm text-foreground/90">Developer Activity</span>
+                <span className="text-sm font-semibold text-foreground">
                   {healthScore.developerActivityScore}/100
                 </span>
               </div>
@@ -105,8 +105,8 @@ export default function DashboardPage() {
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-700">Community Engagement</span>
-                <span className="text-sm font-semibold text-gray-900">
+                <span className="text-sm text-foreground/90">Community Engagement</span>
+                <span className="text-sm font-semibold text-foreground">
                   {healthScore.communityEngagementScore}/100
                 </span>
               </div>
@@ -120,8 +120,8 @@ export default function DashboardPage() {
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-700">Quality Index</span>
-                <span className="text-sm font-semibold text-gray-900">
+                <span className="text-sm text-foreground/90">Quality Index</span>
+                <span className="text-sm font-semibold text-foreground">
                   {healthScore.qualityIndex}/100
                 </span>
               </div>
@@ -134,8 +134,8 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-gray-200">
-            <p className="text-sm text-gray-600">
+          <div className="mt-6 pt-4 border-t border-border">
+            <p className="text-sm text-muted-foreground">
               The <strong>Omotenashi Quality Index</strong> measures quality over quantity,
               rewarding high-impact contributions more than simple activity counts.
             </p>
@@ -146,7 +146,7 @@ export default function DashboardPage() {
       {/* Top Contributors */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Top Contributors
           </h2>
           <a href="/dashboard/contributors" className="text-sm text-purple-600 hover:text-purple-700">

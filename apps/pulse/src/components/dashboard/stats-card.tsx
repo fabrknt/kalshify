@@ -17,7 +17,7 @@ export function StatsCard({
 }: StatsCardProps) {
   if (loading) {
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="bg-card rounded-lg border border-border p-6">
         <div className="animate-pulse">
           <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
           <div className="h-8 bg-gray-200 rounded w-3/4 mb-2"></div>
@@ -28,10 +28,10 @@ export function StatsCard({
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+    <div className="bg-card rounded-lg border border-border p-6 hover:shadow-md transition-shadow">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-medium text-gray-600">{title}</h3>
+        <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
         {Icon && (
           <div className="p-2 bg-purple-50 rounded-lg">
             <Icon className="h-5 w-5 text-purple-600" />
@@ -41,12 +41,12 @@ export function StatsCard({
 
       {/* Value */}
       <div className="mb-2">
-        <p className="text-3xl font-bold text-gray-900">{value}</p>
+        <p className="text-3xl font-bold text-foreground">{value}</p>
       </div>
 
       {/* Description */}
       {description && (
-        <p className="text-sm text-gray-500">{description}</p>
+        <p className="text-sm text-muted-foreground/75">{description}</p>
       )}
     </div>
   );

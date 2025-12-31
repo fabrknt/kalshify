@@ -17,7 +17,7 @@ const chainColors = {
 const statusColors = {
   active: 'bg-green-100 text-green-700',
   paused: 'bg-yellow-100 text-yellow-700',
-  completed: 'bg-gray-100 text-gray-700',
+  completed: 'bg-muted text-foreground/90',
 };
 
 export default function CampaignDetailsPage({ params }: { params: { id: string } }) {
@@ -35,7 +35,7 @@ export default function CampaignDetailsPage({ params }: { params: { id: string }
       {/* Back Button */}
       <Link
         href="/dashboard/campaigns"
-        className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to Campaigns
@@ -44,7 +44,7 @@ export default function CampaignDetailsPage({ params }: { params: { id: string }
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">{campaign.name}</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">{campaign.name}</h1>
           <div className="flex items-center gap-2">
             <span className={cn(
               'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
@@ -89,7 +89,7 @@ export default function CampaignDetailsPage({ params }: { params: { id: string }
           Campaign Tracking Link
         </h3>
         <div className="flex items-center gap-2">
-          <code className="flex-1 bg-white px-3 py-2 rounded border border-orange-200 text-sm font-mono">
+          <code className="flex-1 bg-card px-3 py-2 rounded border border-orange-200 text-sm font-mono">
             {trackingUrl}
           </code>
           <Button variant="outline" size="sm">
@@ -128,33 +128,33 @@ export default function CampaignDetailsPage({ params }: { params: { id: string }
       {/* Campaign Details */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Budget & Spend */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="bg-card rounded-lg border border-border p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">
             Budget & Spend
           </h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Total Budget</span>
-              <span className="text-lg font-semibold text-gray-900">
+              <span className="text-sm text-muted-foreground">Total Budget</span>
+              <span className="text-lg font-semibold text-foreground">
                 {formatUSD(campaign.budgetUsd)}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Spent</span>
+              <span className="text-sm text-muted-foreground">Spent</span>
               <span className="text-lg font-semibold text-orange-600">
                 {formatUSD(campaign.spend)}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Remaining</span>
+              <span className="text-sm text-muted-foreground">Remaining</span>
               <span className="text-lg font-semibold text-green-600">
                 {formatUSD(metrics.remaining)}
               </span>
             </div>
-            <div className="pt-4 border-t border-gray-200">
+            <div className="pt-4 border-t border-border">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-600">Progress</span>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm text-muted-foreground">Progress</span>
+                <span className="text-sm font-medium text-foreground">
                   {metrics.progress.toFixed(1)}%
                 </span>
               </div>
@@ -170,9 +170,9 @@ export default function CampaignDetailsPage({ params }: { params: { id: string }
                 />
               </div>
             </div>
-            <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-              <span className="text-sm text-gray-600">Avg. Spend / Day</span>
-              <span className="text-sm font-medium text-gray-900">
+            <div className="flex items-center justify-between pt-4 border-t border-border">
+              <span className="text-sm text-muted-foreground">Avg. Spend / Day</span>
+              <span className="text-sm font-medium text-foreground">
                 {formatUSD(metrics.avgSpendPerDay)}
               </span>
             </div>
@@ -180,54 +180,54 @@ export default function CampaignDetailsPage({ params }: { params: { id: string }
         </div>
 
         {/* Campaign Info */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="bg-card rounded-lg border border-border p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">
             Campaign Information
           </h3>
           <div className="space-y-3">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Target Contract</p>
-              <p className="text-sm font-mono text-gray-900">{campaign.targetContract}</p>
+              <p className="text-sm text-muted-foreground mb-1">Target Contract</p>
+              <p className="text-sm font-mono text-foreground">{campaign.targetContract}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600 mb-1">Blockchain</p>
-              <p className="text-sm text-gray-900 capitalize">{campaign.chain}</p>
+              <p className="text-sm text-muted-foreground mb-1">Blockchain</p>
+              <p className="text-sm text-foreground capitalize">{campaign.chain}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600 mb-1">Goal Type</p>
-              <p className="text-sm text-gray-900 capitalize">
+              <p className="text-sm text-muted-foreground mb-1">Goal Type</p>
+              <p className="text-sm text-foreground capitalize">
                 {campaign.goalType}
                 {campaign.goalValue && ` (${formatNumber(campaign.goalValue)})`}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600 mb-1">Start Date</p>
-              <p className="text-sm text-gray-900">{formatDate(campaign.startDate)}</p>
+              <p className="text-sm text-muted-foreground mb-1">Start Date</p>
+              <p className="text-sm text-foreground">{formatDate(campaign.startDate)}</p>
             </div>
             {campaign.endDate && (
               <div>
-                <p className="text-sm text-gray-600 mb-1">End Date</p>
-                <p className="text-sm text-gray-900">{formatDate(campaign.endDate)}</p>
+                <p className="text-sm text-muted-foreground mb-1">End Date</p>
+                <p className="text-sm text-foreground">{formatDate(campaign.endDate)}</p>
               </div>
             )}
             <div>
-              <p className="text-sm text-gray-600 mb-1">Days Running</p>
-              <p className="text-sm text-gray-900">{metrics.daysRunning} days</p>
+              <p className="text-sm text-muted-foreground mb-1">Days Running</p>
+              <p className="text-sm text-foreground">{metrics.daysRunning} days</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600 mb-1">Created</p>
-              <p className="text-sm text-gray-900">{formatDate(campaign.createdAt)}</p>
+              <p className="text-sm text-muted-foreground mb-1">Created</p>
+              <p className="text-sm text-foreground">{formatDate(campaign.createdAt)}</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Recent Conversions Placeholder */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+      <div className="bg-card rounded-lg border border-border p-6">
+        <h3 className="text-lg font-semibold text-foreground mb-4">
           Recent Conversions
         </h3>
-        <p className="text-sm text-gray-500 text-center py-8">
+        <p className="text-sm text-muted-foreground/75 text-center py-8">
           Conversion tracking coming soon
         </p>
       </div>

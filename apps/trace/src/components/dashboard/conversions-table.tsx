@@ -16,7 +16,7 @@ const eventTypeColors = {
   swap: 'bg-blue-100 text-blue-700',
   stake: 'bg-green-100 text-green-700',
   vote: 'bg-yellow-100 text-yellow-700',
-  transfer: 'bg-gray-100 text-gray-700',
+  transfer: 'bg-muted text-foreground/90',
   unstake: 'bg-orange-100 text-orange-700',
 };
 
@@ -57,51 +57,51 @@ export function ConversionsTable({ conversions }: ConversionsTableProps) {
   return (
     <div className="space-y-4">
       {/* Table */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <div className="bg-card rounded-lg border border-border overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+            <thead className="bg-muted">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground/75 uppercase tracking-wider">
                   Timestamp
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground/75 uppercase tracking-wider">
                   Wallet
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground/75 uppercase tracking-wider">
                   Event
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground/75 uppercase tracking-wider">
                   Chain
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground/75 uppercase tracking-wider">
                   Value
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground/75 uppercase tracking-wider">
                   Campaign
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground/75 uppercase tracking-wider">
                   TX Hash
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-card divide-y divide-gray-200">
               {paginatedConversions.map((conversion) => (
-                <tr key={conversion.id} className="hover:bg-gray-50">
+                <tr key={conversion.id} className="hover:bg-muted">
                   {/* Timestamp */}
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                     {formatDate(conversion.timestamp, 'MMM dd, HH:mm')}
                   </td>
 
                   {/* Wallet Address */}
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-2">
-                      <code className="text-xs font-mono text-gray-700">
+                      <code className="text-xs font-mono text-foreground/90">
                         {conversion.walletAddress}
                       </code>
                       <button
                         onClick={() => handleCopy(conversion.walletAddress, `wallet-${conversion.id}`)}
-                        className="text-gray-400 hover:text-gray-600"
+                        className="text-gray-400 hover:text-muted-foreground"
                       >
                         {copiedId === `wallet-${conversion.id}` ? (
                           <Check className="h-3 w-3 text-green-600" />
@@ -137,12 +137,12 @@ export function ConversionsTable({ conversions }: ConversionsTableProps) {
                   </td>
 
                   {/* Value */}
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
                     {conversion.valueUsd > 0 ? formatUSD(conversion.valueUsd) : '-'}
                   </td>
 
                   {/* Campaign */}
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground/90">
                     {conversion.campaignName ? (
                       <Link
                         href={`/dashboard/campaigns/${conversion.campaignId}`}
@@ -160,14 +160,14 @@ export function ConversionsTable({ conversions }: ConversionsTableProps) {
                   {/* TX Hash */}
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-2">
-                      <code className="text-xs font-mono text-gray-700">
+                      <code className="text-xs font-mono text-foreground/90">
                         {conversion.txHash}
                       </code>
                       <a
                         href={getExplorerUrl(conversion.chain, conversion.txHash)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-gray-600"
+                        className="text-gray-400 hover:text-muted-foreground"
                       >
                         <ExternalLink className="h-3 w-3" />
                       </a>
@@ -183,7 +183,7 @@ export function ConversionsTable({ conversions }: ConversionsTableProps) {
       {/* Pagination */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-700">Show</span>
+          <span className="text-sm text-foreground/90">Show</span>
           <select
             value={pageSize}
             onChange={(e) => {
@@ -197,7 +197,7 @@ export function ConversionsTable({ conversions }: ConversionsTableProps) {
             <option value={50}>50</option>
             <option value={100}>100</option>
           </select>
-          <span className="text-sm text-gray-700">
+          <span className="text-sm text-foreground/90">
             Showing {startIndex + 1}-{Math.min(endIndex, conversions.length)} of {conversions.length}
           </span>
         </div>
@@ -206,17 +206,17 @@ export function ConversionsTable({ conversions }: ConversionsTableProps) {
           <button
             onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
             disabled={currentPage === 1}
-            className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+            className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted"
           >
             Previous
           </button>
-          <span className="text-sm text-gray-700">
+          <span className="text-sm text-foreground/90">
             Page {currentPage} of {totalPages}
           </span>
           <button
             onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
             disabled={currentPage === totalPages}
-            className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+            className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted"
           >
             Next
           </button>

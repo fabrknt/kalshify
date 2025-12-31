@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { Building2, DollarSign, TrendingUp, Users, ArrowRight } from 'lucide-react';
-import { DashboardHeader } from '@/components/dashboard/dashboard-header';
 import { StatsCard } from '@/components/dashboard/stats-card';
 import { ListingCard } from '@/components/dashboard/listing-card';
 import { getMockListings, calculateMarketplaceStats } from '@/lib/mock-data';
@@ -12,13 +11,7 @@ export default function DashboardPage() {
   const featuredListings = activeListings.slice(0, 3); // Top 3 active listings
 
   return (
-    <div className="min-h-screen">
-      <DashboardHeader
-        title="M&A Terminal"
-        description="Premium marketplace for Web3 projects with verified signals"
-      />
-
-      <div className="p-8">
+    <div className="space-y-8">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           <StatsCard
@@ -55,10 +48,10 @@ export default function DashboardPage() {
         <div className="mt-8">
           <div className="mb-6 flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-foreground">
                 Featured Listings
               </h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground/75">
                 Top active projects with verified signals
               </p>
             </div>
@@ -81,25 +74,25 @@ export default function DashboardPage() {
         {/* Quick Stats */}
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
           {/* Revenue Breakdown */}
-          <div className="rounded-lg border border-gray-200 bg-white p-6">
-            <h3 className="text-lg font-bold text-gray-900">
+          <div className="rounded-lg border border-border bg-card p-6">
+            <h3 className="text-lg font-bold text-foreground">
               Marketplace Metrics
             </h3>
             <div className="mt-4 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Total Revenue</span>
-                <span className="font-bold text-gray-900">
+                <span className="text-sm text-muted-foreground">Total Revenue</span>
+                <span className="font-bold text-foreground">
                   ${(stats.totalRevenue / 1000000).toFixed(1)}M ARR
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Total MAU</span>
-                <span className="font-bold text-gray-900">
+                <span className="text-sm text-muted-foreground">Total MAU</span>
+                <span className="font-bold text-foreground">
                   {(stats.totalMAU / 1000).toFixed(0)}K Users
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Verified Listings</span>
+                <span className="text-sm text-muted-foreground">Verified Listings</span>
                 <span className="font-bold text-green-600">
                   {listings.filter((l) => l.suiteData?.revenue_verified).length}/
                   {stats.totalListings}
@@ -109,8 +102,8 @@ export default function DashboardPage() {
           </div>
 
           {/* Category Distribution */}
-          <div className="rounded-lg border border-gray-200 bg-white p-6">
-            <h3 className="text-lg font-bold text-gray-900">
+          <div className="rounded-lg border border-border bg-card p-6">
+            <h3 className="text-lg font-bold text-foreground">
               Category Distribution
             </h3>
             <div className="mt-4 space-y-4">
@@ -123,14 +116,14 @@ export default function DashboardPage() {
                   return (
                     <div key={category}>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="capitalize text-gray-600">
+                        <span className="capitalize text-muted-foreground">
                           {category}
                         </span>
-                        <span className="font-medium text-gray-900">
+                        <span className="font-medium text-foreground">
                           {count} ({percentage.toFixed(0)}%)
                         </span>
                       </div>
-                      <div className="mt-1 h-2 w-full rounded-full bg-gray-100">
+                      <div className="mt-1 h-2 w-full rounded-full bg-muted">
                         <div
                           className="h-2 rounded-full bg-green-600"
                           style={{ width: `${percentage}%` }}
@@ -143,7 +136,6 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-      </div>
     </div>
   );
 }

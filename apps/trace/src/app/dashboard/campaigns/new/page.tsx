@@ -28,7 +28,7 @@ export default function NewCampaignPage() {
       {/* Back Button */}
       <Link
         href="/dashboard/campaigns"
-        className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to Campaigns
@@ -36,8 +36,8 @@ export default function NewCampaignPage() {
 
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Create New Campaign</h1>
-        <p className="text-gray-600 mt-2">
+        <h1 className="text-3xl font-bold text-foreground">Create New Campaign</h1>
+        <p className="text-muted-foreground mt-2">
           Set up a new marketing campaign to track conversions and measure ROI
         </p>
       </div>
@@ -56,7 +56,7 @@ export default function NewCampaignPage() {
       </div>
 
       {/* Form */}
-      <div className="bg-white rounded-lg border border-gray-200 p-8">
+      <div className="bg-card rounded-lg border border-border p-8">
         <CampaignForm
           onSubmit={handleSubmit}
           onCancel={handleCancel}
@@ -64,11 +64,11 @@ export default function NewCampaignPage() {
       </div>
 
       {/* Help Text */}
-      <div className="bg-gray-50 rounded-lg p-6">
-        <h3 className="text-sm font-semibold text-gray-900 mb-3">
+      <div className="bg-muted rounded-lg p-6">
+        <h3 className="text-sm font-semibold text-foreground mb-3">
           Campaign Setup Tips
         </h3>
-        <div className="space-y-2 text-sm text-gray-600">
+        <div className="space-y-2 text-sm text-muted-foreground">
           <p>
             <strong>Target Contract:</strong> The smart contract address you want to track interactions with
           </p>

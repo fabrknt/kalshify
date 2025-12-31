@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Filter } from 'lucide-react';
-import { DashboardHeader } from '@/components/dashboard/dashboard-header';
 import { ListingCard } from '@/components/dashboard/listing-card';
 import { getMockListings, Listing } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
@@ -55,24 +54,18 @@ export default function MarketplacePage() {
   });
 
   return (
-    <div className="min-h-screen">
-      <DashboardHeader
-        title="Marketplace"
-        description="Browse all available Web3 projects for acquisition"
-      />
-
-      <div className="p-8">
+    <div className="space-y-8">
         {/* Filters */}
-        <div className="mb-6 rounded-lg border border-gray-200 bg-white p-4">
+        <div className="mb-6 rounded-lg border border-border bg-card p-4">
           <div className="flex items-center gap-2 mb-4">
-            <Filter className="h-5 w-5 text-gray-500" />
-            <h3 className="font-semibold text-gray-900">Filters</h3>
+            <Filter className="h-5 w-5 text-muted-foreground/75" />
+            <h3 className="font-semibold text-foreground">Filters</h3>
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {/* Category Filter */}
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
+              <label className="mb-2 block text-sm font-medium text-foreground/90">
                 Category
               </label>
               <select
@@ -92,7 +85,7 @@ export default function MarketplacePage() {
 
             {/* Status Filter */}
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
+              <label className="mb-2 block text-sm font-medium text-foreground/90">
                 Status
               </label>
               <select
@@ -110,7 +103,7 @@ export default function MarketplacePage() {
 
             {/* Sort By */}
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
+              <label className="mb-2 block text-sm font-medium text-foreground/90">
                 Sort By
               </label>
               <select
@@ -130,7 +123,7 @@ export default function MarketplacePage() {
 
         {/* Results Count */}
         <div className="mb-4 flex items-center justify-between">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             Showing <span className="font-semibold">{sortedListings.length}</span>{' '}
             {sortedListings.length === 1 ? 'listing' : 'listings'}
           </p>
@@ -138,8 +131,8 @@ export default function MarketplacePage() {
 
         {/* Listings Grid */}
         {sortedListings.length === 0 ? (
-          <div className="rounded-lg border border-gray-200 bg-white p-12 text-center">
-            <p className="text-gray-500">
+          <div className="rounded-lg border border-border bg-card p-12 text-center">
+            <p className="text-muted-foreground/75">
               No listings found matching your filters.
             </p>
           </div>
@@ -150,7 +143,6 @@ export default function MarketplacePage() {
             ))}
           </div>
         )}
-      </div>
     </div>
   );
 }

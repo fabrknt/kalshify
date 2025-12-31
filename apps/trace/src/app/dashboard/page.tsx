@@ -14,8 +14,8 @@ export default function DashboardPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
-        <p className="text-gray-600 mt-2">
+        <h1 className="text-3xl font-bold text-foreground">Dashboard Overview</h1>
+        <p className="text-muted-foreground mt-2">
           Track your protocol's activity metrics and engagement
         </p>
       </div>
@@ -61,31 +61,31 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick Stats */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+      <div className="bg-card rounded-lg border border-border p-6">
+        <h3 className="text-lg font-semibold text-foreground mb-4">
           Quick Stats
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
-            <p className="text-sm text-gray-600 mb-1">Transaction Count</p>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-sm text-muted-foreground mb-1">Transaction Count</p>
+            <p className="text-2xl font-bold text-foreground">
               {formatNumber(today.txCount)}
             </p>
-            <p className="text-sm text-gray-500 mt-1">transactions today</p>
+            <p className="text-sm text-muted-foreground/75 mt-1">transactions today</p>
           </div>
           <div>
-            <p className="text-sm text-gray-600 mb-1">Avg. Transaction Value</p>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-sm text-muted-foreground mb-1">Avg. Transaction Value</p>
+            <p className="text-2xl font-bold text-foreground">
               {formatUSD(today.volumeUsd / today.txCount)}
             </p>
-            <p className="text-sm text-gray-500 mt-1">per transaction</p>
+            <p className="text-sm text-muted-foreground/75 mt-1">per transaction</p>
           </div>
           <div>
-            <p className="text-sm text-gray-600 mb-1">Activity Score</p>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-sm text-muted-foreground mb-1">Activity Score</p>
+            <p className="text-2xl font-bold text-foreground">
               {today.activityScore}/100
             </p>
-            <p className="text-sm text-gray-500 mt-1">protocol health</p>
+            <p className="text-sm text-muted-foreground/75 mt-1">protocol health</p>
           </div>
         </div>
       </div>

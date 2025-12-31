@@ -13,8 +13,8 @@ export default function ConversionsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Conversions</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-3xl font-bold text-foreground">Conversions</h1>
+          <p className="text-muted-foreground mt-2">
             Track on-chain conversions and measure campaign attribution
           </p>
         </div>
@@ -26,52 +26,52 @@ export default function ConversionsPage() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-card rounded-lg border border-border p-6">
           <div className="flex items-center gap-2 mb-2">
             <Zap className="h-5 w-5 text-orange-600" />
-            <p className="text-sm text-gray-600">Total Conversions</p>
+            <p className="text-sm text-muted-foreground">Total Conversions</p>
           </div>
-          <p className="text-3xl font-bold text-gray-900">
+          <p className="text-3xl font-bold text-foreground">
             {formatNumber(stats.totalConversions)}
           </p>
-          <p className="text-sm text-gray-500 mt-1">all time</p>
+          <p className="text-sm text-muted-foreground/75 mt-1">all time</p>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-card rounded-lg border border-border p-6">
           <div className="flex items-center gap-2 mb-2">
             <DollarSign className="h-5 w-5 text-green-600" />
-            <p className="text-sm text-gray-600">Total Value</p>
+            <p className="text-sm text-muted-foreground">Total Value</p>
           </div>
-          <p className="text-3xl font-bold text-gray-900">
+          <p className="text-3xl font-bold text-foreground">
             {formatUSD(stats.totalValue)}
           </p>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-muted-foreground/75 mt-1">
             avg. {formatUSD(stats.avgValue)}
           </p>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-card rounded-lg border border-border p-6">
           <div className="flex items-center gap-2 mb-2">
             <Target className="h-5 w-5 text-blue-600" />
-            <p className="text-sm text-gray-600">Attribution Rate</p>
+            <p className="text-sm text-muted-foreground">Attribution Rate</p>
           </div>
-          <p className="text-3xl font-bold text-gray-900">
+          <p className="text-3xl font-bold text-foreground">
             {stats.attributionRate.toFixed(1)}%
           </p>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-muted-foreground/75 mt-1">
             {formatNumber(stats.attributedConversions)} attributed
           </p>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-card rounded-lg border border-border p-6">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="h-5 w-5 text-purple-600" />
-            <p className="text-sm text-gray-600">Organic Conversions</p>
+            <p className="text-sm text-muted-foreground">Organic Conversions</p>
           </div>
-          <p className="text-3xl font-bold text-gray-900">
+          <p className="text-3xl font-bold text-foreground">
             {formatNumber(stats.organicConversions)}
           </p>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-muted-foreground/75 mt-1">
             {((stats.organicConversions / stats.totalConversions) * 100).toFixed(1)}% of total
           </p>
         </div>
@@ -79,8 +79,8 @@ export default function ConversionsPage() {
 
       {/* Event Type Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="bg-card rounded-lg border border-border p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">
             By Event Type
           </h3>
           <div className="space-y-3">
@@ -88,7 +88,7 @@ export default function ConversionsPage() {
               .sort(([, a], [, b]) => b - a)
               .map(([eventType, count]) => (
                 <div key={eventType} className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700 capitalize">{eventType}</span>
+                  <span className="text-sm text-foreground/90 capitalize">{eventType}</span>
                   <div className="flex items-center gap-3">
                     <div className="w-32 bg-gray-200 rounded-full h-2">
                       <div
@@ -98,7 +98,7 @@ export default function ConversionsPage() {
                         }}
                       />
                     </div>
-                    <span className="text-sm font-medium text-gray-900 w-12 text-right">
+                    <span className="text-sm font-medium text-foreground w-12 text-right">
                       {count}
                     </span>
                   </div>
@@ -107,8 +107,8 @@ export default function ConversionsPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="bg-card rounded-lg border border-border p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">
             By Blockchain
           </h3>
           <div className="space-y-3">
@@ -116,7 +116,7 @@ export default function ConversionsPage() {
               .sort(([, a], [, b]) => b - a)
               .map(([chain, count]) => (
                 <div key={chain} className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700 capitalize">{chain}</span>
+                  <span className="text-sm text-foreground/90 capitalize">{chain}</span>
                   <div className="flex items-center gap-3">
                     <div className="w-32 bg-gray-200 rounded-full h-2">
                       <div
@@ -126,7 +126,7 @@ export default function ConversionsPage() {
                         }}
                       />
                     </div>
-                    <span className="text-sm font-medium text-gray-900 w-12 text-right">
+                    <span className="text-sm font-medium text-foreground w-12 text-right">
                       {count}
                     </span>
                   </div>
@@ -156,7 +156,7 @@ export default function ConversionsPage() {
 
       {/* Conversions Table */}
       <div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+        <h2 className="text-xl font-semibold text-foreground mb-4">
           Recent Conversions
         </h2>
         <ConversionsTable conversions={conversions} />

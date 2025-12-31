@@ -15,7 +15,7 @@ export function DashboardHeader() {
   }));
 
   return (
-    <div className="h-16 border-b border-gray-200 bg-white px-8 flex items-center">
+    <div className="h-16 border-b border-border bg-card px-8 flex items-center">
       {/* Breadcrumbs */}
       <nav className="flex items-center gap-2">
         {breadcrumbs.map((crumb, index) => (
@@ -26,8 +26,8 @@ export function DashboardHeader() {
             <span
               className={
                 crumb.isLast
-                  ? 'text-sm font-medium text-gray-900'
-                  : 'text-sm text-gray-500'
+                  ? 'text-sm font-medium text-foreground'
+                  : 'text-sm text-muted-foreground/75'
               }
             >
               {crumb.name}

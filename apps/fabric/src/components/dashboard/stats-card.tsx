@@ -20,7 +20,7 @@ export function StatsCard({
 }: StatsCardProps) {
   if (loading) {
     return (
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
+      <div className="rounded-lg border border-border bg-card p-6">
         <div className="animate-pulse">
           <div className="h-4 w-24 rounded bg-gray-200"></div>
           <div className="mt-2 h-8 w-32 rounded bg-gray-200"></div>
@@ -31,10 +31,10 @@ export function StatsCard({
   }
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-6 transition-shadow hover:shadow-md">
+    <div className="rounded-lg border border-border bg-card p-6 transition-shadow hover:shadow-md">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <p className="text-sm font-medium text-gray-600">{title}</p>
+        <p className="text-sm font-medium text-muted-foreground">{title}</p>
         {Icon && (
           <div className="rounded-lg bg-green-50 p-2">
             <Icon className="h-5 w-5 text-green-600" />
@@ -43,7 +43,7 @@ export function StatsCard({
       </div>
 
       {/* Value */}
-      <p className="mt-2 text-3xl font-bold text-gray-900">{value}</p>
+      <p className="mt-2 text-3xl font-bold text-foreground">{value}</p>
 
       {/* Change Indicator */}
       {change !== undefined && (
@@ -55,13 +55,13 @@ export function StatsCard({
               'text-sm font-medium',
               trend === 'up' && 'text-green-600',
               trend === 'down' && 'text-red-600',
-              !trend && 'text-gray-600'
+              !trend && 'text-muted-foreground'
             )}
           >
             {change > 0 ? '+' : ''}
             {change}%
           </span>
-          <span className="text-sm text-gray-500">vs last month</span>
+          <span className="text-sm text-muted-foreground/75">vs last month</span>
         </div>
       )}
     </div>

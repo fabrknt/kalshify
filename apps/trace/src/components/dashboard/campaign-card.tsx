@@ -18,7 +18,7 @@ const chainColors = {
 const statusColors = {
   active: 'bg-green-100 text-green-700',
   paused: 'bg-yellow-100 text-yellow-700',
-  completed: 'bg-gray-100 text-gray-700',
+  completed: 'bg-muted text-foreground/90',
 };
 
 export function CampaignCard({ campaign }: CampaignCardProps) {
@@ -26,11 +26,11 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
 
   return (
     <Link href={`/dashboard/campaigns/${campaign.id}`}>
-      <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+      <div className="bg-card rounded-lg border border-border p-6 hover:shadow-md transition-shadow cursor-pointer">
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               {campaign.name}
             </h3>
             <div className="flex items-center gap-2">
@@ -53,47 +53,47 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
 
         {/* Contract Address */}
         <div className="mb-4">
-          <p className="text-sm text-gray-600">Target Contract</p>
-          <p className="text-sm font-mono text-gray-900">{campaign.targetContract}</p>
+          <p className="text-sm text-muted-foreground">Target Contract</p>
+          <p className="text-sm font-mono text-foreground">{campaign.targetContract}</p>
         </div>
 
         {/* Metrics Grid */}
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <Users className="h-4 w-4 text-gray-500" />
-              <p className="text-sm text-gray-600">Clicks</p>
+              <Users className="h-4 w-4 text-muted-foreground/75" />
+              <p className="text-sm text-muted-foreground">Clicks</p>
             </div>
-            <p className="text-xl font-bold text-gray-900">{formatNumber(campaign.clicks)}</p>
+            <p className="text-xl font-bold text-foreground">{formatNumber(campaign.clicks)}</p>
           </div>
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <Target className="h-4 w-4 text-gray-500" />
-              <p className="text-sm text-gray-600">Conversions</p>
+              <Target className="h-4 w-4 text-muted-foreground/75" />
+              <p className="text-sm text-muted-foreground">Conversions</p>
             </div>
-            <p className="text-xl font-bold text-gray-900">{formatNumber(campaign.conversions)}</p>
+            <p className="text-xl font-bold text-foreground">{formatNumber(campaign.conversions)}</p>
           </div>
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <TrendingUp className="h-4 w-4 text-gray-500" />
-              <p className="text-sm text-gray-600">Conv. Rate</p>
+              <TrendingUp className="h-4 w-4 text-muted-foreground/75" />
+              <p className="text-sm text-muted-foreground">Conv. Rate</p>
             </div>
-            <p className="text-xl font-bold text-gray-900">{campaign.conversionRate}%</p>
+            <p className="text-xl font-bold text-foreground">{campaign.conversionRate}%</p>
           </div>
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <DollarSign className="h-4 w-4 text-gray-500" />
-              <p className="text-sm text-gray-600">CPC</p>
+              <DollarSign className="h-4 w-4 text-muted-foreground/75" />
+              <p className="text-sm text-muted-foreground">CPC</p>
             </div>
-            <p className="text-xl font-bold text-gray-900">{formatUSD(campaign.costPerConversion)}</p>
+            <p className="text-xl font-bold text-foreground">{formatUSD(campaign.costPerConversion)}</p>
           </div>
         </div>
 
         {/* Budget Progress */}
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm text-gray-600">Budget</p>
-            <p className="text-sm font-medium text-gray-900">
+            <p className="text-sm text-muted-foreground">Budget</p>
+            <p className="text-sm font-medium text-foreground">
               {formatUSD(campaign.spend)} / {formatUSD(campaign.budgetUsd)}
             </p>
           </div>
@@ -109,17 +109,17 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
             />
           </div>
           <div className="flex items-center justify-between mt-1">
-            <p className="text-xs text-gray-500">{metrics.progress.toFixed(1)}% spent</p>
-            <p className="text-xs text-gray-500">{formatUSD(metrics.remaining)} remaining</p>
+            <p className="text-xs text-muted-foreground/75">{metrics.progress.toFixed(1)}% spent</p>
+            <p className="text-xs text-muted-foreground/75">{formatUSD(metrics.remaining)} remaining</p>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-          <p className="text-xs text-gray-500">
+        <div className="flex items-center justify-between pt-4 border-t border-border">
+          <p className="text-xs text-muted-foreground/75">
             Started {formatDate(campaign.startDate)}
           </p>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-muted-foreground/75">
             {metrics.daysRunning} days running
           </p>
         </div>

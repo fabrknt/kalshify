@@ -12,7 +12,7 @@ const platformIcons = {
 const platformColors = {
   github: 'bg-purple-100 text-purple-700',
   discord: 'bg-blue-100 text-blue-700',
-  notion: 'bg-gray-100 text-gray-700',
+  notion: 'bg-muted text-foreground/90',
 };
 
 const typeLabels = {
@@ -36,48 +36,48 @@ export default function ContributionsPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Contributions</h1>
-        <p className="text-gray-600 mt-2">
+        <h1 className="text-3xl font-bold text-foreground">Contributions</h1>
+        <p className="text-muted-foreground mt-2">
           Recent activity across GitHub, Discord, and Notion
         </p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <p className="text-sm text-gray-600 mb-1">Total Contributions</p>
-          <p className="text-3xl font-bold text-gray-900">{formatNumber(contributions.length)}</p>
-          <p className="text-sm text-gray-500 mt-1">last 30 days</p>
+        <div className="bg-card rounded-lg border border-border p-6">
+          <p className="text-sm text-muted-foreground mb-1">Total Contributions</p>
+          <p className="text-3xl font-bold text-foreground">{formatNumber(contributions.length)}</p>
+          <p className="text-sm text-muted-foreground/75 mt-1">last 30 days</p>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-card rounded-lg border border-border p-6">
           <div className="flex items-center gap-2 mb-1">
-            <Github className="h-4 w-4 text-gray-600" />
-            <p className="text-sm text-gray-600">GitHub</p>
+            <Github className="h-4 w-4 text-muted-foreground" />
+            <p className="text-sm text-muted-foreground">GitHub</p>
           </div>
-          <p className="text-3xl font-bold text-gray-900">{formatNumber(githubContributions.length)}</p>
-          <p className="text-sm text-gray-500 mt-1">PRs and reviews</p>
+          <p className="text-3xl font-bold text-foreground">{formatNumber(githubContributions.length)}</p>
+          <p className="text-sm text-muted-foreground/75 mt-1">PRs and reviews</p>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-card rounded-lg border border-border p-6">
           <div className="flex items-center gap-2 mb-1">
-            <MessageSquare className="h-4 w-4 text-gray-600" />
-            <p className="text-sm text-gray-600">Discord</p>
+            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+            <p className="text-sm text-muted-foreground">Discord</p>
           </div>
-          <p className="text-3xl font-bold text-gray-900">{formatNumber(discordContributions.length)}</p>
-          <p className="text-sm text-gray-500 mt-1">messages and praises</p>
+          <p className="text-3xl font-bold text-foreground">{formatNumber(discordContributions.length)}</p>
+          <p className="text-sm text-muted-foreground/75 mt-1">messages and praises</p>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-card rounded-lg border border-border p-6">
           <div className="flex items-center gap-2 mb-1">
-            <FileText className="h-4 w-4 text-gray-600" />
-            <p className="text-sm text-gray-600">Notion</p>
+            <FileText className="h-4 w-4 text-muted-foreground" />
+            <p className="text-sm text-muted-foreground">Notion</p>
           </div>
-          <p className="text-3xl font-bold text-gray-900">{formatNumber(notionContributions.length)}</p>
-          <p className="text-sm text-gray-500 mt-1">pages created</p>
+          <p className="text-3xl font-bold text-foreground">{formatNumber(notionContributions.length)}</p>
+          <p className="text-sm text-muted-foreground/75 mt-1">pages created</p>
         </div>
       </div>
 
       {/* Activity Feed */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+      <div className="bg-card rounded-lg border border-border p-6">
+        <h3 className="text-lg font-semibold text-foreground mb-4">
           Recent Activity
         </h3>
         <div className="space-y-4">
@@ -100,24 +100,24 @@ export default function ContributionsPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-foreground">
                         {contribution.contributorName}
                       </p>
-                      <p className="text-sm text-gray-700 mt-1">
+                      <p className="text-sm text-foreground/90 mt-1">
                         {contribution.title}
                       </p>
                       <div className="flex items-center gap-3 mt-2">
-                        <span className="text-xs text-gray-500 capitalize">
+                        <span className="text-xs text-muted-foreground/75 capitalize">
                           {typeLabels[contribution.type]}
                         </span>
                         <span className="text-xs text-gray-400">•</span>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-muted-foreground/75">
                           {formatRelativeTime(contribution.timestamp)}
                         </span>
                         {contribution.metadata?.channel && (
                           <>
                             <span className="text-xs text-gray-400">•</span>
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-muted-foreground/75">
                               {contribution.metadata.channel}
                             </span>
                           </>
@@ -143,7 +143,7 @@ export default function ContributionsPage() {
                       <p className="text-sm font-semibold text-purple-600">
                         +{contribution.score}
                       </p>
-                      <p className="text-xs text-gray-500">points</p>
+                      <p className="text-xs text-muted-foreground/75">points</p>
                     </div>
                   </div>
                 </div>
@@ -152,8 +152,8 @@ export default function ContributionsPage() {
           })}
         </div>
 
-        <div className="mt-6 pt-4 border-t border-gray-200 text-center">
-          <p className="text-sm text-gray-500">
+        <div className="mt-6 pt-4 border-t border-border text-center">
+          <p className="text-sm text-muted-foreground/75">
             Showing 20 of {contributions.length} contributions
           </p>
         </div>

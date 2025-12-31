@@ -32,16 +32,18 @@ export function DashboardSidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="flex h-full w-64 flex-col bg-gray-50 border-r border-gray-200">
+    <div className="flex h-full w-64 flex-col bg-muted border-r border-border">
       {/* Brand Header */}
-      <div className="flex h-16 items-center px-6 border-b border-gray-200">
+      <div className="flex h-16 items-center px-6 border-b border-border">
         <h1 className="text-2xl font-bold text-orange-600">TRACE</h1>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 space-y-1 px-3 py-4">
         {navigation.map((item) => {
-          const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+          const isActive = item.href === '/dashboard'
+            ? pathname === '/dashboard'
+            : pathname === item.href || pathname.startsWith(item.href + '/');
           const Icon = item.icon;
 
           return (
@@ -54,7 +56,7 @@ export function DashboardSidebar() {
                   ? 'bg-orange-100 text-orange-700'
                   : item.disabled
                   ? 'text-gray-400 cursor-not-allowed'
-                  : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                  : 'text-foreground/90 hover:bg-muted hover:text-foreground'
               )}
               onClick={(e) => item.disabled && e.preventDefault()}
             >
@@ -69,14 +71,14 @@ export function DashboardSidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-gray-200 p-4">
+      <div className="border-t border-border p-4">
         <div className="flex items-center gap-3">
           <div className="h-8 w-8 rounded-full bg-orange-600 flex items-center justify-center text-white text-sm font-medium">
             U
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">User</p>
-            <p className="text-xs text-gray-500 truncate">Connected</p>
+            <p className="text-sm font-medium text-foreground truncate">User</p>
+            <p className="text-xs text-muted-foreground/75 truncate">Connected</p>
           </div>
         </div>
       </div>

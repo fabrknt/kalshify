@@ -21,8 +21,8 @@ export default function ContributorsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Contributors</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-3xl font-bold text-foreground">Contributors</h1>
+          <p className="text-muted-foreground mt-2">
             View and manage team members and their contributions
           </p>
         </div>
@@ -34,36 +34,36 @@ export default function ContributorsPage() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <p className="text-sm text-gray-600 mb-1">Total Contributors</p>
-          <p className="text-3xl font-bold text-gray-900">{contributors.length}</p>
-          <p className="text-sm text-gray-500 mt-1">
+        <div className="bg-card rounded-lg border border-border p-6">
+          <p className="text-sm text-muted-foreground mb-1">Total Contributors</p>
+          <p className="text-3xl font-bold text-foreground">{contributors.length}</p>
+          <p className="text-sm text-muted-foreground/75 mt-1">
             {contributors.filter(c => c.isActive).length} active
           </p>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-card rounded-lg border border-border p-6">
           <div className="flex items-center gap-2 mb-1">
-            <Github className="h-4 w-4 text-gray-600" />
-            <p className="text-sm text-gray-600">GitHub Score</p>
+            <Github className="h-4 w-4 text-muted-foreground" />
+            <p className="text-sm text-muted-foreground">GitHub Score</p>
           </div>
-          <p className="text-3xl font-bold text-gray-900">{formatNumber(totalGithub)}</p>
-          <p className="text-sm text-gray-500 mt-1">total contribution</p>
+          <p className="text-3xl font-bold text-foreground">{formatNumber(totalGithub)}</p>
+          <p className="text-sm text-muted-foreground/75 mt-1">total contribution</p>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-card rounded-lg border border-border p-6">
           <div className="flex items-center gap-2 mb-1">
-            <MessageSquare className="h-4 w-4 text-gray-600" />
-            <p className="text-sm text-gray-600">Discord Score</p>
+            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+            <p className="text-sm text-muted-foreground">Discord Score</p>
           </div>
-          <p className="text-3xl font-bold text-gray-900">{formatNumber(totalDiscord)}</p>
-          <p className="text-sm text-gray-500 mt-1">total contribution</p>
+          <p className="text-3xl font-bold text-foreground">{formatNumber(totalDiscord)}</p>
+          <p className="text-sm text-muted-foreground/75 mt-1">total contribution</p>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-card rounded-lg border border-border p-6">
           <div className="flex items-center gap-2 mb-1">
-            <FileText className="h-4 w-4 text-gray-600" />
-            <p className="text-sm text-gray-600">Notion Score</p>
+            <FileText className="h-4 w-4 text-muted-foreground" />
+            <p className="text-sm text-muted-foreground">Notion Score</p>
           </div>
-          <p className="text-3xl font-bold text-gray-900">{formatNumber(totalNotion)}</p>
-          <p className="text-sm text-gray-500 mt-1">total contribution</p>
+          <p className="text-3xl font-bold text-foreground">{formatNumber(totalNotion)}</p>
+          <p className="text-sm text-muted-foreground/75 mt-1">total contribution</p>
         </div>
       </div>
 
@@ -86,7 +86,7 @@ export default function ContributorsPage() {
       {/* Core Contributors */}
       {coreContributors.length > 0 && (
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          <h2 className="text-xl font-semibold text-foreground mb-4">
             Core Team ({coreContributors.length})
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -100,7 +100,7 @@ export default function ContributorsPage() {
       {/* Regular Contributors */}
       {regularContributors.length > 0 && (
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          <h2 className="text-xl font-semibold text-foreground mb-4">
             Contributors ({regularContributors.length})
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -114,7 +114,7 @@ export default function ContributorsPage() {
       {/* Community Contributors */}
       {communityContributors.length > 0 && (
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          <h2 className="text-xl font-semibold text-foreground mb-4">
             Community ({communityContributors.length})
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

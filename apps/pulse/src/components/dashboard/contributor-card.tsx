@@ -17,7 +17,7 @@ const roleColors = {
 export function ContributorCard({ contributor }: ContributorCardProps) {
   return (
     <Link href={`/dashboard/contributors/${contributor.id}`}>
-      <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+      <div className="bg-card rounded-lg border border-border p-6 hover:shadow-md transition-shadow cursor-pointer">
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
@@ -25,10 +25,10 @@ export function ContributorCard({ contributor }: ContributorCardProps) {
               {contributor.name.charAt(0)}
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-lg font-semibold text-foreground">
                 {contributor.name}
               </h3>
-              <p className="text-sm text-gray-500 font-mono">
+              <p className="text-sm text-muted-foreground/75 font-mono">
                 {truncateAddress(contributor.walletAddress)}
               </p>
             </div>
@@ -44,8 +44,8 @@ export function ContributorCard({ contributor }: ContributorCardProps) {
         </div>
 
         {/* Total Score */}
-        <div className="mb-4 pb-4 border-b border-gray-200">
-          <p className="text-sm text-gray-600 mb-1">Total Contribution Score</p>
+        <div className="mb-4 pb-4 border-b border-border">
+          <p className="text-sm text-muted-foreground mb-1">Total Contribution Score</p>
           <p className="text-3xl font-bold text-purple-600">
             {formatNumber(contributor.totalScore)}
           </p>
@@ -55,36 +55,36 @@ export function ContributorCard({ contributor }: ContributorCardProps) {
         <div className="grid grid-cols-3 gap-3 mb-4">
           <div>
             <div className="flex items-center gap-1 mb-1">
-              <Github className="h-3 w-3 text-gray-500" />
-              <p className="text-xs text-gray-600">GitHub</p>
+              <Github className="h-3 w-3 text-muted-foreground/75" />
+              <p className="text-xs text-muted-foreground">GitHub</p>
             </div>
-            <p className="text-sm font-semibold text-gray-900">
+            <p className="text-sm font-semibold text-foreground">
               {formatNumber(contributor.githubScore)}
             </p>
           </div>
           <div>
             <div className="flex items-center gap-1 mb-1">
-              <MessageSquare className="h-3 w-3 text-gray-500" />
-              <p className="text-xs text-gray-600">Discord</p>
+              <MessageSquare className="h-3 w-3 text-muted-foreground/75" />
+              <p className="text-xs text-muted-foreground">Discord</p>
             </div>
-            <p className="text-sm font-semibold text-gray-900">
+            <p className="text-sm font-semibold text-foreground">
               {formatNumber(contributor.discordScore)}
             </p>
           </div>
           <div>
             <div className="flex items-center gap-1 mb-1">
-              <FileText className="h-3 w-3 text-gray-500" />
-              <p className="text-xs text-gray-600">Notion</p>
+              <FileText className="h-3 w-3 text-muted-foreground/75" />
+              <p className="text-xs text-muted-foreground">Notion</p>
             </div>
-            <p className="text-sm font-semibold text-gray-900">
+            <p className="text-sm font-semibold text-foreground">
               {formatNumber(contributor.notionScore)}
             </p>
           </div>
         </div>
 
         {/* Recognition */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-          <div className="text-sm text-gray-600">
+        <div className="flex items-center justify-between pt-4 border-t border-border">
+          <div className="text-sm text-muted-foreground">
             <span className="font-medium text-purple-600">{contributor.praisesReceived}</span> praises received
           </div>
           <div
@@ -92,7 +92,7 @@ export function ContributorCard({ contributor }: ContributorCardProps) {
               'text-xs px-2 py-1 rounded-full',
               contributor.isActive
                 ? 'bg-green-100 text-green-700'
-                : 'bg-gray-100 text-gray-600'
+                : 'bg-muted text-muted-foreground'
             )}
           >
             {contributor.isActive

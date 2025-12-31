@@ -13,7 +13,7 @@ interface ListingCardProps {
 const statusColors = {
   active: 'bg-green-100 text-green-800',
   under_offer: 'bg-yellow-100 text-yellow-800',
-  sold: 'bg-gray-100 text-gray-800',
+  sold: 'bg-muted text-gray-800',
   withdrawn: 'bg-red-100 text-red-800',
 };
 
@@ -38,8 +38,8 @@ export function ListingCard({ listing }: ListingCardProps) {
       : 'text-red-600 bg-red-50';
 
   return (
-    <Link href={`/dashboard/marketplace/${listing.id}`}>
-      <div className="group rounded-lg border border-gray-200 bg-white p-6 transition-all hover:border-green-300 hover:shadow-lg">
+    <div className="group rounded-lg border border-border bg-card p-6 transition-all hover:border-green-300 hover:shadow-lg">
+      <Link href={`/dashboard/marketplace/${listing.id}`} className="block">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -47,10 +47,10 @@ export function ListingCard({ listing }: ListingCardProps) {
               <CategoryIcon className="h-6 w-6 text-green-600" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900 group-hover:text-green-600">
+              <h3 className="text-lg font-bold text-foreground group-hover:text-green-600">
                 {listing.projectName}
               </h3>
-              <p className="text-sm text-gray-500 capitalize">
+              <p className="text-sm text-muted-foreground/75 capitalize">
                 {listing.category} • {listing.chain}
               </p>
             </div>
@@ -68,27 +68,27 @@ export function ListingCard({ listing }: ListingCardProps) {
         </div>
 
         {/* Description */}
-        <p className="mt-4 line-clamp-2 text-sm text-gray-600">
+        <p className="mt-4 line-clamp-2 text-sm text-muted-foreground">
           {listing.description}
         </p>
 
         {/* Metrics Grid */}
         <div className="mt-4 grid grid-cols-3 gap-4">
           <div>
-            <p className="text-xs text-gray-500">Asking Price</p>
-            <p className="mt-1 text-lg font-bold text-gray-900">
+            <p className="text-xs text-muted-foreground/75">Asking Price</p>
+            <p className="mt-1 text-lg font-bold text-foreground">
               {formatUSD(listing.askingPrice)}
             </p>
           </div>
           <div>
-            <p className="text-xs text-gray-500">Revenue (ARR)</p>
-            <p className="mt-1 text-lg font-bold text-gray-900">
+            <p className="text-xs text-muted-foreground/75">Revenue (ARR)</p>
+            <p className="mt-1 text-lg font-bold text-foreground">
               {formatUSD(listing.revenue)}
             </p>
           </div>
           <div>
-            <p className="text-xs text-gray-500">MAU</p>
-            <p className="mt-1 text-lg font-bold text-gray-900">
+            <p className="text-xs text-muted-foreground/75">MAU</p>
+            <p className="mt-1 text-lg font-bold text-foreground">
               {formatNumber(listing.mau)}
             </p>
           </div>
@@ -106,8 +106,8 @@ export function ListingCard({ listing }: ListingCardProps) {
               </div>
             )}
             {listing.hasNDA && (
-              <div className="rounded-full bg-gray-100 px-2 py-1">
-                <span className="text-xs font-medium text-gray-700">NDA</span>
+              <div className="rounded-full bg-muted px-2 py-1">
+                <span className="text-xs font-medium text-foreground/90">NDA</span>
               </div>
             )}
           </div>
@@ -125,22 +125,22 @@ export function ListingCard({ listing }: ListingCardProps) {
             </div>
           )}
         </div>
+      </Link>
 
-        {/* Seller */}
-        <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
-          <span>Seller: {truncateAddress(listing.sellerWallet)}</span>
-          {listing.website && (
-            <a
-              href={listing.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-green-600 hover:underline"
-            >
-              Visit Website →
-            </a>
-          )}
-        </div>
+      {/* Seller - Outside Link to avoid nested anchors */}
+      <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground/75">
+        <span>Seller: {truncateAddress(listing.sellerWallet)}</span>
+        {listing.website && (
+          <a
+            href={listing.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-green-600 hover:underline"
+          >
+            Visit Website →
+          </a>
+        )}
       </div>
-    </Link>
+    </div>
   );
 }

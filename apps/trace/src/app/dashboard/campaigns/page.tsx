@@ -22,8 +22,8 @@ export default function CampaignsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Campaigns</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-3xl font-bold text-foreground">Campaigns</h1>
+          <p className="text-muted-foreground mt-2">
             Manage and track your marketing campaigns
           </p>
         </div>
@@ -37,31 +37,31 @@ export default function CampaignsPage() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <p className="text-sm text-gray-600 mb-1">Total Campaigns</p>
-          <p className="text-3xl font-bold text-gray-900">{campaigns.length}</p>
-          <p className="text-sm text-gray-500 mt-1">
+        <div className="bg-card rounded-lg border border-border p-6">
+          <p className="text-sm text-muted-foreground mb-1">Total Campaigns</p>
+          <p className="text-3xl font-bold text-foreground">{campaigns.length}</p>
+          <p className="text-sm text-muted-foreground/75 mt-1">
             {activeCampaigns.length} active
           </p>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <p className="text-sm text-gray-600 mb-1">Total Clicks</p>
-          <p className="text-3xl font-bold text-gray-900">{formatNumber(totalClicks)}</p>
-          <p className="text-sm text-gray-500 mt-1">across all campaigns</p>
+        <div className="bg-card rounded-lg border border-border p-6">
+          <p className="text-sm text-muted-foreground mb-1">Total Clicks</p>
+          <p className="text-3xl font-bold text-foreground">{formatNumber(totalClicks)}</p>
+          <p className="text-sm text-muted-foreground/75 mt-1">across all campaigns</p>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <p className="text-sm text-gray-600 mb-1">Total Conversions</p>
-          <p className="text-3xl font-bold text-gray-900">{formatNumber(totalConversions)}</p>
-          <p className="text-sm text-gray-500 mt-1">
+        <div className="bg-card rounded-lg border border-border p-6">
+          <p className="text-sm text-muted-foreground mb-1">Total Conversions</p>
+          <p className="text-3xl font-bold text-foreground">{formatNumber(totalConversions)}</p>
+          <p className="text-sm text-muted-foreground/75 mt-1">
             {avgConversionRate.toFixed(1)}% avg. rate
           </p>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <p className="text-sm text-gray-600 mb-1">Total Spend</p>
-          <p className="text-3xl font-bold text-gray-900">
+        <div className="bg-card rounded-lg border border-border p-6">
+          <p className="text-sm text-muted-foreground mb-1">Total Spend</p>
+          <p className="text-3xl font-bold text-foreground">
             ${formatNumber(totalSpend)}
           </p>
-          <p className="text-sm text-gray-500 mt-1">lifetime spend</p>
+          <p className="text-sm text-muted-foreground/75 mt-1">lifetime spend</p>
         </div>
       </div>
 
@@ -85,7 +85,7 @@ export default function CampaignsPage() {
       {/* Active Campaigns */}
       {activeCampaigns.length > 0 && (
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          <h2 className="text-xl font-semibold text-foreground mb-4">
             Active Campaigns ({activeCampaigns.length})
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -99,7 +99,7 @@ export default function CampaignsPage() {
       {/* Paused Campaigns */}
       {pausedCampaigns.length > 0 && (
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          <h2 className="text-xl font-semibold text-foreground mb-4">
             Paused Campaigns ({pausedCampaigns.length})
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -113,7 +113,7 @@ export default function CampaignsPage() {
       {/* Completed Campaigns */}
       {completedCampaigns.length > 0 && (
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          <h2 className="text-xl font-semibold text-foreground mb-4">
             Completed Campaigns ({completedCampaigns.length})
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -126,8 +126,8 @@ export default function CampaignsPage() {
 
       {/* Empty State */}
       {campaigns.length === 0 && (
-        <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
-          <p className="text-gray-600 mb-4">No campaigns yet</p>
+        <div className="bg-card rounded-lg border border-border p-12 text-center">
+          <p className="text-muted-foreground mb-4">No campaigns yet</p>
           <Link href="/dashboard/campaigns/new">
             <Button className="bg-orange-600 hover:bg-orange-700 text-white">
               Create Your First Campaign

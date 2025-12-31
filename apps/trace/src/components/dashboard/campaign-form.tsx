@@ -51,7 +51,7 @@ export function CampaignForm({
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* Campaign Name */}
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="name" className="block text-sm font-medium text-foreground/90 mb-2">
           Campaign Name *
         </label>
         <input
@@ -71,7 +71,7 @@ export function CampaignForm({
 
       {/* Chain Selection */}
       <div>
-        <label htmlFor="chain" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="chain" className="block text-sm font-medium text-foreground/90 mb-2">
           Blockchain *
         </label>
         <select
@@ -88,7 +88,7 @@ export function CampaignForm({
 
       {/* Target Contract */}
       <div>
-        <label htmlFor="targetContract" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="targetContract" className="block text-sm font-medium text-foreground/90 mb-2">
           Target Contract Address *
         </label>
         <input
@@ -108,11 +108,11 @@ export function CampaignForm({
 
       {/* Budget */}
       <div>
-        <label htmlFor="budgetUsd" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="budgetUsd" className="block text-sm font-medium text-foreground/90 mb-2">
           Budget (USD) *
         </label>
         <div className="relative">
-          <span className="absolute left-3 top-2 text-gray-500">$</span>
+          <span className="absolute left-3 top-2 text-muted-foreground/75">$</span>
           <input
             {...register('budgetUsd', { valueAsNumber: true })}
             type="number"
@@ -132,7 +132,7 @@ export function CampaignForm({
 
       {/* Goal Type */}
       <div>
-        <label htmlFor="goalType" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="goalType" className="block text-sm font-medium text-foreground/90 mb-2">
           Goal Type *
         </label>
         <select
@@ -148,7 +148,7 @@ export function CampaignForm({
 
       {/* Goal Value */}
       <div>
-        <label htmlFor="goalValue" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="goalValue" className="block text-sm font-medium text-foreground/90 mb-2">
           Goal Value (Optional)
         </label>
         <input
@@ -158,14 +158,14 @@ export function CampaignForm({
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
           placeholder="e.g., 500 conversions"
         />
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-muted-foreground/75">
           Target number to achieve for this campaign
         </p>
       </div>
 
       {/* Start Date */}
       <div>
-        <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="startDate" className="block text-sm font-medium text-foreground/90 mb-2">
           Start Date *
         </label>
         <input
@@ -177,7 +177,7 @@ export function CampaignForm({
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
+      <div className="flex items-center gap-3 pt-4 border-t border-border">
         {onCancel && (
           <Button
             type="button"

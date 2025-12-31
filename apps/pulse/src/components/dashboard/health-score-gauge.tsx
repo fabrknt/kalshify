@@ -57,9 +57,9 @@ export function HealthScoreGauge({
   const offset = circumference - (clampedScore / 100) * circumference;
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6 flex flex-col items-center justify-center">
+    <div className="bg-card rounded-lg border border-border p-6 flex flex-col items-center justify-center">
       {showLabel && (
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <h3 className="text-lg font-semibold text-foreground mb-4">
           Organizational Health Score
         </h3>
       )}
@@ -102,7 +102,7 @@ export function HealthScoreGauge({
           <span className={cn(config.textSize, 'font-bold', getScoreColor(clampedScore))}>
             {Math.round(clampedScore)}
           </span>
-          <span className={cn(config.labelSize, 'text-gray-500 font-medium')}>
+          <span className={cn(config.labelSize, 'text-muted-foreground/75 font-medium')}>
             out of 100
           </span>
         </div>
@@ -110,7 +110,7 @@ export function HealthScoreGauge({
 
       {/* Score Description */}
       <div className="mt-4 text-center">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           {clampedScore >= 70 && 'Excellent team vitality! Strong contributor engagement.'}
           {clampedScore >= 40 && clampedScore < 70 && 'Good vitality. Opportunities for improvement.'}
           {clampedScore < 40 && 'Team vitality needs attention. Consider boosting engagement.'}
