@@ -57,8 +57,13 @@ applications:
             - cd apps/pulse
             - pnpm run build
             - echo "PULSE build completed"
+        postBuild:
+          commands:
+            - cp -r .next/static .next/standalone/.next/static
+            - cp -r public .next/standalone/public || true
+            - echo "Prepared standalone build for deployment"
       artifacts:
-        baseDirectory: .next
+        baseDirectory: .next/standalone
         files:
           - '**/*'
       cache:
