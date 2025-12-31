@@ -57,26 +57,18 @@ applications:
             - cd apps/pulse
             - pnpm run build
             - echo "PULSE build completed"
-        postBuild:
-          commands:
-            - echo "Preparing node_modules for Amplify runtime..."
-            - 'echo "Current directory: $(pwd)"'
-            - echo "Checking root node_modules..."
-            - 'ls -d ../../node_modules/next 2>/dev/null && echo "next found in root node_modules" || echo "next not in root"'
-            - echo "Copying node_modules from monorepo root to .next..."
-            - cp -rL ../../node_modules .next/node_modules
-            - cp package.json .next/package.json
-            - echo "Verifying copy succeeded..."
-            - 'test -d .next/node_modules/next && echo "next successfully copied to .next/node_modules" || (echo "ERROR: next not found after copy" && exit 1)'
-            - echo "Post-build completed"
       artifacts:
-        baseDirectory: .next
+        baseDirectory: apps/pulse
         files:
-          - '**/*'
+          - '.next/**/*'
+          - 'node_modules/**/*'
+          - 'package.json'
+          - 'next.config.js'
+          - 'public/**/*'
       cache:
         paths:
           - node_modules/**/*
-          - .next/cache/**/*
+          - apps/pulse/.next/cache/**/*
           - .turbo/**/*
     customHeaders:
       - pattern: '**/*'
