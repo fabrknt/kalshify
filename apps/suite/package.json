@@ -1,11 +1,11 @@
 {
-  "name": "@fabrknt/acquire",
+  "name": "@fabrknt/suite",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3003",
+    "dev": "next dev -p 3000",
     "build": "next build",
-    "start": "next start -p 3003",
+    "start": "next start -p 3000",
     "lint": "next lint",
     "type-check": "tsc --noEmit"
   },

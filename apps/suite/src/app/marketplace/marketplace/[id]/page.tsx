@@ -12,7 +12,7 @@ import {
   FileText,
 } from 'lucide-react';
 import { getListingById } from '@/lib/mock-data';
-import { formatUSD, formatNumber, formatDate, truncateAddress } from '@/lib/utils/format';
+import { formatUSD, formatNumber, formatDate } from '@/lib/utils/format';
 import { SuiteRibbon } from '@fabrknt/ui';
 import { cn } from '@/lib/utils';
 
@@ -40,7 +40,7 @@ export default function ListingDetailPage({
       <div className="border-b border-border bg-card">
         <div className="p-8">
           <Link
-            href="/dashboard/marketplace"
+            href="/marketplace/marketplace"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="h-4 w-4" />

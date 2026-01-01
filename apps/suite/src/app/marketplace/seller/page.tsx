@@ -130,7 +130,7 @@ export default function SellerDashboardPage() {
                 <td className="whitespace-nowrap px-6 py-4 text-sm">
                   <div className="flex items-center gap-2">
                     <Link
-                      href={`/dashboard/marketplace/${listing.id}`}
+                      href={`/marketplace/marketplace/${listing.id}`}
                       className="text-green-600 hover:text-green-900"
                       title="View"
                     >

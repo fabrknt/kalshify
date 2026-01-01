@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Filter } from 'lucide-react';
 import { ListingCard } from '@/components/dashboard/listing-card';
 import { getMockListings, Listing } from '@/lib/mock-data';
-import { cn } from '@/lib/utils';
 
 type CategoryFilter = 'all' | Listing['category'];
 type StatusFilter = 'all' | Listing['status'];

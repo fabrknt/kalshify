@@ -6,10 +6,10 @@ import { Building2, LayoutDashboard, ShoppingBag, Users, X, Heart, BarChart3 } f
 import { cn } from '@/lib/utils';
 
 const navigation = [
-  { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Marketplace', href: '/dashboard/marketplace', icon: ShoppingBag },
-  { name: 'My Listings', href: '/dashboard/seller', icon: Building2 },
-  { name: 'Buyers', href: '/dashboard/buyers', icon: Users, disabled: true },
+  { name: 'Overview', href: '/marketplace', icon: LayoutDashboard },
+  { name: 'Marketplace', href: '/marketplace/marketplace', icon: ShoppingBag },
+  { name: 'My Listings', href: '/marketplace/seller', icon: Building2 },
+  { name: 'Buyers', href: '/marketplace/buyers', icon: Users, disabled: true },
 ];
 
 interface DashboardSidebarProps {
@@ -34,7 +34,7 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
           <div className="flex h-16 items-center justify-between border-b border-border px-6">
             <div className="flex items-center gap-2">
               <ShoppingBag className="h-5 w-5" style={{ color: '#06b6d4' }} />
-              <span className="text-xl font-bold text-foreground">ACQUIRE</span>
+              <span className="text-xl font-bold text-foreground">MARKETPLACE</span>
             </div>
             <button
               onClick={onClose}
@@ -49,8 +49,8 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
           <nav className="flex-1 space-y-1 px-3 py-4 overflow-y-auto">
             {navigation.map((item) => {
               const isActive =
-                item.href === '/dashboard'
-                  ? pathname === '/dashboard'
+                item.href === '/marketplace'
+                  ? pathname === '/marketplace'
                   : pathname === item.href || pathname.startsWith(item.href + '/');
               const Icon = item.icon;
 
@@ -122,7 +122,7 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
                 }}
               >
                 <ShoppingBag className="h-3.5 w-3.5" />
-                <span>ACQUIRE</span>
+                <span>MARKETPLACE</span>
                 <span className="ml-auto text-[10px]">●</span>
               </div>
             </div>
@@ -131,7 +131,7 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
           {/* Footer */}
           <div className="border-t border-border p-4">
             <div className="text-xs text-muted-foreground/75">
-              <div className="font-medium text-foreground">ACQUIRE</div>
+              <div className="font-medium text-foreground">MARKETPLACE</div>
               <div className="mt-1">
                 Part of <span className="font-semibold text-foreground">Fabrknt Suite</span>
               </div>
@@ -147,7 +147,7 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
         <div className="flex h-16 items-center border-b border-border px-6">
           <div className="flex items-center gap-2">
             <ShoppingBag className="h-5 w-5" style={{ color: '#06b6d4' }} />
-            <span className="text-xl font-bold text-foreground">ACQUIRE</span>
+            <span className="text-xl font-bold text-foreground">MARKETPLACE</span>
             <span
               className="rounded px-1.5 py-0.5 text-xs font-semibold text-white"
               style={{
@@ -164,8 +164,8 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
         <nav className="flex-1 space-y-1 px-3 py-4">
           {navigation.map((item) => {
             const isActive =
-              item.href === '/dashboard'
-                ? pathname === '/dashboard'
+              item.href === '/marketplace'
+                ? pathname === '/marketplace'
                 : pathname === item.href || pathname.startsWith(item.href + '/');
             const Icon = item.icon;
 
@@ -234,7 +234,7 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
               }}
             >
               <ShoppingBag className="h-3.5 w-3.5" />
-              <span>ACQUIRE</span>
+              <span>MARKETPLACE</span>
               <span className="ml-auto text-[10px]">●</span>
             </div>
           </div>
@@ -243,7 +243,7 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
         {/* Footer */}
         <div className="border-t border-border p-4">
           <div className="text-xs text-muted-foreground/75">
-            <div className="font-medium text-foreground">ACQUIRE</div>
+            <div className="font-medium text-foreground">MARKETPLACE</div>
             <div className="mt-1">
               Part of <span className="font-semibold text-foreground">Fabrknt Suite</span>
             </div>

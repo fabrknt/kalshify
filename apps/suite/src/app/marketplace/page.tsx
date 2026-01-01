@@ -72,7 +72,7 @@ export default function DashboardPage() {
             </p>
           </div>
           <Link
-            href="/dashboard/marketplace"
+            href="/marketplace/marketplace"
             className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all text-white hover:shadow-lg"
             style={{
               background: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',

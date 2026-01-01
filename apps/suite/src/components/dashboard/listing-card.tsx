@@ -39,7 +39,7 @@ export function ListingCard({ listing }: ListingCardProps) {
 
   return (
     <div className="group rounded-lg border border-border bg-card p-6 transition-all hover:border-green-300 hover:shadow-lg">
-      <Link href={`/dashboard/marketplace/${listing.id}`} className="block">
+      <Link href={`/marketplace/marketplace/${listing.id}`} className="block">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">

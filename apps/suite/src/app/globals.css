@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    /* Fabrknt Light Mode Design System - ACQUIRE (Blue Accent) */
+    /* Fabrknt Light Mode Design System - MARKETPLACE (Blue Accent) */
     --background: 0 0% 100%; /* Pure white */
     --foreground: 222 47% 11%; /* Dark text #1a202c */
 
@@ -17,7 +17,7 @@
     --primary: 217 91% 60%; /* Business blue #3b82f6 */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 217 91% 60%; /* ACQUIRE Blue #3b82f6 */
+    --secondary: 217 91% 60%; /* MARKETPLACE Blue #3b82f6 */
     --secondary-foreground: 0 0% 100%;
 
     --muted: 210 40% 96%; /* Light gray background #f7fafc */
@@ -35,10 +35,10 @@
 
     --radius: 0.5rem;
 
-    /* ACQUIRE brand color */
-    --acquire-blue: 217 91% 60%; /* #3b82f6 */
-    --acquire-blue-light: 217 91% 70%;
-    --acquire-blue-dark: 217 91% 50%;
+    /* MARKETPLACE brand color */
+    --marketplace-blue: 217 91% 60%; /* #3b82f6 */
+    --marketplace-blue-light: 217 91% 70%;
+    --marketplace-blue-dark: 217 91% 50%;
   }
 }
 

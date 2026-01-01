@@ -1,8 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { ChevronRight, Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { ChevronRight, Menu } from 'lucide-react';
 
 interface DashboardHeaderProps {
   onMenuClick: () => void;
