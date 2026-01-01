@@ -87,7 +87,10 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
               </div>
               <div className="space-y-1">
                 {intelligenceNav.map((item) => {
-                  const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+                  const isActive =
+                    item.href === '/intelligence'
+                      ? pathname === '/intelligence'
+                      : pathname === item.href || pathname.startsWith(item.href + '/');
                   const Icon = item.icon;
 
                   return (
@@ -200,7 +203,10 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
             </div>
             <div className="space-y-1">
               {intelligenceNav.map((item) => {
-                const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+                const isActive =
+                  item.href === '/intelligence'
+                    ? pathname === '/intelligence'
+                    : pathname === item.href || pathname.startsWith(item.href + '/');
                 const Icon = item.icon;
 
                 return (
