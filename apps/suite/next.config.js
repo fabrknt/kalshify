@@ -13,15 +13,6 @@ const nextConfig = {
       bodySizeLimit: '2mb',
     },
   },
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/marketplace',
-        permanent: true,
-      },
-    ];
-  },
 };
 
 module.exports = nextConfig;
