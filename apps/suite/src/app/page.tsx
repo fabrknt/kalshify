@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Brain, Link2, TrendingUp, Shield, Users, Building2 } from 'lucide-react';
+import { ArrowRight, Brain, Link2, TrendingUp, Shield, Users, Building2, Github } from 'lucide-react';
 import { companies } from '@/lib/intelligence/companies';
 import { getMockListings } from '@/lib/mock-data';
 import { Logo } from '@/components/logo';
@@ -12,12 +12,64 @@ export default function SuiteLandingPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-muted to-background">
+      {/* Header */}
+      <header className="border-b border-border bg-card sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <Logo size="sm" />
+            <div className="flex items-center gap-6">
+              <a
+                href="https://x.com/fabrknt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="X (Twitter)"
+              >
+                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+              </a>
+              <a
+                href="https://github.com/fabrknt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="GitHub"
+              >
+                <Github className="h-5 w-5" />
+              </a>
+              <Link
+                href="/intelligence"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Intelligence
+              </Link>
+              <Link
+                href="/match"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Match
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
+
       {/* Hero Section */}
       <div className="border-b border-border bg-card">
         <div className="container mx-auto px-4 py-16 md:py-24">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="flex justify-center mb-8">
+            <div className="flex justify-center mb-4">
               <Logo size="lg" />
+            </div>
+            <div className="flex justify-center mb-8">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 text-purple-800 text-sm font-semibold">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+                </span>
+                Preview
+              </span>
             </div>
             <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
               Web3 Intelligence & M&A Matching Platform
@@ -229,6 +281,54 @@ export default function SuiteLandingPage() {
         </div>
       </div>
 
+      {/* About Section */}
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-foreground mb-4">About Fabrknt</h2>
+            <p className="text-lg text-muted-foreground">
+              We are <a href="https://www.fabrknt.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-purple-600 hover:text-purple-700">www.fabrknt.com</a> — Building the future of Web3 intelligence and M&A
+            </p>
+          </div>
+          <div className="bg-card rounded-lg border border-border p-8">
+            <p className="text-muted-foreground mb-6">
+              Fabrknt is a Web3 intelligence and M&A matching platform that brings transparency and trust to the ecosystem.
+              Our mission is to enable better decision-making through AI-powered, verified intelligence on Web3 companies.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">🎯 Our Mission</h3>
+                <p className="text-sm text-muted-foreground">
+                  Democratize access to verified Web3 company intelligence and facilitate meaningful connections
+                  between companies seeking growth through M&A and strategic partnerships.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">🔍 Our Approach</h3>
+                <p className="text-sm text-muted-foreground">
+                  100% automated verification using on-chain data, GitHub activity, and social metrics.
+                  No manual input, no manipulation—just trustworthy, transparent intelligence.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">🤝 Built for Web3</h3>
+                <p className="text-sm text-muted-foreground">
+                  We understand the unique challenges of the Web3 ecosystem. Our platform is designed
+                  to help founders, investors, and acquirers make data-driven decisions with confidence.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">🚀 Open Development</h3>
+                <p className="text-sm text-muted-foreground">
+                  We believe in building in public. Follow our journey on GitHub and X as we continue
+                  to expand our intelligence coverage and matching capabilities.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* CTA Section */}
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-3xl mx-auto text-center bg-gradient-to-r from-purple-50 to-cyan-50 rounded-lg border border-purple-200 p-12">
@@ -257,6 +357,111 @@ export default function SuiteLandingPage() {
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="border-t border-border bg-card mt-16">
+        <div className="container mx-auto px-4 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            {/* Company Info */}
+            <div className="md:col-span-2">
+              <Logo size="md" className="mb-4" />
+              <div className="flex items-center gap-2 mb-4">
+                <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-purple-100 text-purple-800 text-xs font-semibold">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-purple-500"></span>
+                  </span>
+                  Preview
+                </span>
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">
+                Web3 Intelligence & M&A Matching Platform
+              </p>
+              <p className="text-sm text-muted-foreground mb-4">
+                We are <a href="https://www.fabrknt.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-purple-600 hover:text-purple-700">www.fabrknt.com</a>
+              </p>
+              <div className="flex items-center gap-4">
+                <a
+                  href="https://x.com/fabrknt"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="X (Twitter)"
+                >
+                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                </a>
+                <a
+                  href="https://github.com/fabrknt"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="GitHub"
+                >
+                  <Github className="h-5 w-5" />
+                </a>
+              </div>
+            </div>
+
+            {/* Products */}
+            <div>
+              <h3 className="font-semibold text-foreground mb-4">Products</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link href="/intelligence" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                    Intelligence
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/intelligence/companies" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                    Company Directory
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/match" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                    Match
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/match/opportunities" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                    Opportunities
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Company */}
+            <div>
+              <h3 className="font-semibold text-foreground mb-4">Company</h3>
+              <ul className="space-y-2">
+                <li>
+                  <a href="https://www.fabrknt.com" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                    About Us
+                  </a>
+                </li>
+                <li>
+                  <a href="https://github.com/fabrknt" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                    GitHub
+                  </a>
+                </li>
+                <li>
+                  <a href="https://x.com/fabrknt" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                    X (Twitter)
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Copyright */}
+          <div className="border-t border-border pt-8">
+            <p className="text-sm text-muted-foreground text-center">
+              © {new Date().getFullYear()} Fabrknt. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
