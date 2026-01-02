@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { searchCompanies } from "@/lib/index/company-queries";
+import { searchCompanies } from "@/lib/cindex/company-queries";
 
 // Mark route as dynamic
 export const dynamic = "force-dynamic";
 
 /**
- * GET /api/index/search?q=query
+ * GET /api/cindex/search?q=query
  * Search companies in Index database
  */
 export async function GET(request: NextRequest) {
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json(companies);
     } catch (error) {
-        console.error("GET /api/index/search error:", error);
+        console.error("GET /api/cindex/search error:", error);
         return NextResponse.json(
             { error: "Failed to search companies" },
             { status: 500 }

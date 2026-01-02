@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Info } from "lucide-react";
-import { Company } from "@/lib/index/companies";
-import { calculateMomentumIndex } from "@/lib/index/calculators/score-calculator";
+import { Company } from "@/lib/cindex/companies";
+import { calculateMomentumIndex } from "@/lib/cindex/calculators/score-calculator";
 import { cn } from "@/lib/utils";
 
 interface SpotlightSectionProps {
@@ -75,7 +75,7 @@ export function SpotlightSection({
                     companies.map((company, index) => (
                         <Link
                             key={company.slug}
-                            href={`/index/${company.slug}`}
+                            href={`/cindex/${company.slug}`}
                             className="block p-3 rounded-lg border border-border hover:border-purple-300 hover:shadow-md transition-all"
                         >
                             <div className="flex items-center justify-between">
@@ -83,7 +83,9 @@ export function SpotlightSection({
                                     <div className="text-lg font-bold text-muted-foreground/40 w-6">
                                         #{index + 1}
                                     </div>
-                                    <div className="text-2xl">{company.logo}</div>
+                                    <div className="text-2xl">
+                                        {company.logo}
+                                    </div>
                                     <div className="flex-1">
                                         <div className="flex items-center gap-2">
                                             <h4 className="font-semibold text-foreground">
@@ -92,7 +94,9 @@ export function SpotlightSection({
                                             <span
                                                 className={cn(
                                                     "text-xs px-1.5 py-0.5 rounded",
-                                                    categoryColors[company.category]
+                                                    categoryColors[
+                                                        company.category
+                                                    ]
                                                 )}
                                             >
                                                 {company.category.toUpperCase()}
@@ -127,7 +131,7 @@ export function SpotlightSection({
 
             <div className="mt-4 pt-4 border-t border-border">
                 <Link
-                    href="/index/companies"
+                    href="/cindex/companies"
                     className="flex items-center justify-center gap-2 text-sm text-purple-600 hover:text-purple-700 font-medium"
                 >
                     View All Companies
@@ -160,15 +164,14 @@ export function CategoryLeaderCard({
                     Coming Soon
                 </h4>
                 <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
-                    Index data for this category is currently being
-                    aggregated.
+                    Index data for this category is currently being aggregated.
                 </p>
             </div>
         );
     }
     return (
         <Link
-            href={`/index/${company.slug}`}
+            href={`/cindex/${company.slug}`}
             className="block bg-card rounded-lg border border-border p-4 hover:border-purple-300 hover:shadow-md transition-all"
         >
             <div className="flex items-center justify-between mb-3">

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
 /**
- * GET /api/index/[companyId]
+ * GET /api/cindex/[companyId]
  * Get company Index data with PULSE + TRACE scores
  * Supports both ID and slug lookup
  */
@@ -63,8 +63,7 @@ export async function GET(
             trace: indexData?.onchain
                 ? {
                       growth_score: company.growthScore,
-                      verified_roi:
-                          indexData.onchain.transactionCount30d || 0,
+                      verified_roi: indexData.onchain.transactionCount30d || 0,
                       roi_multiplier: 0,
                       quality_score: company.overallScore,
                   }
@@ -76,10 +75,7 @@ export async function GET(
         return NextResponse.json(response);
     } catch (error) {
         const { companyId } = await params;
-        console.error(
-            `GET /api/index/${companyId} error:`,
-            error
-        );
+        console.error(`GET /api/cindex/${companyId} error:`, error);
         return NextResponse.json(
             { error: "Failed to fetch company data" },
             { status: 500 }

@@ -13,7 +13,7 @@ import { prisma } from "@/lib/db";
 import { Logo } from "@/components/logo";
 
 // Mark page as dynamic since it uses database
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 async function getCompanyStats() {
     const [companyCount, listedCount, avgScore] = await Promise.all([
@@ -83,7 +83,7 @@ export default async function SuiteLandingPage() {
                                 <Github className="h-5 w-5" />
                             </a>
                             <Link
-                                href="/index"
+                                href="/cindex"
                                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                             >
                                 Index
@@ -119,14 +119,14 @@ export default async function SuiteLandingPage() {
                             Web3 Index & Synergy Platform
                         </h1>
                         <p className="text-xl text-muted-foreground mb-8">
-                            Research web3 companies with AI-powered
-                            index. Connect for acquisitions, strategic
-                            partnerships, and ecosystem collaborations—all
-                            backed by verified on-chain and off-chain data.
+                            Research web3 companies with AI-powered index.
+                            Connect for acquisitions, strategic partnerships,
+                            and ecosystem collaborations—all backed by verified
+                            on-chain and off-chain data.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <Link
-                                href="/index"
+                                href="/cindex"
                                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition-colors font-semibold text-lg"
                             >
                                 <Brain className="h-6 w-6" />
@@ -204,9 +204,9 @@ export default async function SuiteLandingPage() {
                         </div>
 
                         <p className="text-muted-foreground mb-6">
-                            Automated index for {totalCompanies} web3
-                            companies with verified on-chain and off-chain data.
-                            No manual input, just trustworthy metrics.
+                            Automated index for {totalCompanies} web3 companies
+                            with verified on-chain and off-chain data. No manual
+                            input, just trustworthy metrics.
                         </p>
 
                         <div className="space-y-4 mb-6">
@@ -275,9 +275,8 @@ export default async function SuiteLandingPage() {
 
                         <p className="text-muted-foreground mb-6">
                             Find acquisition targets and partnership
-                            opportunities with verified index. Connect
-                            for M&A, strategic alliances, and ecosystem
-                            collaboration.
+                            opportunities with verified index. Connect for M&A,
+                            strategic alliances, and ecosystem collaboration.
                         </p>
 
                         <div className="space-y-4 mb-6">
@@ -406,17 +405,15 @@ export default async function SuiteLandingPage() {
                             >
                                 www.fabrknt.com
                             </a>{" "}
-                            — Building the future of Web3 index and
-                            synergy
+                            — Building the future of Web3 index and synergy
                         </p>
                     </div>
                     <div className="bg-card rounded-lg border border-border p-8">
                         <p className="text-muted-foreground mb-6">
-                            Fabrknt is a Web3 index and synergy platform
-                            that brings transparency and trust to the ecosystem.
-                            Our mission is to enable better decision-making
-                            through AI-powered, verified index on Web3
-                            companies.
+                            Fabrknt is a Web3 index and synergy platform that
+                            brings transparency and trust to the ecosystem. Our
+                            mission is to enable better decision-making through
+                            AI-powered, verified index on Web3 companies.
                         </p>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
@@ -425,9 +422,9 @@ export default async function SuiteLandingPage() {
                                 </h3>
                                 <p className="text-sm text-muted-foreground">
                                     Democratize access to verified Web3 company
-                                    index and facilitate meaningful
-                                    connections between companies seeking growth
-                                    through M&A and strategic partnerships.
+                                    index and facilitate meaningful connections
+                                    between companies seeking growth through M&A
+                                    and strategic partnerships.
                                 </p>
                             </div>
                             <div>
@@ -459,8 +456,8 @@ export default async function SuiteLandingPage() {
                                 <p className="text-sm text-muted-foreground">
                                     We believe in building in public. Follow our
                                     journey on GitHub and X as we continue to
-                                    expand our index coverage and
-                                    synergy capabilities.
+                                    expand our index coverage and synergy
+                                    capabilities.
                                 </p>
                             </div>
                         </div>
@@ -481,7 +478,7 @@ export default async function SuiteLandingPage() {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link
-                            href="/index/companies"
+                            href="/cindex/companies"
                             className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition-colors font-medium"
                         >
                             Explore Companies
@@ -564,7 +561,7 @@ export default async function SuiteLandingPage() {
                             <ul className="space-y-2">
                                 <li>
                                     <Link
-                                        href="/index"
+                                        href="/cindex"
                                         className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                                     >
                                         Index
@@ -572,7 +569,7 @@ export default async function SuiteLandingPage() {
                                 </li>
                                 <li>
                                     <Link
-                                        href="/index/companies"
+                                        href="/cindex/companies"
                                         className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                                     >
                                         Company Directory

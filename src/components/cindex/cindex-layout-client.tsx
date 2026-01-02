@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 
-export default function DashboardLayout({
+export function CindexLayoutClient({
     children,
 }: {
     children: React.ReactNode;

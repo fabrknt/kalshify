@@ -1,15 +1,15 @@
 import Link from "next/link";
 import { ArrowRight, Trophy, TrendingUp, Github, Star } from "lucide-react";
 import { prisma } from "@/lib/db";
-import { Company } from "@/lib/index/companies";
-import { calculateMomentumIndex } from "@/lib/index/calculators/score-calculator";
+import { Company } from "@/lib/cindex/companies";
+import { calculateMomentumIndex } from "@/lib/cindex/calculators/score-calculator";
 import {
     SpotlightSection,
     CategoryLeaderCard,
-} from "@/components/index/spotlight";
+} from "@/components/cindex/spotlight";
 
 // Mark page as dynamic since it uses database
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 async function getAllCompaniesFromDB(): Promise<Company[]> {
     const companies = await prisma.company.findMany({
@@ -156,7 +156,7 @@ function getCategoryLeaders(
     return leaders as Record<Company["category"], Company | undefined>;
 }
 
-export default async function IndexPage() {
+export default async function CindexPage() {
     const companiesList = await getAllCompaniesFromDB();
     const topCompanies = getTopCompanies(companiesList, 5);
     const fastestGrowing = getFastestGrowing(companiesList, 5);
@@ -181,8 +181,8 @@ export default async function IndexPage() {
                     Web3 Company Index
                 </h1>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                    Automated index for {companiesList.length} web3
-                    companies with verified on-chain and off-chain data
+                    Automated index for {companiesList.length} web3 companies
+                    with verified on-chain and off-chain data
                 </p>
             </div>
 
@@ -320,7 +320,7 @@ export default async function IndexPage() {
                     means trustworthy, objective index.
                 </p>
                 <Link
-                    href="/index/companies"
+                    href="/cindex/companies"
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition-colors font-medium"
                 >
                     Explore All Companies

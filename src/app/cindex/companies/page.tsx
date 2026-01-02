@@ -1,9 +1,9 @@
 import { Search } from "lucide-react";
-import { CompanyCard } from "@/components/index/company-card";
-import { getCompanies, type Company } from "@/lib/index/companies";
+import { CompanyCard } from "@/components/cindex/company-card";
+import { getCompanies, type Company } from "@/lib/cindex/companies";
 
 // Mark page as dynamic since it uses database
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function CompaniesPage() {
     const companiesList = await getCompanies();
