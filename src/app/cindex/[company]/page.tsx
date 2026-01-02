@@ -380,6 +380,28 @@ export default async function CompanyProfilePage({ params }: PageProps) {
             {/* Content - continued in next part due to length... */}
             {/* For brevity, I'll continue with the rest of the component */}
             <div className="p-8 space-y-8">
+                {/* Data Fetching Notice */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                        <div className="flex-shrink-0">
+                            <div className="relative flex h-3 w-3 mt-1">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+                            </div>
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="text-sm font-semibold text-blue-900 mb-1">
+                                Data Collection in Progress
+                            </h3>
+                            <p className="text-sm text-blue-800">
+                                We are currently fetching and verifying data from GitHub, Twitter, and on-chain sources.
+                                Some metrics may be incomplete or show as zero until the initial data collection is complete.
+                                This page will update automatically as data becomes available.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
                 {/* Score Breakdown */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* Team Health */}
@@ -416,6 +438,25 @@ export default async function CompanyProfilePage({ params }: PageProps) {
                         <div className="space-y-3">
                             <div className="flex justify-between">
                                 <span className="text-sm text-muted-foreground">
+                                    Total Contributors
+                                </span>
+                                <span className="font-medium text-foreground">
+                                    {formatNumber(
+                                        (companyData.indexData as any)?.github
+                                            ?.totalContributors || 0
+                                    )}
+                                </span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-sm text-muted-foreground">
+                                    Active Contributors (30d)
+                                </span>
+                                <span className="font-medium text-foreground">
+                                    {formatNumber(company.teamHealth.activeContributors)}
+                                </span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-sm text-muted-foreground">
                                     GitHub Commits (30d)
                                 </span>
                                 <span className="font-medium text-foreground">
@@ -426,26 +467,10 @@ export default async function CompanyProfilePage({ params }: PageProps) {
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-sm text-muted-foreground">
-                                    Active Contributors
-                                </span>
-                                <span className="font-medium text-foreground">
-                                    {company.teamHealth.activeContributors}
-                                </span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span className="text-sm text-muted-foreground">
                                     Contributor Retention
                                 </span>
                                 <span className="font-medium text-foreground">
                                     {company.teamHealth.contributorRetention}%
-                                </span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span className="text-sm text-muted-foreground">
-                                    Code Quality Score
-                                </span>
-                                <span className="font-medium text-foreground">
-                                    {company.teamHealth.codeQuality}/100
                                 </span>
                             </div>
                         </div>
@@ -470,7 +495,40 @@ export default async function CompanyProfilePage({ params }: PageProps) {
                         <div className="space-y-3">
                             <div className="flex justify-between">
                                 <span className="text-sm text-muted-foreground">
-                                    On-Chain Activity (30d)
+                                    Daily Active Users
+                                </span>
+                                <span className="font-medium text-foreground">
+                                    {formatNumber(
+                                        (companyData.indexData as any)?.onchain
+                                            ?.dailyActiveUsers || 0
+                                    )}
+                                </span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-sm text-muted-foreground">
+                                    Monthly Active Users
+                                </span>
+                                <span className="font-medium text-foreground">
+                                    {formatNumber(
+                                        (companyData.indexData as any)?.onchain
+                                            ?.monthlyActiveUsers || 0
+                                    )}
+                                </span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-sm text-muted-foreground">
+                                    Unique Wallets (30d)
+                                </span>
+                                <span className="font-medium text-foreground">
+                                    {formatNumber(
+                                        (companyData.indexData as any)?.onchain
+                                            ?.uniqueWallets30d || 0
+                                    )}
+                                </span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-sm text-muted-foreground">
+                                    Transactions (30d)
                                 </span>
                                 <span className="font-medium text-foreground">
                                     {formatNumber(
@@ -480,40 +538,44 @@ export default async function CompanyProfilePage({ params }: PageProps) {
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-sm text-muted-foreground">
-                                    User Growth Rate
+                                    Total Value Locked
                                 </span>
                                 <span className="font-medium text-foreground">
-                                    +{company.growth.userGrowthRate}%
+                                    ${formatNumber(company.growth.tvl || 0)}
                                 </span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-sm text-muted-foreground">
-                                    Wallet Growth
+                                    Volume (30d)
                                 </span>
                                 <span className="font-medium text-foreground">
-                                    {company.growth.walletGrowth}%
+                                    ${formatNumber(company.growth.volume30d || 0)}
                                 </span>
                             </div>
-                            {company.growth.tvl && (
-                                <div className="flex justify-between">
-                                    <span className="text-sm text-muted-foreground">
-                                        Total Value Locked
-                                    </span>
-                                    <span className="font-medium text-foreground">
-                                        ${formatNumber(company.growth.tvl)}
-                                    </span>
-                                </div>
-                            )}
-                            {company.growth.volume30d && (
-                                <div className="flex justify-between">
-                                    <span className="text-sm text-muted-foreground">
-                                        Volume (30d)
-                                    </span>
-                                    <span className="font-medium text-foreground">
-                                        ${formatNumber(company.growth.volume30d)}
-                                    </span>
-                                </div>
-                            )}
+                            <div className="flex justify-between">
+                                <span className="text-sm text-muted-foreground">
+                                    Web Activity Score
+                                </span>
+                                <span className="font-medium text-foreground">
+                                    {scores?.breakdown?.onchain?.webActivityScore || 0}/100
+                                </span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-sm text-muted-foreground">
+                                    News Growth Score
+                                </span>
+                                <span className="font-medium text-foreground">
+                                    {scores?.breakdown?.onchain?.indexNewsScore || 0}/100
+                                </span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-sm text-muted-foreground">
+                                    Attention Score
+                                </span>
+                                <span className="font-medium text-foreground">
+                                    {scores?.breakdown?.onchain?.attentionScore || 0}/100
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -548,42 +610,61 @@ export default async function CompanyProfilePage({ params }: PageProps) {
                             </p>
                         </div>
                         <div className="space-y-3">
-                            {company.social.twitterFollowers && (
-                                <div className="flex justify-between">
-                                    <span className="text-sm text-muted-foreground">
-                                        Twitter Followers
-                                    </span>
-                                    <span className="font-medium text-foreground">
-                                        {formatNumber(company.social.twitterFollowers)}
-                                    </span>
-                                </div>
-                            )}
-                            {company.social.discordMembers && (
-                                <div className="flex justify-between">
-                                    <span className="text-sm text-muted-foreground">
-                                        Discord Members
-                                    </span>
-                                    <span className="font-medium text-foreground">
-                                        {formatNumber(company.social.discordMembers)}
-                                    </span>
-                                </div>
-                            )}
-                            {company.social.telegramMembers && (
-                                <div className="flex justify-between">
-                                    <span className="text-sm text-muted-foreground">
-                                        Telegram Members
-                                    </span>
-                                    <span className="font-medium text-foreground">
-                                        {formatNumber(company.social.telegramMembers)}
-                                    </span>
-                                </div>
-                            )}
                             <div className="flex justify-between">
                                 <span className="text-sm text-muted-foreground">
-                                    Community Engagement
+                                    Twitter Followers
                                 </span>
                                 <span className="font-medium text-foreground">
-                                    {company.social.communityEngagement}/100
+                                    {formatNumber(company.social.twitterFollowers || 0)}
+                                </span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-sm text-muted-foreground">
+                                    Likes (30d)
+                                </span>
+                                <span className="font-medium text-foreground">
+                                    {formatNumber(
+                                        (companyData.indexData as any)?.twitter
+                                            ?.engagement30d?.likes || 0
+                                    )}
+                                </span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-sm text-muted-foreground">
+                                    Retweets (30d)
+                                </span>
+                                <span className="font-medium text-foreground">
+                                    {formatNumber(
+                                        (companyData.indexData as any)?.twitter
+                                            ?.engagement30d?.retweets || 0
+                                    )}
+                                </span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-sm text-muted-foreground">
+                                    Replies (30d)
+                                </span>
+                                <span className="font-medium text-foreground">
+                                    {formatNumber(
+                                        (companyData.indexData as any)?.twitter
+                                            ?.engagement30d?.replies || 0
+                                    )}
+                                </span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-sm text-muted-foreground">
+                                    Discord Members
+                                </span>
+                                <span className="font-medium text-foreground">
+                                    {formatNumber(company.social.discordMembers || 0)}
+                                </span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-sm text-muted-foreground">
+                                    Telegram Members
+                                </span>
+                                <span className="font-medium text-foreground">
+                                    {formatNumber(company.social.telegramMembers || 0)}
                                 </span>
                             </div>
                         </div>

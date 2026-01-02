@@ -38,6 +38,28 @@ export default async function CompaniesPage() {
                 </p>
             </div>
 
+            {/* Data Fetching Notice */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0">
+                        <div className="relative flex h-3 w-3 mt-1">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+                        </div>
+                    </div>
+                    <div className="flex-1">
+                        <h3 className="text-sm font-semibold text-blue-900 mb-1">
+                            Data Collection in Progress
+                        </h3>
+                        <p className="text-sm text-blue-800">
+                            We are currently fetching and verifying data from GitHub, Twitter, and on-chain sources for all companies.
+                            Some metrics may be incomplete or show as zero until the initial data collection is complete.
+                            Index scores will be updated automatically as data becomes available.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
             {/* Search and Filters */}
             <div className="flex items-center gap-4">
                 <div className="flex-1 max-w-md">
