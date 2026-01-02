@@ -302,15 +302,17 @@ export default async function CompanyProfilePage({ params }: PageProps) {
                                 <p className="text-muted-foreground mt-2">
                                     {company.description}
                                 </p>
-                                <a
-                                    href={company.website}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 text-sm text-purple-600 hover:text-purple-700 mt-2"
-                                >
-                                    {company.website}
-                                    <ExternalLink className="h-3 w-3" />
-                                </a>
+                                {company.website && (
+                                    <a
+                                        href={company.website}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1 text-sm text-purple-600 hover:text-purple-700 mt-2"
+                                    >
+                                        {company.website}
+                                        <ExternalLink className="h-3 w-3" />
+                                    </a>
+                                )}
                             </div>
                         </div>
 

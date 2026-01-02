@@ -133,15 +133,25 @@ export async function POST(request: NextRequest) {
         chain: data.chain,
         website: data.website || null,
 
-        // M&A fields
-        askingPrice: data.askingPrice ? new Prisma.Decimal(data.askingPrice) : null,
+        // M&A fields (only for acquisition/investment types)
+        ...(data.type === 'acquisition' || data.type === 'investment'
+          ? {
+              askingPrice: (data as any).askingPrice
+                ? new Prisma.Decimal((data as any).askingPrice)
+                : null,
+            }
+          : {}),
         revenue: new Prisma.Decimal(data.revenue),
         mau: data.mau,
 
-        // Partnership fields (type assertion needed for discriminated union)
-        seekingPartners: (data as any).seekingPartners || [],
-        offeringCapabilities: (data as any).offeringCapabilities || [],
-        partnershipType: (data as any).partnershipType || null,
+        // Partnership fields (only for partnership/collaboration types)
+        ...(data.type === 'partnership' || data.type === 'collaboration'
+          ? {
+              seekingPartners: (data as any).seekingPartners || [],
+              offeringCapabilities: (data as any).offeringCapabilities || [],
+              partnershipType: (data as any).partnershipType || null,
+            }
+          : {}),
 
         // Deal terms
         hasNDA: data.hasNDA ?? false,
@@ -150,7 +160,7 @@ export async function POST(request: NextRequest) {
 
         // Intelligence link
         intelligenceCompanyId: data.intelligenceCompanyId || null,
-        suiteDataSnapshot: data.suiteDataSnapshot || null,
+        suiteDataSnapshot: data.suiteDataSnapshot || undefined,
 
         // Seller
         sellerId,

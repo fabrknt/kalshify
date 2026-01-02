@@ -3,35 +3,7 @@
 import { useState, useEffect } from "react";
 import { Filter } from "lucide-react";
 import { ListingCard } from "@/components/dashboard/listing-card";
-
-interface Listing {
-    id: string;
-    type: "acquisition" | "partnership" | "collaboration" | "investment";
-    projectName: string;
-    productType: string;
-    description: string;
-    askingPrice?: number;
-    revenue: number;
-    mau: number;
-    seekingPartners?: string[];
-    offeringCapabilities?: string[];
-    partnershipType?: "technical" | "strategic" | "marketing" | "ecosystem";
-    category: "defi" | "nft" | "gaming" | "infrastructure" | "dao";
-    status: "active" | "under_offer" | "sold" | "withdrawn" | "in_discussion";
-    sellerWallet: string;
-    createdAt: string;
-    suiteData?: {
-        pulse?: any;
-        trace?: any;
-        revenue_verified?: number;
-        fabrknt_score?: number;
-    };
-    chain: "ethereum" | "base" | "polygon" | "solana" | "multi-chain";
-    website?: string;
-    hasNDA: boolean;
-    requiresProofOfFunds?: boolean;
-    minBuyerCapital?: number;
-}
+import { Listing } from "@/lib/mock-data";
 
 type CategoryFilter = "all" | Listing["category"];
 type StatusFilter = "all" | Listing["status"];
@@ -94,18 +66,30 @@ export default function MarketplacePage() {
                             : undefined,
                         revenue: Number(listing.revenue),
                         mau: listing.mau,
-                        seekingPartners: listing.seekingPartners,
-                        offeringCapabilities: listing.offeringCapabilities,
-                        partnershipType: listing.partnershipType,
+                        seekingPartners: listing.seekingPartners || undefined,
+                        offeringCapabilities:
+                            listing.offeringCapabilities || undefined,
+                        partnershipType: listing.partnershipType || undefined,
                         category: listing.category,
                         status: listing.status,
-                        sellerWallet: listing.seller.walletAddress,
+                        sellerWallet: listing.seller?.walletAddress || "",
                         createdAt: listing.createdAt,
-                        suiteData: listing.suiteDataSnapshot,
+                        suiteData: listing.suiteDataSnapshot
+                            ? {
+                                  pulse: listing.suiteDataSnapshot.pulse,
+                                  trace: listing.suiteDataSnapshot.trace,
+                                  revenue_verified:
+                                      listing.suiteDataSnapshot
+                                          .revenue_verified,
+                                  fabrknt_score:
+                                      listing.suiteDataSnapshot.fabrknt_score,
+                              }
+                            : undefined,
                         chain: listing.chain,
                         website: listing.website || undefined,
                         hasNDA: listing.hasNDA,
-                        requiresProofOfFunds: listing.requiresProofOfFunds,
+                        requiresProofOfFunds:
+                            listing.requiresProofOfFunds || undefined,
                         minBuyerCapital: listing.minBuyerCapital
                             ? Number(listing.minBuyerCapital)
                             : undefined,
