@@ -93,7 +93,9 @@ export async function calculateUniswapScore(
     return calculateIntelligenceScore(
         intelligenceData.github,
         intelligenceData.twitter,
-        intelligenceData.onchain, intelligenceData.category, intelligenceData.category
+        intelligenceData.onchain,
+        intelligenceData.category,
+        intelligenceData.news
     );
 }
 

@@ -21,7 +21,7 @@ const nextConfig = {
                 "@react-native-async-storage/async-storage": false,
                 "react-native": false,
             };
-            
+
             // Ignore React Native modules in node_modules
             config.resolve.alias = {
                 ...config.resolve.alias,
