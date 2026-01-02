@@ -16,7 +16,7 @@ import { SuiteRibbon } from '@/components/suite-ribbon';
 import { cn } from '@/lib/utils';
 import { prisma } from '@/lib/db';
 
-const statusColors = {
+const statusColors: Record<string, string> = {
   active: 'bg-green-100 text-green-800',
   under_offer: 'bg-yellow-100 text-yellow-800',
   sold: 'bg-muted text-gray-800',
