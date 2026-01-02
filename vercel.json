@@ -1,9 +1,9 @@
 {
-    "buildCommand": "pnpm build",
-    "devCommand": "pnpm dev",
     "installCommand": "corepack enable && corepack prepare pnpm@latest --activate && pnpm install",
     "framework": "nextjs",
-    "regions": ["iad1"],
+    "regions": [
+        "iad1"
+    ],
     "env": {
         "PRISMA_GENERATE_DATAPROXY": "false"
     },
@@ -13,24 +13,6 @@
         }
     },
     "headers": [
-        {
-            "source": "/(.*)",
-            "headers": [
-                {
-                    "key": "Cache-Control",
-                    "value": "public, max-age=31536000, immutable"
-                }
-            ]
-        },
-        {
-            "source": "/(.*).html",
-            "headers": [
-                {
-                    "key": "Cache-Control",
-                    "value": "public, max-age=0, must-revalidate"
-                }
-            ]
-        },
         {
             "source": "/api/(.*)",
             "headers": [
