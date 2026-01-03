@@ -210,12 +210,60 @@ export function calculateOnChainScore(onchain: Partial<OnChainMetrics>): {
 }
 
 /**
+ * Calculate Partnership Score (Ecosystem Word-of-Mouth)
+ * Measures partnerships, integrations, collaborations - strong word-of-mouth signals
+ */
+export function calculatePartnershipScore(news?: IndexData["news"]): number {
+    if (!news || news.length === 0) return 0;
+
+    const partnershipKeywords = [
+        /\bpartnership\b/i,
+        /\bintegration\b/i,
+        /\bintegrated\b/i,
+        /\bcollaboration\b/i,
+        /\bcollaborates?\b/i,
+        /\bteam up\b/i,
+        /\bjoins? forces\b/i,
+        /\bannounces.*with\b/i,
+        /\bpartners? with\b/i,
+    ];
+
+    let score = 0;
+    const now = new Date();
+
+    news.forEach((item) => {
+        const title = item.title || "";
+        const content = item.content || "";
+        const combined = `${title} ${content}`;
+
+        const date = new Date(item.date);
+        if (isNaN(date.getTime())) return;
+
+        const matchCount = partnershipKeywords.filter((k) =>
+            k.test(combined)
+        ).length;
+
+        if (matchCount > 0) {
+            const daysAgo = Math.max(
+                0,
+                (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)
+            );
+
+            // Recent partnerships more valuable (30 day window)
+            const freshness = normalize(daysAgo, 30, 0);
+            // Base points + bonus for multiple partnership keywords
+            score += (20 + matchCount * 10) * (freshness / 100 + 0.2);
+        }
+    });
+
+    return Math.min(100, Math.round(score));
+}
+
+/**
  * Calculate News-based Growth Signals
  * Rewards shipping pace and high-impact announcements
  */
-export function calculateIndexNewsScore(
-    news?: IndexData["news"]
-): number {
+export function calculateIndexNewsScore(news?: IndexData["news"]): number {
     if (!news || news.length === 0) return 0;
 
     // Use word boundaries for better keyword synergy (avoids false positives like "disintegrated")
@@ -257,6 +305,33 @@ export function calculateIndexNewsScore(
     });
 
     return Math.min(100, Math.round(signalStrength));
+}
+
+/**
+ * Calculate Virality Score (Word-of-Mouth Indicator)
+ * Measures how much content is being shared vs just liked
+ */
+export function calculateViralityScore(engagement30d: {
+    likes: number;
+    retweets: number;
+    replies: number;
+}): number {
+    const { likes, retweets, replies } = engagement30d;
+
+    if (likes === 0 && retweets === 0 && replies === 0) return 0;
+
+    // Retweet ratio: measures sharing behavior (word-of-mouth)
+    // Benchmark: 20% retweet rate is excellent for institutional accounts
+    const retweetRatio = likes > 0 ? (retweets / likes) * 100 : 0;
+    const retweetScore = normalize(retweetRatio, 0, 20);
+
+    // Reply ratio: measures conversation depth and community engagement
+    // Benchmark: 10% reply rate indicates strong engagement
+    const replyRatio = likes > 0 ? (replies / likes) * 100 : 0;
+    const replyScore = normalize(replyRatio, 0, 10);
+
+    // Sharing (retweets) weighted higher as it indicates word-of-mouth spread
+    return Math.round(retweetScore * 0.6 + replyScore * 0.4);
 }
 
 /**
@@ -355,7 +430,11 @@ export function calculateIndexScore(
     const onchainScore = calculateOnChainScore(onchain);
     const webScore = calculateWebScore(news);
     const indexNewsScore = calculateIndexNewsScore(news);
+    const partnershipScore = calculatePartnershipScore(news);
     const attentionScore = calculateAttentionScore(twitter);
+    const viralityScore = twitter.engagement30d
+        ? calculateViralityScore(twitter.engagement30d)
+        : 0;
 
     // Initial Weights based on category (Wallet redistributed to GitHub/Growth)
     let weights = {
@@ -392,17 +471,22 @@ export function calculateIndexScore(
         weights.social = 0;
     }
 
-    // --- Signal Fusion: Revamped Growth Score ---
-    // Growth = (On-Chain * 0.4) + (News/Shipping * 0.3) + (Attention/Virality * 0.3)
+    // --- Signal Fusion: Revamped Growth Score with Word-of-Mouth ---
+    // Growth = (On-Chain * 0.35) + (News/Shipping * 0.25) + (Partnerships * 0.20) + (Attention * 0.20)
+    // Partnerships added as explicit word-of-mouth signal
     let combinedGrowthScore =
-        onchainScore.score * 0.4 +
-        Math.max(webScore, indexNewsScore) * 0.3 +
-        attentionScore * 0.3;
+        onchainScore.score * 0.35 +
+        Math.max(webScore, indexNewsScore) * 0.25 +
+        partnershipScore * 0.2 +
+        attentionScore * 0.2;
 
-    // If On-chain is extremely low (SaaS/Stealth), shift weight to Web/Social Growth
+    // If On-chain is extremely low (SaaS/Stealth), shift weight to Web/Social/Partnership Growth
+    // This is critical for Fabrknt which has no real on-chain activity
     if ((onchain.transactionCount30d || 0) < 10) {
         combinedGrowthScore =
-            Math.max(webScore, indexNewsScore) * 0.7 + attentionScore * 0.3;
+            Math.max(webScore, indexNewsScore) * 0.35 +
+            partnershipScore * 0.35 +
+            attentionScore * 0.3;
     }
 
     // --- Dynamic Weight Shifting for Private Development ---
@@ -441,8 +525,10 @@ export function calculateIndexScore(
             onchain: {
                 ...onchainScore.breakdown,
                 webActivityScore: webScore,
-                indexNewsScore,
+                newsGrowthScore: indexNewsScore,
+                partnershipScore,
                 attentionScore,
+                viralityScore,
             } as any,
             wallet: {
                 distributionScore: 0,

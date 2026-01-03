@@ -206,7 +206,9 @@ async function getCompanyData(slug: string) {
                             : 0,
                         webActivityScore: 0,
                         newsGrowthScore: 0,
+                        partnershipScore: 0,
                         attentionScore: Math.min(company.socialScore, 100),
+                        viralityScore: 0,
                     },
                     wallet: {
                         distributionScore: Math.min(
@@ -576,6 +578,14 @@ export default async function CompanyProfilePage({ params }: PageProps) {
                                     {scores?.breakdown?.onchain?.attentionScore || 0}/100
                                 </span>
                             </div>
+                            <div className="flex justify-between border-t border-gray-100 pt-3 mt-3">
+                                <span className="text-sm text-muted-foreground font-medium">
+                                    Partnership Score (Word-of-Mouth)
+                                </span>
+                                <span className="font-semibold text-green-600">
+                                    {scores?.breakdown?.onchain?.partnershipScore || 0}/100
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -649,6 +659,14 @@ export default async function CompanyProfilePage({ params }: PageProps) {
                                         (companyData.indexData as any)?.twitter
                                             ?.engagement30d?.replies || 0
                                     )}
+                                </span>
+                            </div>
+                            <div className="flex justify-between border-t border-gray-100 pt-3 mt-3">
+                                <span className="text-sm text-muted-foreground font-medium">
+                                    Virality Score (Sharing Rate)
+                                </span>
+                                <span className="font-semibold text-purple-600">
+                                    {scores?.breakdown?.onchain?.viralityScore || 0}/100
                                 </span>
                             </div>
                             <div className="flex justify-between">

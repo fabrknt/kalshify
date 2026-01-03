@@ -26,11 +26,12 @@ import { fetchWithTimeoutAndRetry } from "./utils/fetch-with-retry";
 import { TimeoutError } from "./utils/timeout";
 
 // Configuration for fetch timeouts and retries
-// Increased timeouts and retries to handle rate limits and slow APIs
+// Very long timeouts to handle slow APIs - script runs manually so we can afford to wait
+// Better to wait longer and get real data than to fail fast with zeros
 const FETCH_CONFIG = {
-    github: { timeoutMs: 180000, maxRetries: 5 }, // 3min timeout, 5 retries
-    twitter: { timeoutMs: 300000, maxRetries: 5 }, // 5min timeout, 5 retries (rate limits are common)
-    onchain: { timeoutMs: 300000, maxRetries: 4 }, // 5min timeout, 4 retries (RPC calls can be very slow)
+    github: { timeoutMs: 600000, maxRetries: 3 }, // 10min timeout, 3 retries
+    twitter: { timeoutMs: 1200000, maxRetries: 3 }, // 20min timeout, 3 retries (rate limits and slow responses)
+    onchain: { timeoutMs: 1200000, maxRetries: 3 }, // 20min timeout, 3 retries (RPC calls can be very slow)
 };
 
 /**
@@ -88,6 +89,11 @@ export async function fetchCompanyData(
 
         // Execute all fetches in parallel with timeout and retry, using Promise.allSettled
         // to handle partial failures gracefully
+        console.log("Starting parallel fetch for all data sources...");
+        console.log(
+            `⏱️  Timeouts: GitHub ${FETCH_CONFIG.github.timeoutMs / 1000}s, Twitter ${FETCH_CONFIG.twitter.timeoutMs / 1000}s, On-chain ${FETCH_CONFIG.onchain.timeoutMs / 1000}s`
+        );
+
         const [githubResult, twitterResult, onchainResult] =
             await Promise.allSettled([
                 fetchWithTimeoutAndRetry(fetchGitHub, {
@@ -96,10 +102,17 @@ export async function fetchCompanyData(
                 }).catch((err) => {
                     // Return default values only after all retries exhausted
                     console.error(
-                        `GitHub fetch failed for ${config.name} after retries:`,
-                        err instanceof TimeoutError
-                            ? `Timeout after ${FETCH_CONFIG.github.timeoutMs}ms`
-                            : err.message
+                        `\n❌ GitHub fetch failed for ${config.name} after ${FETCH_CONFIG.github.maxRetries} retries:`
+                    );
+                    console.error(
+                        `   ${
+                            err instanceof TimeoutError
+                                ? `Timeout after ${FETCH_CONFIG.github.timeoutMs / 1000}s`
+                                : err.message
+                        }`
+                    );
+                    console.error(
+                        `   Using default values (zeros) for GitHub metrics`
                     );
                     return {
                         totalContributors: 0,
@@ -115,10 +128,17 @@ export async function fetchCompanyData(
                     sourceName: `Twitter (${config.name})`,
                 }).catch((err) => {
                     console.error(
-                        `Twitter fetch failed for ${config.name} after retries:`,
-                        err instanceof TimeoutError
-                            ? `Timeout after ${FETCH_CONFIG.twitter.timeoutMs}ms`
-                            : err.message
+                        `\n❌ Twitter fetch failed for ${config.name} after ${FETCH_CONFIG.twitter.maxRetries} retries:`
+                    );
+                    console.error(
+                        `   ${
+                            err instanceof TimeoutError
+                                ? `Timeout after ${FETCH_CONFIG.twitter.timeoutMs / 1000}s`
+                                : err.message
+                        }`
+                    );
+                    console.error(
+                        `   Using default values (zeros) for Twitter metrics`
                     );
                     return {
                         followers: 0,
@@ -133,10 +153,17 @@ export async function fetchCompanyData(
                     sourceName: `${config.onchain.chain} On-chain (${config.name})`,
                 }).catch((err) => {
                     console.error(
-                        `${config.onchain.chain} on-chain fetch failed for ${config.name} after retries:`,
-                        err instanceof TimeoutError
-                            ? `Timeout after ${FETCH_CONFIG.onchain.timeoutMs}ms`
-                            : err.message
+                        `\n❌ ${config.onchain.chain} on-chain fetch failed for ${config.name} after ${FETCH_CONFIG.onchain.maxRetries} retries:`
+                    );
+                    console.error(
+                        `   ${
+                            err instanceof TimeoutError
+                                ? `Timeout after ${FETCH_CONFIG.onchain.timeoutMs / 1000}s`
+                                : err.message
+                        }`
+                    );
+                    console.error(
+                        `   Using default values (zeros) for on-chain metrics`
                     );
                     return {
                         contractAddress: config.onchain.address,
@@ -189,20 +216,53 @@ export async function fetchCompanyData(
                       uniqueWallets30d: 0,
                   };
 
-        // Log success status
+        // Log detailed success/failure status
+        console.log("\n📊 Fetch Results Summary:");
         if (githubResult.status === "fulfilled") {
             console.log(
-                `✓ GitHub data fetched successfully for ${config.name}`
+                `   ✅ GitHub: ${github.totalContributors} contributors, ${github.totalCommits30d} commits (30d)`
             );
-        }
-        if (twitterResult.status === "fulfilled") {
+        } else {
             console.log(
-                `✓ Twitter data fetched successfully for ${config.name}`
+                `   ❌ GitHub: Failed - ${githubResult.reason instanceof TimeoutError ? "Timeout" : githubResult.reason?.message || "Unknown error"}`
             );
         }
+
+        if (twitterResult.status === "fulfilled") {
+            const engagement = (twitter as any).engagement30d;
+            console.log(
+                `   ✅ Twitter: ${twitter.followers.toLocaleString()} followers${engagement ? `, ${engagement.likes} likes (30d)` : ""}`
+            );
+        } else {
+            console.log(
+                `   ❌ Twitter: Failed - ${twitterResult.reason instanceof TimeoutError ? "Timeout" : twitterResult.reason?.message || "Unknown error"}`
+            );
+        }
+
         if (onchainResult.status === "fulfilled") {
             console.log(
-                `✓ ${config.onchain.chain} on-chain data fetched successfully for ${config.name}`
+                `   ✅ On-chain (${config.onchain.chain}): ${onchain.transactionCount30d?.toLocaleString() || 0} txs, ${onchain.uniqueWallets30d?.toLocaleString() || 0} wallets (30d)`
+            );
+        } else {
+            console.log(
+                `   ❌ On-chain (${config.onchain.chain}): Failed - ${onchainResult.reason instanceof TimeoutError ? "Timeout" : onchainResult.reason?.message || "Unknown error"}`
+            );
+        }
+
+        // Warn if any data source returned zeros
+        const hasZeroGithub =
+            github.totalContributors === 0 && github.totalCommits30d === 0;
+        const hasZeroTwitter = twitter.followers === 0;
+        const hasZeroOnchain =
+            onchain.transactionCount30d === 0 && onchain.uniqueWallets30d === 0;
+
+        if (hasZeroGithub || hasZeroTwitter || hasZeroOnchain) {
+            console.log("\n⚠️  Warning: Some data sources returned zero values:");
+            if (hasZeroGithub) console.log("   - GitHub metrics are zero");
+            if (hasZeroTwitter) console.log("   - Twitter metrics are zero");
+            if (hasZeroOnchain) console.log("   - On-chain metrics are zero");
+            console.log(
+                "   This may indicate API failures, rate limits, or missing data."
             );
         }
 

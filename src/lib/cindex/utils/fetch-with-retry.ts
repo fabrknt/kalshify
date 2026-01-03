@@ -35,11 +35,13 @@ export async function fetchWithTimeoutAndRetry<T>(
     );
 
     try {
-        return await withRetry(
+        const result = await withRetry(
             () =>
                 withTimeout(fn(), timeoutMs, `${sourceName} request timed out`),
             retryOptions
         );
+        console.log(`[${sourceName}] ✅ Fetch completed successfully`);
+        return result;
     } catch (error: any) {
         if (error instanceof TimeoutError) {
             console.error(

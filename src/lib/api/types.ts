@@ -121,6 +121,7 @@ export interface IndexData {
         date: string;
         summary: string;
         source: string;
+        content?: string;
     }[];
     calculatedAt: string;
 }
@@ -142,6 +143,11 @@ export interface IndexScore {
             userGrowthScore: number;
             transactionScore: number;
             tvlScore: number;
+            webActivityScore: number;
+            newsGrowthScore: number;
+            partnershipScore: number;
+            attentionScore: number;
+            viralityScore: number;
         };
         wallet: {
             distributionScore: number;
