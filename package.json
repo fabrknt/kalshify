@@ -10,6 +10,7 @@
         "lint": "next lint",
         "type-check": "tsc --noEmit",
         "fetch:company": "tsx scripts/fetch-company-data.ts",
+        "fetch:init-targets": "tsx scripts/fetch-init-target-data.ts",
         "seed:demo": "tsx scripts/seed-demo-companies.ts",
         "postinstall": "prisma generate"
     },
