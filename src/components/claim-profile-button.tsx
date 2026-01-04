@@ -32,6 +32,7 @@ export function ClaimProfileButton({
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [claimed, setClaimed] = useState(false);
+  const isProduction = process.env.NODE_ENV === "production";
 
   // Check if profile is already claimed (on mount)
   // In a real app, you'd fetch this from the API
@@ -47,10 +48,20 @@ export function ClaimProfileButton({
 
   if (!session) {
     return (
-      <Button variant="default" asChild>
-        <a href="/auth/signin?callbackUrl=/dashboard/claim-company">
-          Sign In to Claim Profile
-        </a>
+      <Button
+        variant="default"
+        asChild={!isProduction}
+        disabled={isProduction}
+        className={isProduction ? "cursor-not-allowed opacity-50" : ""}
+        title={isProduction ? "Sign in is disabled in production" : undefined}
+      >
+        {isProduction ? (
+          <span>Sign In to Claim Profile (Disabled)</span>
+        ) : (
+          <a href="/auth/signin?callbackUrl=/dashboard/claim-company">
+            Sign In to Claim Profile
+          </a>
+        )}
       </Button>
     );
   }

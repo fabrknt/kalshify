@@ -7,6 +7,7 @@ import { Logo } from "@/components/logo";
 
 export function LandingHeader() {
   const { data: session, status } = useSession();
+  const isProduction = process.env.NODE_ENV === "production";
 
   return (
     <header className="border-b border-border bg-card sticky top-0 z-50">
@@ -76,8 +77,18 @@ export function LandingHeader() {
               </div>
             ) : (
               <Link
-                href="/auth/signin"
-                className="flex items-center gap-2 px-4 py-2 bg-cyan-400 text-slate-950 rounded-md hover:bg-cyan-300 transition-all text-sm font-bold border border-cyan-300 shadow-lg shadow-cyan-400/20 hover:shadow-cyan-400/40"
+                href={isProduction ? "#" : "/auth/signin"}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all text-sm font-bold border shadow-lg ${
+                  isProduction
+                    ? "bg-gray-400 text-gray-600 border-gray-300 cursor-not-allowed opacity-50"
+                    : "bg-cyan-400 text-slate-950 border-cyan-300 shadow-cyan-400/20 hover:bg-cyan-300 hover:shadow-cyan-400/40"
+                }`}
+                onClick={(e) => {
+                  if (isProduction) {
+                    e.preventDefault();
+                  }
+                }}
+                title={isProduction ? "Sign in is disabled in production" : "Sign In"}
               >
                 <LogIn className="h-4 w-4" />
                 <span>Sign In</span>

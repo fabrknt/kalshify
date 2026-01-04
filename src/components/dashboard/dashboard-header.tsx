@@ -12,6 +12,7 @@ interface DashboardHeaderProps {
 export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
   const pathname = usePathname();
   const { data: session, status } = useSession();
+  const isProduction = process.env.NODE_ENV === "production";
 
   // Generate breadcrumbs from pathname
   const pathSegments = pathname.split('/').filter(Boolean);
@@ -95,8 +96,18 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
           </div>
         ) : (
           <Link
-            href="/auth/signin"
-            className="flex items-center gap-2 px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
+            href={isProduction ? "#" : "/auth/signin"}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-md transition-colors text-sm font-medium ${
+              isProduction
+                ? "bg-gray-400 text-gray-600 cursor-not-allowed opacity-50"
+                : "bg-green-600 text-white hover:bg-green-700"
+            }`}
+            onClick={(e) => {
+              if (isProduction) {
+                e.preventDefault();
+              }
+            }}
+            title={isProduction ? "Sign in is disabled in production" : "Sign In"}
           >
             <LogIn className="h-4 w-4" />
             <span className="hidden sm:inline">Sign In</span>

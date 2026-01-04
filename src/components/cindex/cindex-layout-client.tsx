@@ -14,6 +14,7 @@ export function CindexLayoutClient({
 }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const { data: session, status } = useSession();
+    const isProduction = process.env.NODE_ENV === "production";
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-muted to-background">
@@ -76,8 +77,18 @@ export function CindexLayoutClient({
                                 </div>
                             ) : (
                                 <Link
-                                    href="/auth/signin"
-                                    className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors text-sm font-medium"
+                                    href={isProduction ? "#" : "/auth/signin"}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors text-sm font-medium ${
+                                        isProduction
+                                            ? "bg-gray-400 text-gray-600 cursor-not-allowed opacity-50"
+                                            : "bg-purple-600 text-white hover:bg-purple-700"
+                                    }`}
+                                    onClick={(e) => {
+                                        if (isProduction) {
+                                            e.preventDefault();
+                                        }
+                                    }}
+                                    title={isProduction ? "Sign in is disabled in production" : "Sign In"}
                                 >
                                     <LogIn className="h-4 w-4" />
                                     <span>Sign In</span>
