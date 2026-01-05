@@ -15,12 +15,9 @@ declare module "next-auth" {
       githubUsername?: string;
     };
   }
-}
 
-declare module "next-auth/jwt" {
-  interface JWT {
-    id?: string;
-    githubUsername?: string;
+  interface User {
+    id: string;
   }
 }
 
@@ -49,8 +46,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      if (session.user && token.id) {
-        session.user.id = token.id as string;
+      if (session.user) {
+        session.user.id = token.sub as string;
         // Add GitHub username to session if available
         if (token.githubUsername) {
           session.user.githubUsername = token.githubUsername as string;
