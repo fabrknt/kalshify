@@ -122,18 +122,6 @@ export default async function SynergyDiscoveryPage() {
       chain = indexData.onchain.chain.trim().toLowerCase();
     }
 
-    // Debug logging (will be visible in browser console)
-    if (process.env.NODE_ENV === 'production') {
-      console.log('Chain extraction debug:', {
-        partnerSlug: match.partnerSlug,
-        partnerName: match.partnerName,
-        hasIndexData: !!indexData,
-        hasOnchain: !!indexData?.onchain,
-        chainValue: indexData?.onchain?.chain,
-        extractedChain: chain,
-      });
-    }
-
     return {
       partnerSlug: match.partnerSlug,
       partnerName: match.partnerName,
