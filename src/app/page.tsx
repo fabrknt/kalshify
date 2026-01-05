@@ -290,7 +290,7 @@ export default async function SuiteLandingPage() {
                                     </p>
                                     <p className="text-sm text-muted-foreground">
                                         GitHub commits, contributors, retention,
-                                        npm downloads, code quality
+                                        npm downloads
                                     </p>
                                 </div>
                             </div>
