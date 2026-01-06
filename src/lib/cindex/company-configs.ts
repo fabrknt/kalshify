@@ -3,7 +3,7 @@
  * Single source of truth for all company metadata
  */
 
-import { CompanyCategory } from "./companies";
+import { CompanyCategory, CompanySubcategory, Chain } from "./companies";
 
 export type SupportedChain =
     | "ethereum"
@@ -18,6 +18,8 @@ export interface CompanyConfig {
     slug: string;
     name: string;
     category: CompanyCategory;
+    subcategory?: CompanySubcategory;
+    chains?: Chain[]; // Multi-chain support (if not specified, uses onchain.chain)
 
     // Display metadata
     description: string;
@@ -70,6 +72,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "uniswap",
         name: "Uniswap",
         category: "defi",
+        subcategory: "dex",
         description:
             "Leading decentralized exchange protocol enabling permissionless token swaps on Ethereum and Layer 2s",
         logo: "🦄",
@@ -102,6 +105,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "jupiter",
         name: "Jupiter",
         category: "defi",
+        subcategory: "dex",
         description:
             "Leading DEX aggregator on Solana providing best swap rates across all DEXs",
         logo: "🪐",
@@ -132,6 +136,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "hyperliquid",
         name: "Hyperliquid",
         category: "defi",
+        subcategory: "derivatives",
         description:
             "High-performance decentralized perpetual exchange on its own L1 blockchain",
         logo: "💧",
@@ -162,6 +167,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "morpho",
         name: "Morpho",
         category: "defi",
+        subcategory: "lending",
         description:
             "Peer-to-peer lending protocol with optimized capital efficiency",
         logo: "🔷",
@@ -191,6 +197,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "euler",
         name: "Euler",
         category: "defi",
+        subcategory: "lending",
         description: "Permissionless lending protocol on Ethereum",
         logo: "📐",
         website: "https://www.euler.finance",
@@ -215,6 +222,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "rocketpool",
         name: "Rocket Pool",
         category: "defi",
+        subcategory: "liquid-staking",
         description: "Decentralized Ethereum staking protocol",
         logo: "🚀",
         website: "https://rocketpool.net",
@@ -239,6 +247,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "blur",
         name: "Blur",
         category: "nft",
+        subcategory: "marketplace",
         description: "NFT marketplace and aggregator",
         logo: "💎",
         website: "https://blur.io",
@@ -263,6 +272,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "safe",
         name: "Safe",
         category: "infrastructure",
+        subcategory: "wallet",
         description: "Multi-sig wallet infrastructure",
         logo: "🔒",
         website: "https://safe.global",
@@ -287,6 +297,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "orca",
         name: "Orca",
         category: "defi",
+        subcategory: "dex",
         description:
             "User-friendly AMM and concentrated liquidity DEX on Solana",
         logo: "🐋",
@@ -316,6 +327,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "drift",
         name: "Drift Protocol",
         category: "defi",
+        subcategory: "derivatives",
         description: "Decentralized perpetuals and spot trading on Solana",
         logo: "🌊",
         website: "https://www.drift.trade",
@@ -344,6 +356,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "marginfi",
         name: "MarginFi",
         category: "defi",
+        subcategory: "yield",
         description: "Lending and borrowing protocol on Solana",
         logo: "💰",
         website: "https://marginfi.com",
@@ -372,6 +385,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "kamino",
         name: "Kamino Finance",
         category: "defi",
+        subcategory: "lending",
         description: "Automated liquidity management",
         logo: "🌊",
         website: "https://kamino.finance",
@@ -400,6 +414,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "tensor",
         name: "Tensor",
         category: "nft",
+        subcategory: "marketplace",
         description: "NFT marketplace on Solana",
         logo: "🎯",
         website: "https://www.tensor.trade",
@@ -424,6 +439,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "lido",
         name: "Lido",
         category: "defi",
+        subcategory: "liquid-staking",
         description: "Liquid staking protocol for Ethereum",
         logo: "🌊",
         website: "https://lido.fi",
@@ -452,6 +468,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "zora",
         name: "Zora",
         category: "nft",
+        subcategory: "marketplace",
         description: "NFT marketplace and protocol",
         logo: "✨",
         website: "https://zora.co",
@@ -476,6 +493,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "zerox",
         name: "0x Protocol",
         category: "infrastructure",
+        subcategory: "dex",
         description: "DEX aggregation and liquidity protocol",
         logo: "0️⃣",
         website: "https://0x.org",
@@ -500,6 +518,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "metaplex",
         name: "Metaplex",
         category: "infrastructure",
+        subcategory: "dev-tools",
         description: "NFT standard and tools on Solana",
         logo: "🎨",
         website: "https://www.metaplex.com",
@@ -524,6 +543,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "parallel",
         name: "Parallel",
         category: "gaming",
+        subcategory: "card-game",
         description: "Sci-fi card game on Ethereum",
         logo: "🎮",
         website: "https://parallel.life",
@@ -548,6 +568,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "velodrome",
         name: "Velodrome",
         category: "defi",
+        subcategory: "dex",
         description: "AMM and ve(3,3) model on Optimism",
         logo: "🏁",
         website: "https://velodrome.finance",
@@ -572,6 +593,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "jito",
         name: "Jito",
         category: "infrastructure",
+        subcategory: "validator",
         description: "MEV infrastructure on Solana",
         logo: "⚡",
         website: "https://www.jito.wtf",
@@ -596,6 +618,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "staratlas",
         name: "Star Atlas",
         category: "gaming",
+        subcategory: "mmo",
         description: "Space MMO on Solana",
         logo: "🌌",
         website: "https://staratlas.com",
@@ -620,6 +643,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "aurory",
         name: "Aurory",
         category: "gaming",
+        subcategory: "rpg",
         description: "RPG and NFT game on Solana",
         logo: "🎴",
         website: "https://aurory.io",
@@ -644,6 +668,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "fabrknt",
         name: "Fabrknt",
         category: "infrastructure",
+        subcategory: "dev-tools",
         description:
             "The Foundational Foundry for Agentic Code & Future Economies",
         logo: "🏭",
@@ -674,6 +699,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
         slug: "mangomarkets",
         name: "Mango Markets",
         category: "defi",
+        subcategory: "derivatives",
         description: "Decentralized trading platform on Solana",
         logo: "🥭",
         website: "https://mango.markets",

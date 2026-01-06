@@ -102,7 +102,7 @@ export function SpotlightSection({
                                         )}
                                     </div>
                                     <div className="flex-1">
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-2 flex-wrap">
                                             <h4 className="font-semibold text-foreground">
                                                 {company.name}
                                             </h4>
@@ -116,14 +116,28 @@ export function SpotlightSection({
                                             >
                                                 {company.category.toUpperCase()}
                                             </span>
-                                            <span
-                                                className={cn(
-                                                    "text-xs px-1.5 py-0.5 rounded",
-                                                    chainColors[(company.chain || 'ethereum') as keyof typeof chainColors] || chainColors.ethereum
-                                                )}
-                                            >
-                                                {(company.chain || 'ethereum').charAt(0).toUpperCase() + (company.chain || 'ethereum').slice(1)}
-                                            </span>
+                                            {company.subcategory && (
+                                                <span className="text-xs px-1.5 py-0.5 rounded bg-cyan-50 text-cyan-700 border border-cyan-200">
+                                                    {company.subcategory.replace(/-/g, ' ').toUpperCase()}
+                                                </span>
+                                            )}
+                                            {company.chains && company.chains.length > 0 && (
+                                                <>
+                                                    <span
+                                                        className={cn(
+                                                            "text-xs px-1.5 py-0.5 rounded",
+                                                            chainColors[company.chains[0] as keyof typeof chainColors] || chainColors.ethereum
+                                                        )}
+                                                    >
+                                                        {company.chains[0].charAt(0).toUpperCase() + company.chains[0].slice(1)}
+                                                    </span>
+                                                    {company.chains.length > 1 && (
+                                                        <span className="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">
+                                                            +{company.chains.length - 1}
+                                                        </span>
+                                                    )}
+                                                </>
+                                            )}
                                         </div>
                                         <p className="text-xs text-muted-foreground">
                                             {company.description}

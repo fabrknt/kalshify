@@ -66,7 +66,7 @@ export function CompanyCard({ company }: CompanyCardProps) {
                             <h3 className="font-semibold text-foreground group-hover:text-purple-600 transition-colors">
                                 {company.name}
                             </h3>
-                            <div className="flex gap-1.5 mt-1">
+                            <div className="flex flex-wrap gap-1.5 mt-1">
                                 <span
                                     className={cn(
                                         "text-xs px-2 py-0.5 rounded-full",
@@ -75,14 +75,28 @@ export function CompanyCard({ company }: CompanyCardProps) {
                                 >
                                     {company.category.toUpperCase()}
                                 </span>
-                                <span
-                                    className={cn(
-                                        "text-xs px-2 py-0.5 rounded-full",
-                                        chainColors[company.chain as keyof typeof chainColors] || chainColors.ethereum
-                                    )}
-                                >
-                                    {company.chain.charAt(0).toUpperCase() + company.chain.slice(1)}
-                                </span>
+                                {company.subcategory && (
+                                    <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">
+                                        {company.subcategory.replace(/-/g, ' ').toUpperCase()}
+                                    </span>
+                                )}
+                                {company.chains && company.chains.length > 0 && (
+                                    <>
+                                        <span
+                                            className={cn(
+                                                "text-xs px-2 py-0.5 rounded-full",
+                                                chainColors[company.chains[0] as keyof typeof chainColors] || chainColors.ethereum
+                                            )}
+                                        >
+                                            {company.chains[0].charAt(0).toUpperCase() + company.chains[0].slice(1)}
+                                        </span>
+                                        {company.chains.length > 1 && (
+                                            <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                                                +{company.chains.length - 1}
+                                            </span>
+                                        )}
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
