@@ -20,6 +20,8 @@ async function getAllCompaniesFromDB(): Promise<Company[]> {
                 slug: true,
                 name: true,
                 category: true,
+                subcategory: true,
+                chains: true,
                 description: true,
                 logo: true,
                 website: true,
@@ -46,7 +48,10 @@ async function getAllCompaniesFromDB(): Promise<Company[]> {
                 slug: company.slug,
                 name: company.name,
                 category: company.category as Company["category"],
-                chain: onchain.chain || "ethereum",
+                subcategory: company.subcategory as Company["subcategory"],
+                chains: company.chains && company.chains.length > 0
+                    ? company.chains as Company["chains"]
+                    : [onchain.chain || "ethereum"],
                 description: company.description || "",
                 logo: company.logo || "🏢",
                 website: company.website || "",
