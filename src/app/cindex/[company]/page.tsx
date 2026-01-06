@@ -106,6 +106,7 @@ async function getCompanyData(slug: string) {
                 slug: true,
                 name: true,
                 category: true,
+                subcategory: true,
                 description: true,
                 logo: true,
                 website: true,
@@ -413,7 +414,7 @@ export default async function CompanyProfilePage({ params }: PageProps) {
                                 <h1 className="text-3xl font-bold text-foreground">
                                     {company.name}
                                 </h1>
-                                <div className="flex items-center gap-3 mt-2">
+                                <div className="flex items-center gap-3 mt-2 flex-wrap">
                                     <span
                                         className={cn(
                                             "text-xs px-2 py-1 rounded-full font-medium",
@@ -422,6 +423,11 @@ export default async function CompanyProfilePage({ params }: PageProps) {
                                     >
                                         {category.toUpperCase()}
                                     </span>
+                                    {company.subcategory && (
+                                        <span className="text-xs px-2 py-1 rounded-full font-medium bg-cyan-50 text-cyan-700 border border-cyan-200">
+                                            {company.subcategory.replace(/-/g, ' ').toUpperCase()}
+                                        </span>
+                                    )}
                                     <span
                                         className={cn(
                                             "text-xs px-2 py-1 rounded-full font-medium",
