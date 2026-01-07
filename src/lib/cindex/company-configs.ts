@@ -1172,6 +1172,1690 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
             trend: "up",
         },
     },
+    // ============================================
+    // OPTIMISM PROJECTS (16 new)
+    // ============================================
+    {
+        slug: "sonne-finance",
+        name: "Sonne Finance",
+        category: "defi",
+        subcategory: "lending",
+        description:
+            "Native Optimism lending market, a Compound fork with ve tokenomics for governance",
+        logo: "☀️",
+        website: "https://sonne.finance",
+        github: {
+            org: "sonne-finance",
+        },
+        twitter: {
+            handle: "SonneFinance",
+        },
+        onchain: {
+            chain: "optimism",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 18,
+            userGrowthRate: 16,
+            codeQuality: 85,
+            trend: "up",
+        },
+    },
+    {
+        slug: "exactly-protocol",
+        name: "Exactly Protocol",
+        category: "defi",
+        subcategory: "lending",
+        description:
+            "Fixed-rate lending protocol with variable rate optimization for predictable borrowing costs",
+        logo: "📐",
+        website: "https://exact.ly",
+        github: {
+            org: "exactly",
+        },
+        twitter: {
+            handle: "ExactlyProtocol",
+        },
+        onchain: {
+            chain: "optimism",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 17,
+            userGrowthRate: 15,
+            codeQuality: 88,
+            trend: "up",
+        },
+    },
+    {
+        slug: "pika-protocol",
+        name: "Pika Protocol",
+        category: "defi",
+        subcategory: "derivatives",
+        description:
+            "Perpetual exchange with low fees and deep liquidity, native to Optimism",
+        logo: "⚡",
+        website: "https://pikaprotocol.com",
+        github: {
+            org: "pika-protocol",
+        },
+        twitter: {
+            handle: "PikaProtocol",
+        },
+        onchain: {
+            chain: "optimism",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+            hasVolume: true,
+        },
+        defaults: {
+            walletGrowth: 16,
+            userGrowthRate: 14,
+            codeQuality: 85,
+            trend: "stable",
+        },
+    },
+    {
+        slug: "synthetix",
+        name: "Synthetix",
+        category: "defi",
+        subcategory: "derivatives",
+        description:
+            "Synthetic assets protocol providing liquidity for derivatives, heavily focused on Optimism after migration",
+        logo: "💠",
+        website: "https://synthetix.io",
+        github: {
+            org: "Synthetixio",
+        },
+        twitter: {
+            handle: "synthetix_io",
+        },
+        onchain: {
+            chain: "optimism",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 15,
+            userGrowthRate: 12,
+            codeQuality: 90,
+            trend: "stable",
+        },
+    },
+    {
+        slug: "beethoven-x",
+        name: "Beethoven X",
+        category: "defi",
+        subcategory: "dex",
+        description:
+            "Balancer-style weighted pools DEX with yield optimization on Optimism",
+        logo: "🎼",
+        website: "https://beets.fi",
+        github: {
+            org: "beethovenxfi",
+        },
+        twitter: {
+            handle: "beethaborz",
+        },
+        onchain: {
+            chain: "optimism",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 14,
+            userGrowthRate: 12,
+            codeQuality: 85,
+            trend: "stable",
+        },
+    },
+    {
+        slug: "granary-finance",
+        name: "Granary Finance",
+        category: "defi",
+        subcategory: "lending",
+        description:
+            "Aave fork focused on emerging assets and yield opportunities across multiple chains",
+        logo: "🌾",
+        website: "https://granary.finance",
+        github: {
+            org: "granary-finance",
+        },
+        twitter: {
+            handle: "GranaryFinance",
+        },
+        onchain: {
+            chain: "optimism",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 15,
+            userGrowthRate: 13,
+            codeQuality: 82,
+            trend: "stable",
+        },
+    },
+    {
+        slug: "extra-finance",
+        name: "Extra Finance",
+        category: "defi",
+        subcategory: "yield",
+        description:
+            "Leveraged yield farming protocol enabling up to 7x leverage on LP positions",
+        logo: "➕",
+        website: "https://extra.finance",
+        github: {
+            org: "extrafi",
+        },
+        twitter: {
+            handle: "extraaborz",
+        },
+        onchain: {
+            chain: "optimism",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 18,
+            userGrowthRate: 16,
+            codeQuality: 85,
+            trend: "up",
+        },
+    },
+    {
+        slug: "thales",
+        name: "Thales",
+        category: "defi",
+        subcategory: "derivatives",
+        description:
+            "Binary options and sports betting protocol built on Synthetix liquidity",
+        logo: "🎯",
+        website: "https://thalesmarket.io",
+        github: {
+            org: "thales-markets",
+        },
+        twitter: {
+            handle: "thabormarkets",
+        },
+        onchain: {
+            chain: "optimism",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 16,
+            userGrowthRate: 14,
+            codeQuality: 85,
+            trend: "up",
+        },
+    },
+    {
+        slug: "conduit",
+        name: "Conduit",
+        category: "infrastructure",
+        subcategory: "l2",
+        description:
+            "Rollup deployment platform making it easy to launch OP Stack and Arbitrum Orbit chains",
+        logo: "🔧",
+        website: "https://conduit.xyz",
+        github: {
+            org: "conduit-xyz",
+        },
+        twitter: {
+            handle: "condaborxyz",
+        },
+        onchain: {
+            chain: "optimism",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 22,
+            userGrowthRate: 20,
+            codeQuality: 88,
+            trend: "up",
+        },
+    },
+    {
+        slug: "lattice",
+        name: "Lattice",
+        category: "infrastructure",
+        subcategory: "dev-tools",
+        description:
+            "MUD framework creators building infrastructure for fully on-chain games and autonomous worlds",
+        logo: "🎮",
+        website: "https://lattice.xyz",
+        github: {
+            org: "latticexyz",
+        },
+        twitter: {
+            handle: "latticexyz",
+        },
+        onchain: {
+            chain: "optimism",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 20,
+            userGrowthRate: 18,
+            codeQuality: 90,
+            trend: "up",
+        },
+    },
+    {
+        slug: "socket",
+        name: "Socket",
+        category: "infrastructure",
+        subcategory: "dev-tools",
+        description:
+            "Cross-chain infrastructure providing bridging and interoperability solutions",
+        logo: "🔌",
+        website: "https://socket.tech",
+        github: {
+            org: "SocketDotTech",
+        },
+        twitter: {
+            handle: "SocketDotTech",
+        },
+        onchain: {
+            chain: "optimism",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 18,
+            userGrowthRate: 16,
+            codeQuality: 88,
+            trend: "up",
+        },
+    },
+    {
+        slug: "layer3",
+        name: "Layer3",
+        category: "infrastructure",
+        subcategory: "identity",
+        description:
+            "Quest and credential platform helping projects distribute tokens and build communities",
+        logo: "🏆",
+        website: "https://layer3.xyz",
+        github: {
+            org: "layer3xyz",
+        },
+        twitter: {
+            handle: "layer3xyz",
+        },
+        onchain: {
+            chain: "optimism",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 22,
+            userGrowthRate: 20,
+            codeQuality: 85,
+            trend: "up",
+        },
+    },
+    {
+        slug: "galxe",
+        name: "Galxe",
+        category: "infrastructure",
+        subcategory: "identity",
+        description:
+            "On-chain credential network for building and verifying digital identity",
+        logo: "🌌",
+        website: "https://galxe.com",
+        github: {
+            org: "galxe",
+        },
+        twitter: {
+            handle: "Galxe",
+        },
+        onchain: {
+            chain: "optimism",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 20,
+            userGrowthRate: 18,
+            codeQuality: 85,
+            trend: "up",
+        },
+    },
+    {
+        slug: "dune-analytics",
+        name: "Dune Analytics",
+        category: "infrastructure",
+        subcategory: "data",
+        description:
+            "Community-powered blockchain analytics platform with SQL-based queries",
+        logo: "📊",
+        website: "https://dune.com",
+        github: {
+            org: "duneanalytics",
+        },
+        twitter: {
+            handle: "DuneAnalytics",
+        },
+        onchain: {
+            chain: "optimism",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 18,
+            userGrowthRate: 16,
+            codeQuality: 88,
+            trend: "up",
+        },
+    },
+    {
+        slug: "chainlink-optimism",
+        name: "Chainlink",
+        category: "infrastructure",
+        subcategory: "data",
+        description:
+            "Decentralized oracle network providing price feeds and verifiable randomness",
+        logo: "🔗",
+        website: "https://chain.link",
+        github: {
+            org: "smartcontractkit",
+        },
+        twitter: {
+            handle: "chainlink",
+        },
+        onchain: {
+            chain: "optimism",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 15,
+            userGrowthRate: 12,
+            codeQuality: 92,
+            trend: "stable",
+        },
+    },
+    {
+        slug: "op-labs",
+        name: "OP Labs",
+        category: "infrastructure",
+        subcategory: "l2",
+        description:
+            "Core development team building the OP Stack and Optimism ecosystem",
+        logo: "🔴",
+        website: "https://optimism.io",
+        github: {
+            org: "ethereum-optimism",
+        },
+        twitter: {
+            handle: "Optimism",
+        },
+        onchain: {
+            chain: "optimism",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 20,
+            userGrowthRate: 18,
+            codeQuality: 92,
+            trend: "up",
+        },
+    },
+    // ============================================
+    // POLYGON PROJECTS (16 new)
+    // ============================================
+    {
+        slug: "quickswap",
+        name: "QuickSwap",
+        category: "defi",
+        subcategory: "dex",
+        description:
+            "Leading DEX on Polygon with DragonLair staking and concentrated liquidity",
+        logo: "🐉",
+        website: "https://quickswap.exchange",
+        github: {
+            org: "QuickSwap",
+        },
+        twitter: {
+            handle: "QuickswapDEX",
+        },
+        onchain: {
+            chain: "polygon",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+            hasVolume: true,
+        },
+        defaults: {
+            walletGrowth: 16,
+            userGrowthRate: 14,
+            codeQuality: 85,
+            trend: "stable",
+        },
+    },
+    {
+        slug: "gains-network",
+        name: "Gains Network",
+        category: "defi",
+        subcategory: "derivatives",
+        description:
+            "Decentralized leveraged trading platform with synthetic assets and low fees",
+        logo: "📈",
+        website: "https://gains.trade",
+        github: {
+            org: "GainsNetwork",
+        },
+        twitter: {
+            handle: "GainsNetwork_io",
+        },
+        onchain: {
+            chain: "polygon",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+            hasVolume: true,
+        },
+        defaults: {
+            walletGrowth: 18,
+            userGrowthRate: 16,
+            codeQuality: 88,
+            trend: "up",
+        },
+    },
+    {
+        slug: "beefy-finance",
+        name: "Beefy Finance",
+        category: "defi",
+        subcategory: "yield",
+        description:
+            "Multi-chain yield optimizer with auto-compounding vaults across 20+ chains",
+        logo: "🐮",
+        website: "https://beefy.com",
+        github: {
+            org: "beefyfinance",
+        },
+        twitter: {
+            handle: "beaborfinance",
+        },
+        onchain: {
+            chain: "polygon",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 15,
+            userGrowthRate: 13,
+            codeQuality: 88,
+            trend: "stable",
+        },
+    },
+    {
+        slug: "gamma-strategies",
+        name: "Gamma Strategies",
+        category: "defi",
+        subcategory: "yield",
+        description:
+            "Active liquidity management protocol for concentrated liquidity positions",
+        logo: "Γ",
+        website: "https://gamma.xyz",
+        github: {
+            org: "GammaStrategies",
+        },
+        twitter: {
+            handle: "GammaStrategies",
+        },
+        onchain: {
+            chain: "polygon",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 17,
+            userGrowthRate: 15,
+            codeQuality: 87,
+            trend: "up",
+        },
+    },
+    {
+        slug: "mai-finance",
+        name: "Mai Finance",
+        category: "defi",
+        subcategory: "lending",
+        description:
+            "Stablecoin lending protocol offering interest-free loans against crypto collateral",
+        logo: "🏦",
+        website: "https://mai.finance",
+        github: {
+            org: "0xlaozi",
+        },
+        twitter: {
+            handle: "QiDaoProtocol",
+        },
+        onchain: {
+            chain: "polygon",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 14,
+            userGrowthRate: 12,
+            codeQuality: 85,
+            trend: "stable",
+        },
+    },
+    {
+        slug: "balancer-polygon",
+        name: "Balancer",
+        category: "defi",
+        subcategory: "dex",
+        description:
+            "Automated portfolio manager and liquidity provider with weighted pools",
+        logo: "⚖️",
+        website: "https://balancer.fi",
+        github: {
+            org: "balancer",
+        },
+        twitter: {
+            handle: "Balancer",
+        },
+        onchain: {
+            chain: "polygon",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 15,
+            userGrowthRate: 13,
+            codeQuality: 90,
+            trend: "stable",
+        },
+    },
+    {
+        slug: "harvest-finance",
+        name: "Harvest Finance",
+        category: "defi",
+        subcategory: "yield",
+        description:
+            "Yield aggregator with auto-compounding strategies across multiple chains",
+        logo: "🚜",
+        website: "https://harvest.finance",
+        github: {
+            org: "harvest-finance",
+        },
+        twitter: {
+            handle: "harvest_finance",
+        },
+        onchain: {
+            chain: "polygon",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 13,
+            userGrowthRate: 11,
+            codeQuality: 85,
+            trend: "stable",
+        },
+    },
+    {
+        slug: "dystopia",
+        name: "Dystopia",
+        category: "defi",
+        subcategory: "dex",
+        description:
+            "ve(3,3) DEX inspired by Solidly, focused on low-fee swaps and gauge voting",
+        logo: "🌆",
+        website: "https://dystopia.exchange",
+        github: {
+            org: "dystopia-exchange",
+        },
+        twitter: {
+            handle: "DystopiaSwap",
+        },
+        onchain: {
+            chain: "polygon",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 14,
+            userGrowthRate: 12,
+            codeQuality: 82,
+            trend: "stable",
+        },
+    },
+    {
+        slug: "polygon-labs",
+        name: "Polygon Labs",
+        category: "infrastructure",
+        subcategory: "l2",
+        description:
+            "Core development team building Polygon PoS, zkEVM, and CDK infrastructure",
+        logo: "💜",
+        website: "https://polygon.technology",
+        github: {
+            org: "maticnetwork",
+        },
+        twitter: {
+            handle: "0xPolygon",
+        },
+        onchain: {
+            chain: "polygon",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 18,
+            userGrowthRate: 16,
+            codeQuality: 90,
+            trend: "up",
+        },
+    },
+    {
+        slug: "biconomy",
+        name: "Biconomy",
+        category: "infrastructure",
+        subcategory: "wallet",
+        description:
+            "Account abstraction and gasless transaction infrastructure for Web3 apps",
+        logo: "🔥",
+        website: "https://biconomy.io",
+        github: {
+            org: "bcnmy",
+        },
+        twitter: {
+            handle: "biaboromy",
+        },
+        onchain: {
+            chain: "polygon",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 20,
+            userGrowthRate: 18,
+            codeQuality: 88,
+            trend: "up",
+        },
+    },
+    {
+        slug: "lens-protocol",
+        name: "Lens Protocol",
+        category: "infrastructure",
+        subcategory: "identity",
+        description:
+            "Decentralized social graph enabling portable social identities and content",
+        logo: "🌿",
+        website: "https://lens.xyz",
+        github: {
+            org: "lens-protocol",
+        },
+        twitter: {
+            handle: "LensProtocol",
+        },
+        onchain: {
+            chain: "polygon",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 22,
+            userGrowthRate: 20,
+            codeQuality: 90,
+            trend: "up",
+        },
+    },
+    {
+        slug: "alchemy",
+        name: "Alchemy",
+        category: "infrastructure",
+        subcategory: "data",
+        description:
+            "Blockchain development platform with node infrastructure and developer tools",
+        logo: "🧪",
+        website: "https://alchemy.com",
+        github: {
+            org: "alchemyplatform",
+        },
+        twitter: {
+            handle: "AlchemyPlatform",
+        },
+        onchain: {
+            chain: "polygon",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 20,
+            userGrowthRate: 18,
+            codeQuality: 92,
+            trend: "up",
+        },
+    },
+    {
+        slug: "quicknode",
+        name: "QuickNode",
+        category: "infrastructure",
+        subcategory: "data",
+        description:
+            "Blockchain node infrastructure providing fast and reliable RPC endpoints",
+        logo: "⚡",
+        website: "https://quicknode.com",
+        github: {
+            org: "quiknode-labs",
+        },
+        twitter: {
+            handle: "QuickNode",
+        },
+        onchain: {
+            chain: "polygon",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 18,
+            userGrowthRate: 16,
+            codeQuality: 88,
+            trend: "up",
+        },
+    },
+    {
+        slug: "thirdweb",
+        name: "thirdweb",
+        category: "infrastructure",
+        subcategory: "dev-tools",
+        description:
+            "Full-stack Web3 development platform with SDKs, contracts, and infrastructure",
+        logo: "🔺",
+        website: "https://thirdweb.com",
+        github: {
+            org: "thirdweb-dev",
+        },
+        twitter: {
+            handle: "thirdweb",
+        },
+        onchain: {
+            chain: "polygon",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 24,
+            userGrowthRate: 22,
+            codeQuality: 90,
+            trend: "up",
+        },
+    },
+    {
+        slug: "sequence",
+        name: "Sequence",
+        category: "infrastructure",
+        subcategory: "wallet",
+        description:
+            "Smart wallet infrastructure designed for gaming and consumer applications",
+        logo: "🎮",
+        website: "https://sequence.xyz",
+        github: {
+            org: "0xsequence",
+        },
+        twitter: {
+            handle: "0xSequence",
+        },
+        onchain: {
+            chain: "polygon",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 20,
+            userGrowthRate: 18,
+            codeQuality: 88,
+            trend: "up",
+        },
+    },
+    {
+        slug: "immutable",
+        name: "Immutable",
+        category: "infrastructure",
+        subcategory: "dev-tools",
+        description:
+            "Gaming-focused infrastructure with zkEVM and marketplace solutions",
+        logo: "🎯",
+        website: "https://immutable.com",
+        github: {
+            org: "immutable",
+        },
+        twitter: {
+            handle: "Immutable",
+        },
+        onchain: {
+            chain: "polygon",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 18,
+            userGrowthRate: 16,
+            codeQuality: 88,
+            trend: "up",
+        },
+    },
+    // ============================================
+    // ETHEREUM ADDITIONAL PROJECTS (3 new)
+    // ============================================
+    {
+        slug: "gearbox",
+        name: "Gearbox",
+        category: "defi",
+        subcategory: "lending",
+        description:
+            "Composable leverage protocol enabling leveraged positions across DeFi",
+        logo: "⚙️",
+        website: "https://gearbox.fi",
+        github: {
+            org: "Gearbox-protocol",
+        },
+        twitter: {
+            handle: "GearboxProtocol",
+        },
+        onchain: {
+            chain: "ethereum",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 17,
+            userGrowthRate: 15,
+            codeQuality: 88,
+            trend: "up",
+        },
+    },
+    {
+        slug: "sommelier",
+        name: "Sommelier",
+        category: "defi",
+        subcategory: "yield",
+        description:
+            "Intelligent DeFi vaults using off-chain computation for yield optimization",
+        logo: "🍷",
+        website: "https://sommelier.finance",
+        github: {
+            org: "PeggyJV",
+        },
+        twitter: {
+            handle: "sommaborfinance",
+        },
+        onchain: {
+            chain: "ethereum",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 16,
+            userGrowthRate: 14,
+            codeQuality: 87,
+            trend: "up",
+        },
+    },
+    {
+        slug: "eigenlayer",
+        name: "EigenLayer",
+        category: "infrastructure",
+        subcategory: "security",
+        description:
+            "Restaking protocol enabling shared security for new protocols and rollups",
+        logo: "🔒",
+        website: "https://eigenlayer.xyz",
+        github: {
+            org: "Layr-Labs",
+        },
+        twitter: {
+            handle: "eigenlayer",
+        },
+        onchain: {
+            chain: "ethereum",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 28,
+            userGrowthRate: 25,
+            codeQuality: 92,
+            trend: "up",
+        },
+    },
+    // ============================================
+    // SOLANA ADDITIONAL PROJECTS (8 new)
+    // ============================================
+    {
+        slug: "raydium",
+        name: "Raydium",
+        category: "defi",
+        subcategory: "dex",
+        description:
+            "AMM and order book DEX providing liquidity to Serum's central limit order book",
+        logo: "☢️",
+        website: "https://raydium.io",
+        github: {
+            org: "raydium-io",
+        },
+        twitter: {
+            handle: "RaydiumProtocol",
+        },
+        onchain: {
+            chain: "solana",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+            hasVolume: true,
+        },
+        defaults: {
+            walletGrowth: 18,
+            userGrowthRate: 16,
+            codeQuality: 88,
+            trend: "up",
+        },
+    },
+    {
+        slug: "marinade-finance",
+        name: "Marinade Finance",
+        category: "defi",
+        subcategory: "liquid-staking",
+        description:
+            "Largest liquid staking protocol on Solana with mSOL and native staking",
+        logo: "🥖",
+        website: "https://marinade.finance",
+        github: {
+            org: "marinade-finance",
+        },
+        twitter: {
+            handle: "MarinadeFinance",
+        },
+        onchain: {
+            chain: "solana",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 17,
+            userGrowthRate: 15,
+            codeQuality: 90,
+            trend: "up",
+        },
+    },
+    {
+        slug: "lifinity",
+        name: "Lifinity",
+        category: "defi",
+        subcategory: "dex",
+        description:
+            "Proactive market maker DEX using oracle prices to reduce impermanent loss",
+        logo: "♾️",
+        website: "https://lifinity.io",
+        github: {
+            org: "Lifinity-Protocol",
+        },
+        twitter: {
+            handle: "Lifinity_io",
+        },
+        onchain: {
+            chain: "solana",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 16,
+            userGrowthRate: 14,
+            codeQuality: 86,
+            trend: "up",
+        },
+    },
+    {
+        slug: "save-solend",
+        name: "Save (Solend)",
+        category: "defi",
+        subcategory: "lending",
+        description:
+            "Algorithmic lending and borrowing protocol, rebranded from Solend",
+        logo: "💰",
+        website: "https://save.finance",
+        github: {
+            org: "solendprotocol",
+        },
+        twitter: {
+            handle: "solaborprotocol",
+        },
+        onchain: {
+            chain: "solana",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 15,
+            userGrowthRate: 13,
+            codeQuality: 88,
+            trend: "stable",
+        },
+    },
+    {
+        slug: "jito-labs",
+        name: "Jito Labs",
+        category: "infrastructure",
+        subcategory: "dev-tools",
+        description:
+            "MEV infrastructure and liquid staking protocol with JitoSOL",
+        logo: "🔥",
+        website: "https://jito.network",
+        github: {
+            org: "jito-foundation",
+        },
+        twitter: {
+            handle: "jito_sol",
+        },
+        onchain: {
+            chain: "solana",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 24,
+            userGrowthRate: 22,
+            codeQuality: 90,
+            trend: "up",
+        },
+    },
+    {
+        slug: "triton",
+        name: "Triton",
+        category: "infrastructure",
+        subcategory: "data",
+        description:
+            "High-performance RPC and validator infrastructure for Solana",
+        logo: "🔱",
+        website: "https://triton.one",
+        github: {
+            org: "triton-one",
+        },
+        twitter: {
+            handle: "triaborone",
+        },
+        onchain: {
+            chain: "solana",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 18,
+            userGrowthRate: 16,
+            codeQuality: 88,
+            trend: "up",
+        },
+    },
+    {
+        slug: "switchboard",
+        name: "Switchboard",
+        category: "infrastructure",
+        subcategory: "data",
+        description:
+            "Decentralized oracle network providing customizable data feeds for Solana",
+        logo: "🔀",
+        website: "https://switchboard.xyz",
+        github: {
+            org: "switchboard-xyz",
+        },
+        twitter: {
+            handle: "switchboardxyz",
+        },
+        onchain: {
+            chain: "solana",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 17,
+            userGrowthRate: 15,
+            codeQuality: 88,
+            trend: "up",
+        },
+    },
+    {
+        slug: "light-protocol",
+        name: "Light Protocol",
+        category: "infrastructure",
+        subcategory: "dev-tools",
+        description:
+            "ZK compression protocol enabling cost-efficient state on Solana",
+        logo: "💡",
+        website: "https://lightprotocol.com",
+        github: {
+            org: "Lightprotocol",
+        },
+        twitter: {
+            handle: "LightProtocol",
+        },
+        onchain: {
+            chain: "solana",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 20,
+            userGrowthRate: 18,
+            codeQuality: 90,
+            trend: "up",
+        },
+    },
+    // ============================================
+    // BASE ADDITIONAL PROJECTS (8 new)
+    // ============================================
+    {
+        slug: "aerodrome",
+        name: "Aerodrome",
+        category: "defi",
+        subcategory: "dex",
+        description:
+            "Leading ve(3,3) DEX on Base, forked from Velodrome with governance incentives",
+        logo: "✈️",
+        website: "https://aerodrome.finance",
+        github: {
+            org: "aerodrome-finance",
+        },
+        twitter: {
+            handle: "AesodromeFi",
+        },
+        onchain: {
+            chain: "base",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+            hasVolume: true,
+        },
+        defaults: {
+            walletGrowth: 25,
+            userGrowthRate: 23,
+            codeQuality: 88,
+            trend: "up",
+        },
+    },
+    {
+        slug: "moonwell",
+        name: "Moonwell",
+        category: "defi",
+        subcategory: "lending",
+        description:
+            "Open lending protocol native to Base with community governance",
+        logo: "🌙",
+        website: "https://moonwell.fi",
+        github: {
+            org: "moonwell-fi",
+        },
+        twitter: {
+            handle: "MoonwellFi",
+        },
+        onchain: {
+            chain: "base",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 20,
+            userGrowthRate: 18,
+            codeQuality: 88,
+            trend: "up",
+        },
+    },
+    {
+        slug: "seamless-protocol",
+        name: "Seamless Protocol",
+        category: "defi",
+        subcategory: "lending",
+        description:
+            "Integrated lending protocol with ILMs (Integrated Liquidity Markets) on Base",
+        logo: "🔄",
+        website: "https://seamlessprotocol.com",
+        github: {
+            org: "seamless-protocol",
+        },
+        twitter: {
+            handle: "SeamlessFi",
+        },
+        onchain: {
+            chain: "base",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 22,
+            userGrowthRate: 20,
+            codeQuality: 87,
+            trend: "up",
+        },
+    },
+    {
+        slug: "baseswap",
+        name: "BaseSwap",
+        category: "defi",
+        subcategory: "dex",
+        description:
+            "Native Base DEX with yield farming and NFT marketplace features",
+        logo: "🔵",
+        website: "https://baseswap.fi",
+        github: {
+            org: "baseswapfi",
+        },
+        twitter: {
+            handle: "BaseSwap_Fi",
+        },
+        onchain: {
+            chain: "base",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 18,
+            userGrowthRate: 16,
+            codeQuality: 82,
+            trend: "up",
+        },
+    },
+    {
+        slug: "coinbase-wallet",
+        name: "Coinbase Wallet",
+        category: "infrastructure",
+        subcategory: "wallet",
+        description:
+            "Self-custody wallet from Coinbase, primary gateway to the Base ecosystem",
+        logo: "💼",
+        website: "https://wallet.coinbase.com",
+        github: {
+            org: "coinbase",
+        },
+        twitter: {
+            handle: "CoinbaseWallet",
+        },
+        onchain: {
+            chain: "base",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 22,
+            userGrowthRate: 20,
+            codeQuality: 92,
+            trend: "up",
+        },
+    },
+    {
+        slug: "privy",
+        name: "Privy",
+        category: "infrastructure",
+        subcategory: "wallet",
+        description:
+            "Embedded wallet infrastructure enabling seamless Web3 onboarding",
+        logo: "🔐",
+        website: "https://privy.io",
+        github: {
+            org: "privy-io",
+        },
+        twitter: {
+            handle: "priabordev",
+        },
+        onchain: {
+            chain: "base",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 24,
+            userGrowthRate: 22,
+            codeQuality: 90,
+            trend: "up",
+        },
+    },
+    {
+        slug: "zora",
+        name: "Zora",
+        category: "infrastructure",
+        subcategory: "dev-tools",
+        description:
+            "NFT and media protocol with its own L2 network on the OP Stack",
+        logo: "🎨",
+        website: "https://zora.co",
+        github: {
+            org: "ourzora",
+        },
+        twitter: {
+            handle: "zaboraa",
+        },
+        onchain: {
+            chain: "base",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 20,
+            userGrowthRate: 18,
+            codeQuality: 88,
+            trend: "up",
+        },
+    },
+    {
+        slug: "mirror",
+        name: "Mirror",
+        category: "infrastructure",
+        subcategory: "dev-tools",
+        description:
+            "Decentralized publishing platform for writers and creators",
+        logo: "🪞",
+        website: "https://mirror.xyz",
+        github: {
+            org: "mirror-xyz",
+        },
+        twitter: {
+            handle: "mirrordotxyz",
+        },
+        onchain: {
+            chain: "base",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 16,
+            userGrowthRate: 14,
+            codeQuality: 88,
+            trend: "stable",
+        },
+    },
+    // ============================================
+    // ARBITRUM ADDITIONAL PROJECTS (9 new)
+    // ============================================
+    {
+        slug: "camelot",
+        name: "Camelot",
+        category: "defi",
+        subcategory: "dex",
+        description:
+            "Native Arbitrum DEX with launchpad and innovative tokenomics",
+        logo: "⚔️",
+        website: "https://camelot.exchange",
+        github: {
+            org: "camelotboardxchange",
+        },
+        twitter: {
+            handle: "CamelotDEX",
+        },
+        onchain: {
+            chain: "arbitrum",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+            hasVolume: true,
+        },
+        defaults: {
+            walletGrowth: 20,
+            userGrowthRate: 18,
+            codeQuality: 88,
+            trend: "up",
+        },
+    },
+    {
+        slug: "radiant-capital",
+        name: "Radiant Capital",
+        category: "defi",
+        subcategory: "lending",
+        description:
+            "Cross-chain lending protocol leveraging LayerZero for omnichain borrowing",
+        logo: "☀️",
+        website: "https://radiant.capital",
+        github: {
+            org: "radiant-capital",
+        },
+        twitter: {
+            handle: "RDNTCapital",
+        },
+        onchain: {
+            chain: "arbitrum",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 16,
+            userGrowthRate: 14,
+            codeQuality: 85,
+            trend: "stable",
+        },
+    },
+    {
+        slug: "pendle",
+        name: "Pendle",
+        category: "defi",
+        subcategory: "yield",
+        description:
+            "Yield tokenization protocol enabling trading of future yield",
+        logo: "⏳",
+        website: "https://pendle.finance",
+        github: {
+            org: "pendle-finance",
+        },
+        twitter: {
+            handle: "pendle_fi",
+        },
+        onchain: {
+            chain: "arbitrum",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 24,
+            userGrowthRate: 22,
+            codeQuality: 90,
+            trend: "up",
+        },
+    },
+    {
+        slug: "vela-exchange",
+        name: "Vela Exchange",
+        category: "defi",
+        subcategory: "derivatives",
+        description:
+            "Perpetual DEX with advanced order types and low fees on Arbitrum",
+        logo: "⛵",
+        website: "https://vela.exchange",
+        github: {
+            org: "vela-exchange",
+        },
+        twitter: {
+            handle: "velaaborchange",
+        },
+        onchain: {
+            chain: "arbitrum",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+            hasVolume: true,
+        },
+        defaults: {
+            walletGrowth: 17,
+            userGrowthRate: 15,
+            codeQuality: 85,
+            trend: "up",
+        },
+    },
+    {
+        slug: "jones-dao",
+        name: "Jones DAO",
+        category: "defi",
+        subcategory: "yield",
+        description:
+            "Options vaults and yield strategies maximizing returns on blue-chip assets",
+        logo: "🎩",
+        website: "https://jonesdao.io",
+        github: {
+            org: "Jones-DAO",
+        },
+        twitter: {
+            handle: "Jones_DAO",
+        },
+        onchain: {
+            chain: "arbitrum",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        features: {
+            hasTVL: true,
+        },
+        defaults: {
+            walletGrowth: 16,
+            userGrowthRate: 14,
+            codeQuality: 86,
+            trend: "stable",
+        },
+    },
+    {
+        slug: "arbitrum-foundation",
+        name: "Arbitrum Foundation",
+        category: "infrastructure",
+        subcategory: "l2",
+        description:
+            "Governance body supporting the Arbitrum ecosystem and grants",
+        logo: "🔷",
+        website: "https://arbitrum.foundation",
+        github: {
+            org: "ArbitrumFoundation",
+        },
+        twitter: {
+            handle: "arbitrum",
+        },
+        onchain: {
+            chain: "arbitrum",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 18,
+            userGrowthRate: 16,
+            codeQuality: 90,
+            trend: "up",
+        },
+    },
+    {
+        slug: "offchain-labs",
+        name: "Offchain Labs",
+        category: "infrastructure",
+        subcategory: "l2",
+        description:
+            "Core development team building Arbitrum technology and Stylus VM",
+        logo: "🔬",
+        website: "https://offchainlabs.com",
+        github: {
+            org: "OffchainLabs",
+        },
+        twitter: {
+            handle: "OffchainLabs",
+        },
+        onchain: {
+            chain: "arbitrum",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 20,
+            userGrowthRate: 18,
+            codeQuality: 92,
+            trend: "up",
+        },
+    },
+    {
+        slug: "layerzero",
+        name: "LayerZero",
+        category: "infrastructure",
+        subcategory: "dev-tools",
+        description:
+            "Omnichain interoperability protocol enabling cross-chain messaging",
+        logo: "0️⃣",
+        website: "https://layerzero.network",
+        github: {
+            org: "LayerZero-Labs",
+        },
+        twitter: {
+            handle: "LayerZero_Labs",
+        },
+        onchain: {
+            chain: "arbitrum",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 22,
+            userGrowthRate: 20,
+            codeQuality: 90,
+            trend: "up",
+        },
+    },
+    {
+        slug: "chainlink-ccip",
+        name: "Chainlink CCIP",
+        category: "infrastructure",
+        subcategory: "dev-tools",
+        description:
+            "Cross-Chain Interoperability Protocol for secure token and message transfers",
+        logo: "🔗",
+        website: "https://chain.link/cross-chain",
+        github: {
+            org: "smartcontractkit",
+        },
+        twitter: {
+            handle: "chainlink",
+        },
+        onchain: {
+            chain: "arbitrum",
+            address: "0x0000000000000000000000000000000000000000",
+        },
+        defaults: {
+            walletGrowth: 18,
+            userGrowthRate: 16,
+            codeQuality: 92,
+            trend: "up",
+        },
+    },
 ];
 
 // Helper functions
