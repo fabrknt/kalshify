@@ -1,6 +1,6 @@
-# FABRKNT: Web3 Index & Synergy Platform
+# FABRKNT: Web3 Index, Curate & Synergy Platform
 
-**Verify Web3. Discover Synergy.**
+**Verify Web3. Curate Dependencies. Discover Synergy.**
 
 **Pitch decks lie. On-chain data doesn't.**
 
@@ -14,9 +14,9 @@
 
 **Concept:** A Web3 Index & Synergy platform built for **early verification**. We help **Web3 Corp Dev teams, investors, and founders** verify companies using real on-chain activity, GitHub signals, and social data — fully automated, no self-reporting.
 
-**Products:** Two integrated products: **INDEX** (Web3 Company Verification) and **SYNERGY** (Professional Partnership Discovery). INDEX provides automated verification that shows what Web3 companies actually do — not what they say. SYNERGY leverages INDEX data to discover synergy opportunities with verified companies — enabling strategic connections through AI-powered compatibility analysis.
+**Products:** Three integrated products: **INDEX** (Web3 Company Verification), **CURATE** (Dependency Graph & Tech Stack Analysis), and **SYNERGY** (Professional Partnership Discovery). INDEX provides automated verification that shows what Web3 companies actually do — not what they say. CURATE maps how projects are interconnected through dependencies, SDK usage, and shared technology stacks. SYNERGY leverages INDEX and CURATE data to discover synergy opportunities with verified companies — enabling strategic connections through AI-powered compatibility analysis.
 
-**Architecture:** **Index → Synergy** - INDEX serves as the data foundation that powers SYNERGY's compatibility analysis and recommendation engine. Every synergy opportunity is backed by verified INDEX data, ensuring transparency and trust.
+**Architecture:** **Index → Curate → Synergy** - INDEX serves as the data foundation, CURATE adds technical relationship mapping, and SYNERGY powers compatibility analysis and recommendations. Every synergy opportunity is backed by verified INDEX data and technical relationship insights from CURATE, ensuring transparency and trust.
 
 **Positioning:** **AI × Verified Data × Professional Discovery** - Maximizing automation through AI to enable intelligent partnership discovery and strategic connections in the Web3 market, where information asymmetry is high.
 
@@ -61,9 +61,9 @@ AI seamlessly combines three layers of data to provide a holistic view:
 
 ---
 
-## 4. Platform Architecture: Index → Synergy
+## 4. Platform Architecture: Index → Curate → Synergy
 
-The platform operates on a two-tier architecture where **Index** serves as the data foundation that powers **Synergy**.
+The platform operates on a three-tier architecture where **Index** serves as the data foundation, **Curate** maps technical relationships, and **Synergy** enables partnership discovery.
 
 ### 4.1. INDEX: Web3 Company Verification
 
@@ -95,7 +95,32 @@ The platform operates on a two-tier architecture where **Index** serves as the d
 -   Comprehensive company directory with verified index scores
 -   Transparent, auditable data sources
 
-### 4.2. SYNERGY: Professional Partnership Discovery
+### 4.2. CURATE: Web3 Dependency Graph (Beta)
+
+**CURATE** visualizes how Web3 projects are interconnected through dependencies, SDK usage, and shared technology stacks — revealing technical relationships that signal partnership potential.
+
+**What we map:**
+
+-   **Dependency Graph**
+    Interactive network visualization of project connections
+
+-   **Tech Stack Explorer**
+    Search and filter shared packages across Web3 projects
+
+-   **Ecosystem Maps**
+    Chain-specific views (Solana, Ethereum, Base, etc.)
+
+**Technical relationships reveal partnership potential.**
+
+**Key Features:**
+
+-   Analysis of package.json dependencies from GitHub repositories
+-   Interactive force-graph visualization with project clustering
+-   SDK usage detection and relationship mapping
+-   Ecosystem filtering by blockchain network
+-   Integration with INDEX for company metadata
+
+### 4.3. SYNERGY: Professional Partnership Discovery
 
 **SYNERGY** enables discovery of synergy opportunities with verified Web3 companies — powered by AI-driven compatibility analysis.
 
@@ -114,7 +139,7 @@ The platform operates on a two-tier architecture where **Index** serves as the d
 -   **Compatibility Analysis:** See detailed synergy assessments including technical fit, audience overlap, and projected impact
 -   **Verified Metrics:** Every opportunity displays live INDEX scores (Growth Score, Team Health Score, Overall Score)
 
-### 4.3. Partnership Types & Use Cases
+### 4.4. Partnership Types & Use Cases
 
 **SYNERGY** supports diverse partnership opportunities across the Web3 ecosystem:
 
@@ -124,7 +149,7 @@ The platform operates on a two-tier architecture where **Index** serves as the d
 -   **Ecosystem Collaborations:** Build connections across protocols, chains, and verticals
 -   **Investment & M&A:** Identify potential acquisition targets or investment opportunities with verified traction
 
-### 4.4. M&A Transaction Protocol (Optional)
+### 4.5. M&A Transaction Protocol (Optional)
 
 For companies pursuing acquisition transactions, SYNERGY supports on-chain deal execution:
 
@@ -146,15 +171,17 @@ _Note: Most partnerships begin with discovery and messaging. Transaction protoco
 
 ---
 
-## 6. Index → Synergy Data Flow
+## 6. Index → Curate → Synergy Data Flow
 
-**INDEX** collects and verifies data, which **SYNERGY** uses for AI-powered compatibility analysis and recommendations:
+**INDEX** collects and verifies data, **CURATE** maps technical relationships, and **SYNERGY** uses both for AI-powered compatibility analysis and recommendations:
 
-| Index Data         | Used by Synergy For                                                                   | Impact on Partnership Discovery                                                     |
+| Data Source        | What It Provides                                                                      | Impact on Partnership Discovery                                                     |
 | ------------------ | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| **Growth Metrics** | Verified On-chain ROI / Marketing efficiency + Service activity metrics (DAU/WAU/MAU) | Proves product-market fit, scalability, and real user traction for partnership decisions |
-| **Team Health**    | Team contribution score / Developer activity / Code quality                           | Validates sustainable development capacity and technical partnership readiness     |
-| **Overall Score**  | Automated compatibility analysis and AI-powered ranking                                          | Enables intelligent opportunity matching based on verified data, not self-reported claims                          |
+| **INDEX: Growth Metrics** | Verified On-chain ROI / Marketing efficiency + Service activity metrics (DAU/WAU/MAU) | Proves product-market fit, scalability, and real user traction for partnership decisions |
+| **INDEX: Team Health**    | Team contribution score / Developer activity / Code quality                           | Validates sustainable development capacity and technical partnership readiness     |
+| **CURATE: Dependencies**  | Shared packages, SDK usage, technical stack overlap                                   | Reveals technical compatibility and integration opportunities                       |
+| **CURATE: Ecosystem**     | Chain-specific project clustering and relationship mapping                            | Identifies ecosystem synergies and cross-chain opportunities                        |
+| **Overall Score**         | Automated compatibility analysis combining INDEX + CURATE data                        | Enables intelligent opportunity matching based on verified data and technical fit   |
 
 ---
 
@@ -240,9 +267,9 @@ Web3 has a trust problem:
 
 ## 9. The FABRKNT Ecosystem Vision
 
-**FABRKNT** operates on a data-driven architecture where **INDEX** powers **SYNERGY**.
+**FABRKNT** operates on a data-driven architecture where **INDEX** provides verification, **CURATE** maps relationships, and **SYNERGY** enables discovery.
 
-### The Index → Synergy Flow
+### The Index → Curate → Synergy Flow
 
 1. **INDEX** collects and verifies comprehensive company data:
 
@@ -250,15 +277,23 @@ Web3 has a trust problem:
     - Team health (GitHub activity, contributors, code quality)
     - Overall verification scores (0-100)
 
-2. **SYNERGY** leverages INDEX data to enable intelligent partnership discovery:
+2. **CURATE** maps technical relationships between projects:
+
+    - Dependency analysis from GitHub repositories
+    - SDK usage detection and relationship mapping
+    - Ecosystem clustering by blockchain network
+    - Shared technology stack identification
+
+3. **SYNERGY** leverages INDEX and CURATE data to enable intelligent partnership discovery:
 
     - AI-powered compatibility analysis based on verified INDEX scores
+    - Technical compatibility insights from CURATE dependency mapping
     - Opportunity recommendations using complementary capabilities
-    - Automated synergy assessment using real-time index metrics
+    - Automated synergy assessment using real-time metrics
 
-3. **Result:** Companies can discover and connect with strategic partners using complete transparency—seeing authenticated team health and growth metrics for every opportunity.
+4. **Result:** Companies can discover and connect with strategic partners using complete transparency—seeing authenticated team health, growth metrics, and technical compatibility for every opportunity.
 
-This data-driven approach eliminates information asymmetry and enables high-trust business connections in Web3, supporting ecosystem integration and strategic partnerships. **INDEX is the foundation; SYNERGY is the engine that uses that foundation to create connections.**
+This data-driven approach eliminates information asymmetry and enables high-trust business connections in Web3, supporting ecosystem integration and strategic partnerships. **INDEX is the foundation; CURATE reveals relationships; SYNERGY is the engine that creates connections.**
 
 ---
 
@@ -277,12 +312,21 @@ This data-driven approach eliminates information asymmetry and enables high-trus
 -   Compatibility analysis and AI-powered synergy scoring
 -   Connection management and partnership tracking
 
-### Phase 3: AI Enhancement (In Progress)
+### Phase 3: CURATE - Dependency Mapping (Beta)
+
+-   CURATE: Web3 dependency graph visualization
+-   Tech Stack Explorer for searching shared packages
+-   Ecosystem Maps for chain-specific views
+-   GitHub package.json analysis pipeline
+-   Integration with INDEX company data
+
+### Phase 4: AI Enhancement (In Progress)
 
 -   AI document processing (NLP for financial/legal docs)
 -   Sentiment analysis integration
 -   Automated target extraction algorithms
 -   Enhanced SME scoring system
+-   CURATE-powered technical compatibility scoring
 
 ---
 
@@ -296,7 +340,10 @@ This data-driven approach eliminates information asymmetry and enables high-trus
 2. **Index**
    Companies receive transparent, comparable verification scores based on growth metrics and team health.
 
-3. **Discover**
+3. **Curate**
+   Map dependencies and technical relationships between projects to reveal partnership potential and ecosystem connections.
+
+4. **Discover**
    AI-powered recommendations surface synergy opportunities with verified companies—enabling strategic connections through data-driven compatibility analysis.
 
 ### For Companies Seeking Partnerships

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import { useSession, signOut } from "next-auth/react";
-import { LogIn, LogOut, User } from "lucide-react";
+import { LogIn, LogOut, User, FolderTree, Brain, Link2 } from "lucide-react";
 
 export default function SynergyLayout({
     children,
@@ -40,14 +40,23 @@ export default function SynergyLayout({
                             </a>
                             <Link
                                 href="/cindex"
-                                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:block"
+                                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:flex items-center gap-1.5"
                             >
+                                <Brain className="h-3.5 w-3.5" />
                                 Index
                             </Link>
                             <Link
-                                href="/synergy"
-                                className="text-sm font-medium text-green-600 hover:text-green-700 transition-colors hidden sm:block"
+                                href="/curate"
+                                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:flex items-center gap-1.5"
                             >
+                                <FolderTree className="h-3.5 w-3.5" />
+                                Curate
+                            </Link>
+                            <Link
+                                href="/synergy"
+                                className="text-sm font-medium text-green-600 hover:text-green-700 transition-colors hidden sm:flex items-center gap-1.5"
+                            >
+                                <Link2 className="h-3.5 w-3.5" />
                                 Synergy
                             </Link>
 

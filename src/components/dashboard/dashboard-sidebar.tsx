@@ -17,6 +17,9 @@ import {
     MessageCircle,
     Lock,
     Award,
+    GitBranch,
+    Network,
+    Search,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
@@ -38,6 +41,11 @@ const synergyNav = [
     },
 ];
 
+const curateNav = [
+    { name: "Graph", href: "/curate", icon: Network },
+    { name: "Explorer", href: "/curate/explorer", icon: Search },
+];
+
 interface DashboardSidebarProps {
     isOpen: boolean;
     onClose: () => void;
@@ -47,6 +55,7 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
     const pathname = usePathname();
     const isIndex = pathname.startsWith("/cindex");
     const isSynergy = pathname.startsWith("/synergy");
+    const isCurate = pathname.startsWith("/curate");
     const { data: session } = useSession();
     const [hasClaimed, setHasClaimed] = useState(false);
 
@@ -95,7 +104,7 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
                             onClick={onClose}
                             className={cn(
                                 "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all",
-                                !isIndex && !isSynergy
+                                !isIndex && !isSynergy && !isCurate
                                     ? "bg-gray-100 text-foreground"
                                     : "text-foreground/90 hover:bg-gray-50 hover:text-foreground"
                             )}
@@ -146,7 +155,47 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
                                             className={cn(
                                                 "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all",
                                                 isActive
-                                                    ? "text-white bg-green-600 shadow-lg shadow-green-600/40"
+                                                    ? "text-white bg-purple-600 shadow-lg shadow-purple-600/40"
+                                                    : "text-foreground/90 hover:bg-gray-50 hover:text-foreground"
+                                            )}
+                                        >
+                                            <Icon className="mr-3 h-5 w-5" />
+                                            {item.name}
+                                        </Link>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* CURATE Section */}
+                        <div>
+                            <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                                <GitBranch className="h-4 w-4 text-cyan-600" />
+                                Curate
+                                <span className="ml-auto text-[10px] normal-case text-cyan-600 flex items-center gap-1">
+                                    Beta
+                                </span>
+                            </div>
+                            <div className="space-y-1">
+                                {curateNav.map((item) => {
+                                    const isActive =
+                                        item.href === "/curate"
+                                            ? pathname === "/curate"
+                                            : pathname === item.href ||
+                                              pathname.startsWith(
+                                                  item.href + "/"
+                                              );
+                                    const Icon = item.icon;
+
+                                    return (
+                                        <Link
+                                            key={item.name}
+                                            href={item.href}
+                                            onClick={onClose}
+                                            className={cn(
+                                                "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all",
+                                                isActive
+                                                    ? "text-white bg-cyan-600 shadow-lg shadow-cyan-600/40"
                                                     : "text-foreground/90 hover:bg-gray-50 hover:text-foreground"
                                             )}
                                         >
@@ -231,7 +280,7 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
                             <div className="font-medium text-foreground">
                                 FABRKNT
                             </div>
-                            <div className="mt-1">Index + Synergy</div>
+                            <div className="mt-1">Index + Curate + Synergy</div>
                             <div className="mt-1 text-gray-600">Beta</div>
                         </div>
                     </div>
@@ -247,7 +296,7 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
                         href="/"
                         className={cn(
                             "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all",
-                            !isIndex && !isSynergy
+                            !isIndex && !isSynergy && !isCurate
                                 ? "bg-gray-100 text-foreground"
                                 : "text-foreground/90 hover:bg-gray-50 hover:text-foreground"
                         )}
@@ -295,6 +344,40 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
                                             "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all",
                                             isActive
                                                 ? "text-white bg-purple-600 shadow-lg shadow-purple-600/40"
+                                                : "text-foreground/90 hover:bg-gray-50 hover:text-foreground"
+                                        )}
+                                    >
+                                        <Icon className="mr-3 h-5 w-5" />
+                                        {item.name}
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    {/* CURATE Section */}
+                    <div>
+                        <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                            <GitBranch className="h-4 w-4 text-cyan-600" />
+                            Curate
+                        </div>
+                        <div className="space-y-1">
+                            {curateNav.map((item) => {
+                                const isActive =
+                                    item.href === "/curate"
+                                        ? pathname === "/curate"
+                                        : pathname === item.href ||
+                                          pathname.startsWith(item.href + "/");
+                                const Icon = item.icon;
+
+                                return (
+                                    <Link
+                                        key={item.name}
+                                        href={item.href}
+                                        className={cn(
+                                            "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all",
+                                            isActive
+                                                ? "text-white bg-cyan-600 shadow-lg shadow-cyan-600/40"
                                                 : "text-foreground/90 hover:bg-gray-50 hover:text-foreground"
                                         )}
                                     >
@@ -376,7 +459,7 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
                         <div className="font-medium text-foreground">
                             FABRKNT
                         </div>
-                        <div className="mt-1">Index + Synergy</div>
+                        <div className="mt-1">Index + Curate + Synergy</div>
                         <div className="mt-1 text-gray-600">Beta</div>
                     </div>
                 </div>

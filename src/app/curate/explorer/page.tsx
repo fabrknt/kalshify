@@ -79,15 +79,49 @@ export default function ExplorerPage() {
     };
 
     return (
-        <div className="container mx-auto px-4 py-6">
+        <div className="space-y-8">
             {/* Header */}
-            <div className="mb-6">
-                <h1 className="text-2xl font-bold text-white mb-2">
+            <div>
+                <div className="flex items-center gap-3 mb-2">
+                    <h1 className="text-3xl font-bold text-foreground">
+                        CURATE
+                    </h1>
+                    <span className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-cyan-400/10 text-cyan-400 border border-cyan-400/30 text-xs font-semibold font-mono">
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span>
+                        </span>
+                        PREVIEW
+                    </span>
+                </div>
+                <p className="text-sm text-muted-foreground mb-2">
                     Tech Stack Explorer
-                </h1>
-                <p className="text-slate-400">
-                    Search and filter shared dependencies across Web3 projects
                 </p>
+                <p className="text-muted-foreground">
+                    Search and filter shared dependencies across Web3 projects.
+                </p>
+            </div>
+
+            {/* Data Fetching Notice */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0">
+                        <div className="relative flex h-3 w-3 mt-1">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+                        </div>
+                    </div>
+                    <div className="flex-1">
+                        <h3 className="text-sm font-semibold text-blue-900 mb-1">
+                            Data Collection in Progress
+                        </h3>
+                        <p className="text-sm text-blue-800">
+                            We are currently fetching dependency data from GitHub repositories
+                            for all projects in the Index. The dependency list will be updated
+                            automatically as data becomes available.
+                        </p>
+                    </div>
+                </div>
             </div>
 
             {/* Search and Filters */}

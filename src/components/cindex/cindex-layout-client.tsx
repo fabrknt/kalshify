@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import { useSession, signOut } from "next-auth/react";
-import { LogIn, LogOut, Lock, FolderTree } from "lucide-react";
+import { LogIn, LogOut, Lock, FolderTree, Brain, Link2 } from "lucide-react";
 
 export function CindexLayoutClient({
     children,
@@ -41,8 +41,9 @@ export function CindexLayoutClient({
                             </a>
                             <Link
                                 href="/cindex"
-                                className="text-sm font-medium text-purple-600 hover:text-purple-700 transition-colors hidden sm:block"
+                                className="text-sm font-medium text-purple-600 hover:text-purple-700 transition-colors hidden sm:flex items-center gap-1.5"
                             >
+                                <Brain className="h-3.5 w-3.5" />
                                 Index
                             </Link>
                             <Link
@@ -57,6 +58,7 @@ export function CindexLayoutClient({
                                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:flex items-center gap-1.5"
                                 title={!session ? "Sign in required" : "Synergy"}
                             >
+                                <Link2 className="h-3.5 w-3.5" />
                                 Synergy
                                 {!session && <Lock className="h-3 w-3 text-muted-foreground/50" />}
                             </Link>

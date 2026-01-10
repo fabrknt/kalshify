@@ -8,6 +8,8 @@ import {
     Users,
     Building2,
     Github,
+    GitBranch,
+    Network,
 } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { Logo } from "@/components/logo";
@@ -92,6 +94,9 @@ export default async function SuiteLandingPage() {
                         <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-4">
                             Verify Web3.
                         </h1>
+                        <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+                            Curate Dependencies.
+                        </h2>
                         <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
                             Discover Synergy.
                         </h2>
@@ -220,7 +225,7 @@ export default async function SuiteLandingPage() {
                     <p className="text-lg text-muted-foreground mb-4">
                         FABRKNT is a{" "}
                         <strong className="text-foreground">
-                            Web3 Index & Synergy platform
+                            Web3 Index, Curate & Synergy platform
                         </strong>{" "}
                         built for{" "}
                         <strong className="text-foreground">
@@ -247,7 +252,7 @@ export default async function SuiteLandingPage() {
 
             {/* Products Section */}
             <div className="container mx-auto px-4 pt-4 pb-16">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
                     {/* INDEX Product */}
                     <div className="bg-card rounded-lg border border-border p-8">
                         <div className="flex items-center gap-3 mb-6">
@@ -314,9 +319,84 @@ export default async function SuiteLandingPage() {
 
                         <Link
                             href="/cindex"
-                            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-cyan-400 text-slate-950 hover:bg-cyan-300 transition-all font-bold w-full justify-center border border-cyan-300 shadow-lg shadow-cyan-400/20 hover:shadow-cyan-400/40"
+                            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-purple-500 text-white hover:bg-purple-400 transition-all font-bold w-full justify-center border border-purple-400 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40"
                         >
                             Explore the Index
+                            <ArrowRight className="h-5 w-5" />
+                        </Link>
+                    </div>
+
+                    {/* CURATE Product */}
+                    <div className="bg-card rounded-lg border border-border p-8">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="p-3 rounded-lg bg-cyan-400/10 border border-cyan-400/30">
+                                <GitBranch className="h-8 w-8 text-cyan-400" />
+                            </div>
+                            <div>
+                                <div className="flex items-center gap-2">
+                                    <h2 className="text-2xl font-bold text-foreground">
+                                        CURATE
+                                    </h2>
+                                    <span className="text-xs px-2 py-0.5 rounded bg-cyan-400/10 text-cyan-400 border border-cyan-400/30 font-mono">
+                                        Beta
+                                    </span>
+                                </div>
+                                <p className="text-sm text-muted-foreground">
+                                    Web3 Dependency Graph
+                                </p>
+                            </div>
+                        </div>
+
+                        <p className="text-muted-foreground mb-6">
+                            Visualize how Web3 projects are interconnected through
+                            dependencies, SDK usage, and shared technology stacks.
+                        </p>
+
+                        <div className="space-y-4 mb-6">
+                            <div className="flex items-start gap-3">
+                                <Network className="h-5 w-5 text-cyan-400 mt-0.5" />
+                                <div>
+                                    <p className="font-semibold text-foreground">
+                                        Dependency Graph
+                                    </p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Interactive visualization of project connections
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-3">
+                                <GitBranch className="h-5 w-5 text-cyan-400 mt-0.5" />
+                                <div>
+                                    <p className="font-semibold text-foreground">
+                                        Tech Stack Explorer
+                                    </p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Find projects using the same packages
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-3">
+                                <Shield className="h-5 w-5 text-cyan-400 mt-0.5" />
+                                <div>
+                                    <p className="font-semibold text-foreground">
+                                        Ecosystem Maps
+                                    </p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Chain-specific ecosystem views
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p className="text-sm font-semibold text-cyan-400 mb-6">
+                            Technical relationships reveal partnership potential.
+                        </p>
+
+                        <Link
+                            href="/curate"
+                            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-cyan-400 text-slate-950 hover:bg-cyan-300 transition-all font-bold w-full justify-center border border-cyan-300 shadow-lg shadow-cyan-400/20 hover:shadow-cyan-400/40"
+                        >
+                            Explore Curate
                             <ArrowRight className="h-5 w-5" />
                         </Link>
                     </div>
@@ -389,10 +469,10 @@ export default async function SuiteLandingPage() {
                         <h2 className="text-3xl font-bold text-foreground text-center mb-12">
                             How it works
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                             <div className="text-center">
-                                <div className="w-16 h-16 rounded-full bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center mx-auto mb-4">
-                                    <span className="text-2xl font-bold text-cyan-400 font-mono">
+                                <div className="w-16 h-16 rounded-full bg-purple-500/10 border border-purple-500/30 flex items-center justify-center mx-auto mb-4">
+                                    <span className="text-2xl font-bold text-purple-500 font-mono">
                                         1
                                     </span>
                                 </div>
@@ -405,8 +485,8 @@ export default async function SuiteLandingPage() {
                                 </p>
                             </div>
                             <div className="text-center">
-                                <div className="w-16 h-16 rounded-full bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center mx-auto mb-4">
-                                    <span className="text-2xl font-bold text-cyan-400 font-mono">
+                                <div className="w-16 h-16 rounded-full bg-purple-500/10 border border-purple-500/30 flex items-center justify-center mx-auto mb-4">
+                                    <span className="text-2xl font-bold text-purple-500 font-mono">
                                         2
                                     </span>
                                 </div>
@@ -419,9 +499,23 @@ export default async function SuiteLandingPage() {
                                 </p>
                             </div>
                             <div className="text-center">
+                                <div className="w-16 h-16 rounded-full bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center mx-auto mb-4">
+                                    <span className="text-2xl font-bold text-cyan-400 font-mono">
+                                        3
+                                    </span>
+                                </div>
+                                <h3 className="text-lg font-semibold text-foreground mb-2">
+                                    Curate
+                                </h3>
+                                <p className="text-sm text-muted-foreground">
+                                    Map dependencies and technical relationships
+                                    between projects
+                                </p>
+                            </div>
+                            <div className="text-center">
                                 <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto mb-4">
                                     <span className="text-2xl font-bold text-emerald-500 font-mono">
-                                        3
+                                        4
                                     </span>
                                 </div>
                                 <h3 className="text-lg font-semibold text-foreground mb-2">
@@ -654,6 +748,15 @@ export default async function SuiteLandingPage() {
                                         className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                                     >
                                         Company Directory
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href="/curate"
+                                        className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
+                                    >
+                                        Curate
+                                        <span className="text-[10px] px-1 py-0.5 rounded bg-cyan-400/10 text-cyan-400 border border-cyan-400/30">Beta</span>
                                     </Link>
                                 </li>
                                 <li>
