@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import { useSession, signOut } from "next-auth/react";
-import { LogIn, LogOut, Lock } from "lucide-react";
+import { LogIn, LogOut, Lock, FolderTree } from "lucide-react";
 
 export function CindexLayoutClient({
     children,
@@ -44,6 +44,13 @@ export function CindexLayoutClient({
                                 className="text-sm font-medium text-purple-600 hover:text-purple-700 transition-colors hidden sm:block"
                             >
                                 Index
+                            </Link>
+                            <Link
+                                href="/curate"
+                                className="text-sm font-medium text-cyan-500 hover:text-cyan-400 transition-colors hidden sm:flex items-center gap-1.5"
+                            >
+                                <FolderTree className="h-3.5 w-3.5" />
+                                Curate
                             </Link>
                             <Link
                                 href="/synergy"
