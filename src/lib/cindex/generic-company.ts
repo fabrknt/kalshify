@@ -8,7 +8,6 @@ import {
     getUniswapMetrics as getUniswapGitHubMetrics,
     getFabrkntMetrics,
 } from "@/lib/api/github";
-import { getEngagementMetrics } from "@/lib/api/twitter";
 import {
     getOnChainMetrics as getEthereumMetrics,
     getUniswapMetrics as getUniswapOnChainMetrics,
@@ -21,8 +20,6 @@ import { calculateIndexScore } from "./calculators/score-calculator";
 import { IndexData, IndexScore } from "@/lib/api/types";
 import { Company, Chain } from "./companies";
 import { CompanyConfig } from "./company-configs";
-import { CrawlerService } from "./crawler";
-import { LLMService } from "./llm";
 import { fetchWithTimeoutAndRetry } from "./utils/fetch-with-retry";
 import { TimeoutError } from "./utils/timeout";
 
@@ -31,7 +28,6 @@ import { TimeoutError } from "./utils/timeout";
 // Better to wait longer and get real data than to fail fast with zeros
 const FETCH_CONFIG = {
     github: { timeoutMs: 600000, maxRetries: 3 }, // 10min timeout, 3 retries
-    twitter: { timeoutMs: 1200000, maxRetries: 3 }, // 20min timeout, 3 retries (rate limits and slow responses)
     onchain: { timeoutMs: 1200000, maxRetries: 3 }, // 20min timeout, 3 retries (RPC calls can be very slow)
 };
 
@@ -56,8 +52,6 @@ export async function fetchCompanyData(
                 return getOrganizationMetrics(config.github.org);
             }
         };
-
-        const fetchTwitter = () => getEngagementMetrics(config.twitter.handle);
 
         const fetchOnchain = () => {
             if (config.features?.useCrawler) {
@@ -92,10 +86,10 @@ export async function fetchCompanyData(
         // to handle partial failures gracefully
         console.log("Starting parallel fetch for all data sources...");
         console.log(
-            `⏱️  Timeouts: GitHub ${FETCH_CONFIG.github.timeoutMs / 1000}s, Twitter ${FETCH_CONFIG.twitter.timeoutMs / 1000}s, On-chain ${FETCH_CONFIG.onchain.timeoutMs / 1000}s`
+            `⏱️  Timeouts: GitHub ${FETCH_CONFIG.github.timeoutMs / 1000}s, On-chain ${FETCH_CONFIG.onchain.timeoutMs / 1000}s`
         );
 
-        const [githubResult, twitterResult, onchainResult] =
+        const [githubResult, onchainResult] =
             await Promise.allSettled([
                 fetchWithTimeoutAndRetry(fetchGitHub, {
                     ...FETCH_CONFIG.github,
@@ -122,31 +116,6 @@ export async function fetchCompanyData(
                         avgCommitsPerDay: 0,
                         topContributors: [],
                         commitActivity: [],
-                    };
-                }),
-                fetchWithTimeoutAndRetry(fetchTwitter, {
-                    ...FETCH_CONFIG.twitter,
-                    sourceName: `Twitter (${config.name})`,
-                }).catch((err) => {
-                    console.error(
-                        `\n❌ Twitter fetch failed for ${config.name} after ${FETCH_CONFIG.twitter.maxRetries} retries:`
-                    );
-                    console.error(
-                        `   ${
-                            err instanceof TimeoutError
-                                ? `Timeout after ${FETCH_CONFIG.twitter.timeoutMs / 1000}s`
-                                : err.message
-                        }`
-                    );
-                    console.error(
-                        `   Using default values (zeros) for Twitter metrics`
-                    );
-                    return {
-                        followers: 0,
-                        following: 0,
-                        tweetCount: 0,
-                        verified: false,
-                        createdAt: new Date().toISOString(),
                     };
                 }),
                 fetchWithTimeoutAndRetry(fetchOnchain, {
@@ -192,17 +161,6 @@ export async function fetchCompanyData(
                       commitActivity: [],
                   };
 
-        const twitter =
-            twitterResult.status === "fulfilled"
-                ? twitterResult.value
-                : {
-                      followers: 0,
-                      following: 0,
-                      tweetCount: 0,
-                      verified: false,
-                      createdAt: new Date().toISOString(),
-                  };
-
         const onchain =
             onchainResult.status === "fulfilled"
                 ? onchainResult.value
@@ -229,17 +187,6 @@ export async function fetchCompanyData(
             );
         }
 
-        if (twitterResult.status === "fulfilled") {
-            const engagement = (twitter as any).engagement30d;
-            console.log(
-                `   ✅ Twitter: ${twitter.followers.toLocaleString()} followers${engagement ? `, ${engagement.likes} likes (30d)` : ""}`
-            );
-        } else {
-            console.log(
-                `   ❌ Twitter: Failed - ${twitterResult.reason instanceof TimeoutError ? "Timeout" : twitterResult.reason?.message || "Unknown error"}`
-            );
-        }
-
         if (onchainResult.status === "fulfilled") {
             console.log(
                 `   ✅ On-chain (${config.onchain.chain}): ${onchain.transactionCount30d?.toLocaleString() || 0} txs, ${onchain.uniqueWallets30d?.toLocaleString() || 0} wallets (30d)`
@@ -253,14 +200,12 @@ export async function fetchCompanyData(
         // Warn if any data source returned zeros
         const hasZeroGithub =
             github.totalContributors === 0 && github.totalCommits30d === 0;
-        const hasZeroTwitter = twitter.followers === 0;
         const hasZeroOnchain =
             onchain.transactionCount30d === 0 && onchain.uniqueWallets30d === 0;
 
-        if (hasZeroGithub || hasZeroTwitter || hasZeroOnchain) {
+        if (hasZeroGithub || hasZeroOnchain) {
             console.log("\n⚠️  Warning: Some data sources returned zero values:");
             if (hasZeroGithub) console.log("   - GitHub metrics are zero");
-            if (hasZeroTwitter) console.log("   - Twitter metrics are zero");
             if (hasZeroOnchain) console.log("   - On-chain metrics are zero");
             console.log(
                 "   This may indicate API failures, rate limits, or missing data."
@@ -272,22 +217,11 @@ export async function fetchCompanyData(
         (onchain as any).dailyActiveUsers = onchain.uniqueWallets24h || 0;
         (onchain as any).weeklyActiveUsers = onchain.uniqueWallets7d || 0;
 
-        // Handle special crawler case (Fabrknt)
-        let news: any[] = [];
-        if (config.features?.useCrawler && config.blogUrl) {
-            const crawler = new CrawlerService();
-            news = await crawler
-                .crawlCompanyNews(config.blogUrl, `${config.name} Web`)
-                .catch(() => []);
-        }
-
         return {
             companyName: config.name,
             category: config.category,
             github,
-            twitter,
             onchain: onchain as any,
-            news: news.length > 0 ? news : undefined,
             calculatedAt: new Date().toISOString(),
         };
     } catch (error) {
@@ -297,73 +231,18 @@ export async function fetchCompanyData(
 }
 
 /**
- * Generic score calculation with optional AI partnership analysis
+ * Generic score calculation
  */
 export async function calculateCompanyScore(
     config: CompanyConfig,
-    data?: IndexData,
-    partnershipAnalyses?: Array<{
-        isPartnership: boolean;
-        quality: "tier1" | "tier2" | "tier3" | "none";
-        partnerNames: string[];
-        relationshipType: string;
-        confidence: number;
-        reasoning: string;
-    }>
+    data?: IndexData
 ): Promise<IndexScore> {
     const indexData = data || (await fetchCompanyData(config));
 
-    // If partnership analyses not provided but we have news, analyze with AI
-    let analyses = partnershipAnalyses;
-    if (!analyses && indexData.news && indexData.news.length > 0) {
-        console.log(
-            `🤖 Analyzing ${indexData.news.length} news items for partnerships with AI...`
-        );
-        const llm = new LLMService();
-        try {
-            analyses = await llm.batchAnalyzePartnerships(
-                indexData.news.map((item) => ({
-                    title: item.title,
-                    content: item.content,
-                    url: item.url,
-                }))
-            );
-
-            // Log detected partnerships
-            const partnerships = analyses.filter((a) => a.isPartnership);
-            if (partnerships.length > 0) {
-                console.log(
-                    `   ✅ Detected ${partnerships.length} partnerships:`
-                );
-                partnerships.forEach((p, i) => {
-                    const newsItem = indexData.news![i];
-                    console.log(
-                        `      - ${newsItem.title} (${p.quality}, ${p.confidence}% confidence)`
-                    );
-                    if (p.partnerNames.length > 0) {
-                        console.log(
-                            `        Partners: ${p.partnerNames.join(", ")}`
-                        );
-                    }
-                });
-            } else {
-                console.log("   No partnerships detected in news");
-            }
-        } catch (error) {
-            console.warn(
-                "   ⚠️  AI partnership analysis failed, falling back to regex detection"
-            );
-            analyses = undefined; // Will use regex fallback in calculateIndexScore
-        }
-    }
-
     return calculateIndexScore(
         indexData.github,
-        indexData.twitter,
         indexData.onchain,
-        indexData.category,
-        indexData.news,
-        analyses
+        indexData.category
     );
 }
 
@@ -375,12 +254,6 @@ export function convertToCompany(
     data: IndexData,
     score: IndexScore
 ): Company {
-    // Special logic for Fabrknt
-    const isPrivateDev =
-        config.features?.useCrawler && data.github.totalCommits30d < 5;
-    const hasWebActivity =
-        (score.breakdown.onchain as any).webActivityScore > 40;
-
     return {
         slug: config.slug,
         name: config.name,
@@ -417,24 +290,16 @@ export function convertToCompany(
         },
 
         social: {
-            score: score.socialScore,
-            twitterFollowers: data.twitter?.followers,
+            score: 0, // No longer tracking social
+            twitterFollowers: undefined,
             discordMembers: undefined,
             telegramMembers: undefined,
-            communityEngagement: data.twitter?.engagement30d
-                ? data.twitter.engagement30d.likes +
-                  data.twitter.engagement30d.retweets +
-                  data.twitter.engagement30d.replies
-                : score.socialScore,
+            communityEngagement: 0,
         },
 
         overallScore: score.overall,
-        trend:
-            isPrivateDev && hasWebActivity
-                ? "up"
-                : config.defaults?.trend ?? "stable",
+        trend: config.defaults?.trend ?? "stable",
         isListed: false,
-        news: data.news,
     };
 }
 

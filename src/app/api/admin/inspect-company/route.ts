@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { calculateGitHubScore, calculateOnChainScore, calculateTwitterScore } from '@/lib/cindex/calculators/score-calculator';
+import { calculateGitHubScore, calculateOnChainScore } from '@/lib/cindex/calculators/score-calculator';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,7 +30,6 @@ export async function POST(request: Request) {
 
         // Calculate component scores
         const github = calculateGitHubScore(indexData?.github || {});
-        const twitter = calculateTwitterScore(indexData?.twitter || {});
         const onchain = calculateOnChainScore(indexData?.onchain || {});
 
         return NextResponse.json({
@@ -45,19 +44,12 @@ export async function POST(request: Request) {
             },
             rawData: {
                 github: indexData?.github,
-                twitter: indexData?.twitter,
                 onchain: indexData?.onchain,
-                newsCount: indexData?.news?.length || 0,
-                latestNews: indexData?.news?.slice(0, 3),
             },
             scoreBreakdown: {
                 github: {
                     score: github.score,
                     breakdown: github.breakdown,
-                },
-                twitter: {
-                    score: twitter.score,
-                    breakdown: twitter.breakdown,
                 },
                 onchain: {
                     score: onchain.score,

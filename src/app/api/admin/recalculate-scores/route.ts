@@ -24,13 +24,10 @@ export async function POST() {
             }
 
             // Calculate new scores
-            const scores = await calculateIndexScore(
+            const scores = calculateIndexScore(
                 indexData.github || {},
-                indexData.twitter || {},
                 indexData.onchain || {},
                 company.category as "defi" | "defi-infra",
-                indexData.news,
-                undefined, // partnership analyses
                 indexData.npm?.downloads30d
             );
 

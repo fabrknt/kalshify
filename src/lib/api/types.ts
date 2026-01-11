@@ -112,7 +112,7 @@ export interface IndexData {
     companyName: string;
     category: "defi" | "defi-infra";
     github: GitHubTeamMetrics;
-    twitter: TwitterMetrics;
+    twitter?: TwitterMetrics; // Optional: no longer required
     onchain: OnChainMetrics;
     nansen?: NansenWalletMetrics; // Optional: wallet quality metrics
     news?: {
@@ -143,11 +143,6 @@ export interface IndexScore {
             userGrowthScore: number;
             transactionScore: number;
             tvlScore: number;
-            webActivityScore: number;
-            newsGrowthScore: number;
-            partnershipScore: number;
-            attentionScore: number;
-            viralityScore: number;
         };
         wallet: {
             distributionScore: number;
