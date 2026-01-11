@@ -28,7 +28,7 @@ export async function POST() {
                 indexData.github || {},
                 indexData.twitter || {},
                 indexData.onchain || {},
-                company.category as "defi" | "infrastructure" | "nft" | "dao" | "gaming",
+                company.category as "defi" | "defi-infra",
                 indexData.news,
                 undefined, // partnership analyses
                 indexData.npm?.downloads30d

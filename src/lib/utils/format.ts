@@ -34,7 +34,7 @@ export function truncateAddress(address: string): string {
 }
 
 const categoryLabels: Record<string, string> = {
-  'infrastructure': 'INFRA',
+  'defi-infra': 'INFRA',
 };
 
 export function formatCategory(category: string): string {

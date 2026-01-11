@@ -14,7 +14,7 @@ model Company {
   id              String   @id @default(cuid())
   slug            String   @unique
   name            String
-  category        String   // 'defi' | 'nft' | 'gaming' | 'infrastructure' | 'dao'
+  category        String   // 'defi' | 'defi-infra'
   subcategory     String?  // 'dex' | 'lending' | 'liquid-staking' | 'derivatives' | 'yield' | 'rwa' | 'oracle' | 'dev-tools' | etc.
   chains          String[] @default([]) // ['ethereum', 'solana', 'base', 'arbitrum'] - supports multi-chain
   description     String?  @db.Text
@@ -264,7 +264,7 @@ model Listing {
   partnershipType     String?   // 'technical' | 'strategic' | 'marketing' | 'ecosystem'
 
   // Metadata
-  category        String   // 'defi' | 'nft' | 'gaming' | 'infrastructure' | 'dao'
+  category        String   // 'defi' | 'defi-infra'
   status          String   @default("active") // 'active' | 'under_offer' | 'sold' | 'withdrawn' | 'in_discussion'
   chain           String   // 'ethereum' | 'base' | 'polygon' | 'solana' | 'multi-chain'
   website         String?

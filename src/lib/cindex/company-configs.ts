@@ -71,7 +71,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "adamik",
         name: "Adamik",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "dev-tools",
         description:
             "A universal API startup that allows developers to connect to 40+ blockchains via a single, standardized interface",
@@ -97,7 +97,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "altlayer",
         name: "AltLayer",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "l2",
         description:
             "A Restaked Rollup provider that adds a layer of security to small Arbitrum-based chains",
@@ -123,7 +123,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "anza",
         name: "Anza",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "dev-tools",
         description:
             "A new, small development entity by Armani Ferrante focused solely on the core optimization of the Solana validator client",
@@ -179,7 +179,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "blockscout-base",
         name: "Blockscout Base",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "analytics",
         description:
             "The open-source explorer team, which remains a small, mission-driven alternative to Etherscan for Base",
@@ -205,7 +205,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "caldera",
         name: "Caldera",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "l2",
         description:
             "One of the main providers for Arbitrum Orbit infrastructure, helping small projects manage their own dedicated blockspace",
@@ -231,7 +231,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "clockwork",
         name: "Clockwork",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "dev-tools",
         description:
             "A smart contract automation engine for Solana, allowing for scheduled tasks and event-driven triggers",
@@ -315,7 +315,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "daimo",
         name: "Daimo",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "wallet",
         description:
             "A young startup building a P2P payment app (Venmo-style) using stablecoins natively on the Base network",
@@ -370,7 +370,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "espresso-systems",
         name: "Espresso Systems",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "l2",
         description:
             "Developing a Shared Sequencer to help all the new Arbitrum Orbit chains talk to each other without delays",
@@ -455,7 +455,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "gelato",
         name: "Gelato",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "dev-tools",
         description:
             "Relay and Functions tools specifically being used by young Arbitrum projects to automate complex tasks",
@@ -481,7 +481,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "goldsky",
         name: "Goldsky",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "data",
         description:
             "A real-time data indexing company that has become the subgraph alternative of choice for the Base community",
@@ -507,7 +507,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "helius",
         name: "Helius",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "data",
         description:
             "A small but dominant team providing the developer platform for Solana (RPCs, Webhooks, and data APIs)",
@@ -592,7 +592,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "ironforge",
         name: "Ironforge",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "dev-tools",
         description:
             "A cloud-based developer platform that simplifies the deployment and monitoring of Solana programs",
@@ -647,7 +647,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "lagrange",
         name: "Lagrange",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "security",
         description:
             "A ZK-infrastructure project enabling cross-chain state proofs, allowing dApps to prove data from one chain to another securely",
@@ -673,7 +673,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "lobby",
         name: "Lobby",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "identity",
         description:
             "A developer-focused tool building social infrastructure for DAOs and on-chain organizations",
@@ -757,7 +757,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "openfort",
         name: "Openfort",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "wallet",
         description:
             "A Wallet-as-a-Service provider that helps game developers on Base hide the blockchain from their users",
@@ -871,7 +871,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "pimlico",
         name: "Pimlico",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "wallet",
         description:
             "The current leader in ERC-4337 (Account Abstraction) infrastructure, making gasless apps possible on Base",
@@ -955,7 +955,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "spire",
         name: "Spire",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "l2",
         description:
             "A Rollup-as-a-service focused on app-specific L3s that settle directly to Ethereum or its major L2s",
@@ -981,7 +981,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "squads",
         name: "Squads",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "wallet",
         description:
             "The infrastructure behind most Solana treasuries; a multi-sig and smart account platform for teams",
@@ -1094,7 +1094,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "voltius",
         name: "Voltius",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "security",
         description:
             "A young US-based startup using AI/ML to automate smart contract audits and threat detection",
@@ -1149,7 +1149,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "zeeve",
         name: "Zeeve",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "l2",
         description:
             "A specialized Rollup-as-a-Service that helps small teams launch their own Arbitrum Orbit chains in minutes",
@@ -1411,7 +1411,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "conduit",
         name: "Conduit",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "l2",
         description:
             "Rollup deployment platform making it easy to launch OP Stack and Arbitrum Orbit chains",
@@ -1437,7 +1437,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "lattice",
         name: "Lattice",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "dev-tools",
         description:
             "MUD framework creators building infrastructure for fully on-chain games and autonomous worlds",
@@ -1463,7 +1463,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "socket",
         name: "Socket",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "dev-tools",
         description:
             "Cross-chain infrastructure providing bridging and interoperability solutions",
@@ -1489,7 +1489,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "layer3",
         name: "Layer3",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "identity",
         description:
             "Quest and credential platform helping projects distribute tokens and build communities",
@@ -1515,7 +1515,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "galxe",
         name: "Galxe",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "identity",
         description:
             "On-chain credential network for building and verifying digital identity",
@@ -1541,7 +1541,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "dune-analytics",
         name: "Dune Analytics",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "data",
         description:
             "Community-powered blockchain analytics platform with SQL-based queries",
@@ -1567,7 +1567,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "chainlink-optimism",
         name: "Chainlink",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "data",
         description:
             "Decentralized oracle network providing price feeds and verifiable randomness",
@@ -1593,7 +1593,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "op-labs",
         name: "OP Labs",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "l2",
         description:
             "Core development team building the OP Stack and Optimism ecosystem",
@@ -1856,7 +1856,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "polygon-labs",
         name: "Polygon Labs",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "l2",
         description:
             "Core development team building Polygon PoS, zkEVM, and CDK infrastructure",
@@ -1882,7 +1882,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "biconomy",
         name: "Biconomy",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "wallet",
         description:
             "Account abstraction and gasless transaction infrastructure for Web3 apps",
@@ -1908,7 +1908,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "lens-protocol",
         name: "Lens Protocol",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "identity",
         description:
             "Decentralized social graph enabling portable social identities and content",
@@ -1934,7 +1934,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "alchemy",
         name: "Alchemy",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "data",
         description:
             "Blockchain development platform with node infrastructure and developer tools",
@@ -1960,7 +1960,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "quicknode",
         name: "QuickNode",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "data",
         description:
             "Blockchain node infrastructure providing fast and reliable RPC endpoints",
@@ -1986,7 +1986,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "thirdweb",
         name: "thirdweb",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "dev-tools",
         description:
             "Full-stack Web3 development platform with SDKs, contracts, and infrastructure",
@@ -2012,7 +2012,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "sequence",
         name: "Sequence",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "wallet",
         description:
             "Smart wallet infrastructure designed for gaming and consumer applications",
@@ -2038,7 +2038,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "immutable",
         name: "Immutable",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "dev-tools",
         description:
             "Gaming-focused infrastructure with zkEVM and marketplace solutions",
@@ -2125,7 +2125,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "eigenlayer",
         name: "EigenLayer",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "security",
         description:
             "Restaking protocol enabling shared security for new protocols and rollups",
@@ -2274,7 +2274,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "jito-labs",
         name: "Jito Labs",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "dev-tools",
         description:
             "MEV infrastructure and liquid staking protocol with JitoSOL",
@@ -2303,7 +2303,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "triton",
         name: "Triton",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "data",
         description:
             "High-performance RPC and validator infrastructure for Solana",
@@ -2329,7 +2329,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "switchboard",
         name: "Switchboard",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "data",
         description:
             "Decentralized oracle network providing customizable data feeds for Solana",
@@ -2355,7 +2355,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "light-protocol",
         name: "Light Protocol",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "dev-tools",
         description:
             "ZK compression protocol enabling cost-efficient state on Solana",
@@ -2501,7 +2501,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "coinbase-wallet",
         name: "Coinbase Wallet",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "wallet",
         description:
             "Self-custody wallet from Coinbase, primary gateway to the Base ecosystem",
@@ -2527,7 +2527,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "privy",
         name: "Privy",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "wallet",
         description:
             "Embedded wallet infrastructure enabling seamless Web3 onboarding",
@@ -2553,7 +2553,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "zora",
         name: "Zora",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "dev-tools",
         description:
             "NFT and media protocol with its own L2 network on the OP Stack",
@@ -2579,7 +2579,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "mirror",
         name: "Mirror",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "dev-tools",
         description:
             "Decentralized publishing platform for writers and creators",
@@ -2755,7 +2755,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "arbitrum-foundation",
         name: "Arbitrum Foundation",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "l2",
         description:
             "Governance body supporting the Arbitrum ecosystem and grants",
@@ -2781,7 +2781,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "offchain-labs",
         name: "Offchain Labs",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "l2",
         description:
             "Core development team building Arbitrum technology and Stylus VM",
@@ -2807,7 +2807,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "layerzero",
         name: "LayerZero",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "dev-tools",
         description:
             "Omnichain interoperability protocol enabling cross-chain messaging",
@@ -2833,7 +2833,7 @@ export const COMPANY_CONFIGS: CompanyConfig[] = [
     {
         slug: "chainlink-ccip",
         name: "Chainlink CCIP",
-        category: "infrastructure",
+        category: "defi-infra",
         subcategory: "dev-tools",
         description:
             "Cross-Chain Interoperability Protocol for secure token and message transfers",

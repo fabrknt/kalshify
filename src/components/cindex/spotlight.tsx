@@ -15,12 +15,9 @@ interface SpotlightSectionProps {
     scoreLabel?: string;
 }
 
-const categoryColors = {
+const categoryColors: Record<string, string> = {
     defi: "bg-purple-100 text-purple-700",
-    infrastructure: "bg-blue-100 text-blue-700",
-    nft: "bg-pink-100 text-pink-700",
-    dao: "bg-green-100 text-green-700",
-    gaming: "bg-orange-100 text-orange-700",
+    "defi-infra": "bg-blue-100 text-blue-700",
 };
 
 const chainColors = {

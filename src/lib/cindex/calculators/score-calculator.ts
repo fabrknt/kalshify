@@ -504,12 +504,7 @@ export async function calculateIndexScore(
     github: GitHubTeamMetrics,
     twitter: TwitterMetrics,
     onchain: Partial<OnChainMetrics>,
-    category:
-        | "defi"
-        | "nft"
-        | "gaming"
-        | "infrastructure"
-        | "dao" = "infrastructure",
+    category: "defi" | "defi-infra" = "defi-infra",
     news?: IndexData["news"],
     partnershipAnalyses?: Array<{
         isPartnership: boolean;
@@ -548,12 +543,9 @@ export async function calculateIndexScore(
     if (category === "defi") {
         // DeFi projects: Growth (on-chain metrics) is dominant
         weights = { growth: 0.95, social: 0.05 };
-    } else if (category === "infrastructure") {
-        // Infrastructure: Growth (GitHub + npm) is dominant
+    } else if (category === "defi-infra") {
+        // DeFi Infrastructure: Growth (GitHub + npm) is dominant
         weights = { growth: 0.90, social: 0.10 };
-    } else if (category === "gaming" || category === "nft") {
-        // Gaming/NFT: More social/community driven
-        weights = { growth: 0.75, social: 0.25 };
     }
 
     // --- Signal Presence Detection & Weight Redistribution ---

@@ -1,12 +1,7 @@
 import { calculateMomentumIndex } from "./calculators/score-calculator";
 import { prisma } from "@/lib/db";
 
-export type CompanyCategory =
-    | "defi"
-    | "infrastructure"
-    | "nft"
-    | "dao"
-    | "gaming";
+export type CompanyCategory = "defi" | "defi-infra";
 
 export type CompanySubcategory =
     // DeFi subcategories
@@ -19,7 +14,7 @@ export type CompanySubcategory =
     | "stablecoin"
     | "bridge"
     | "social-defi"
-    // Infrastructure subcategories
+    // DeFi Infrastructure subcategories
     | "l1"
     | "l2"
     | "oracle"
@@ -304,13 +299,7 @@ export async function getCategoryLeaders(): Promise<
     Record<CompanyCategory, Company | undefined>
 > {
     const allCompanies = await getCompanies();
-    const categories: CompanyCategory[] = [
-        "defi",
-        "infrastructure",
-        "nft",
-        "dao",
-        "gaming",
-    ];
+    const categories: CompanyCategory[] = ["defi", "defi-infra"];
     const leaders: Partial<Record<CompanyCategory, Company>> = {};
 
     categories.forEach((category) => {

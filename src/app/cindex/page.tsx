@@ -156,13 +156,7 @@ function getRisingStars(companies: Company[], limit: number = 10): Company[] {
 function getCategoryLeaders(
     companies: Company[]
 ): Record<Company["category"], Company | undefined> {
-    const categories: Company["category"][] = [
-        "defi",
-        "infrastructure",
-        "nft",
-        "dao",
-        "gaming",
-    ];
+    const categories: Company["category"][] = ["defi", "defi-infra"];
     const leaders: Partial<Record<Company["category"], Company>> = {};
 
     categories.forEach((category) => {
@@ -205,10 +199,10 @@ export default async function CindexPage() {
                     </span>
                 </div>
                 <p className="text-sm text-muted-foreground mb-2">
-                    Web3 Company Verification
+                    DeFi Protocol Intelligence
                 </p>
                 <p className="text-muted-foreground">
-                    An automated index that shows what Web3 companies actually
+                    An automated index that shows what DeFi protocols actually
                     do — not what they say.
                 </p>
             </div>
@@ -338,26 +332,14 @@ export default async function CindexPage() {
                         Top companies in each category
                     </p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <CategoryLeaderCard
                         category="DeFi"
                         company={categoryLeaders.defi}
                     />
                     <CategoryLeaderCard
                         category="Infrastructure"
-                        company={categoryLeaders.infrastructure}
-                    />
-                    <CategoryLeaderCard
-                        category="NFT"
-                        company={categoryLeaders.nft}
-                    />
-                    <CategoryLeaderCard
-                        category="DAO"
-                        company={categoryLeaders.dao}
-                    />
-                    <CategoryLeaderCard
-                        category="Gaming"
-                        company={categoryLeaders.gaming}
+                        company={categoryLeaders["defi-infra"]}
                     />
                 </div>
             </div>

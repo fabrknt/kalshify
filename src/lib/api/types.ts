@@ -110,7 +110,7 @@ export interface NansenWalletMetrics {
 // Combined Index Data
 export interface IndexData {
     companyName: string;
-    category: "defi" | "nft" | "gaming" | "infrastructure" | "dao";
+    category: "defi" | "defi-infra";
     github: GitHubTeamMetrics;
     twitter: TwitterMetrics;
     onchain: OnChainMetrics;
