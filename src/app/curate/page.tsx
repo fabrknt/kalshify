@@ -26,6 +26,7 @@ import {
     Bookmark,
 } from "lucide-react";
 import { WatchlistButton } from "@/components/curate/watchlist-button";
+import { ApyHistoryChart } from "@/components/curate/apy-history-chart";
 
 interface PoolDependency {
     type: "protocol" | "asset" | "oracle" | "chain";
@@ -251,7 +252,7 @@ function ExpandedPoolDetails({ pool }: { pool: YieldPool }) {
 
     return (
         <div className="bg-slate-800/50 p-4 border-t border-slate-700">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
                 {/* Risk Breakdown */}
                 <div>
                     <h4 className="text-sm font-semibold text-white mb-2 flex items-center gap-2">
@@ -298,54 +299,9 @@ function ExpandedPoolDetails({ pool }: { pool: YieldPool }) {
                     </div>
                 </div>
 
-                {/* APY Stability */}
-                <div>
-                    <h4 className="text-sm font-semibold text-white mb-2 flex items-center gap-2">
-                        <Activity className="h-4 w-4 text-cyan-400" />
-                        APY Stability (Higher = More Stable)
-                    </h4>
-                    {apyStability ? (
-                        <div className="space-y-2">
-                            <div className="flex justify-between text-xs">
-                                <span className="text-slate-400">Stability Score</span>
-                                <span className={apyStability.score >= 80 ? "text-green-400" : apyStability.score >= 50 ? "text-cyan-400" : apyStability.score >= 20 ? "text-yellow-400" : "text-orange-400"}>
-                                    {apyStability.score}/100
-                                </span>
-                            </div>
-                            <div className="flex justify-between text-xs">
-                                <span className="text-slate-400">APY Volatility</span>
-                                <span className="text-slate-300">{apyStability.volatility}%</span>
-                            </div>
-                            <div className="flex justify-between text-xs">
-                                <span className="text-slate-400">30-Day Avg APY</span>
-                                <span className="text-slate-300">{apyStability.avgApy}%</span>
-                            </div>
-                            <div className="flex justify-between text-xs">
-                                <span className="text-slate-400">APY Range</span>
-                                <span className="text-slate-300">{apyStability.minApy}% - {apyStability.maxApy}%</span>
-                            </div>
-                            <div className="flex justify-between text-xs">
-                                <span className="text-slate-400">Recent Trend</span>
-                                <span className={`flex items-center gap-1 ${
-                                    apyStability.trend === "up" ? "text-green-400" :
-                                    apyStability.trend === "down" ? "text-red-400" : "text-slate-400"
-                                }`}>
-                                    {apyStability.trend === "up" && <TrendingUp className="h-3 w-3" />}
-                                    {apyStability.trend === "down" && <TrendingDown className="h-3 w-3" />}
-                                    {apyStability.trend === "stable" && <ArrowRight className="h-3 w-3" />}
-                                    {apyStability.trend.charAt(0).toUpperCase() + apyStability.trend.slice(1)}
-                                </span>
-                            </div>
-                            <div className="flex justify-between text-xs">
-                                <span className="text-slate-400">Data Points</span>
-                                <span className="text-slate-500">{apyStability.dataPoints} days</span>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="text-xs text-slate-500 italic">
-                            No historical data available for this pool.
-                        </div>
-                    )}
+                {/* APY History Chart */}
+                <div className="lg:col-span-2">
+                    <ApyHistoryChart poolId={pool.id} />
                 </div>
 
                 {/* Liquidity Risk */}
