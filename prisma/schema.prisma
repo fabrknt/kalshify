@@ -82,11 +82,9 @@ model User {
   watchlist       Watchlist[]
   notifications   Notification[]
 
-  // New: Partnership matching relations
+  // NextAuth relations
   accounts        Account[]
   sessions        Session[]
-  claimedProfiles ClaimedProfile[]
-  swipes          Swipe[]
   yieldWatchlist  YieldWatchlist[]
 
   @@index([walletAddress])
@@ -130,118 +128,6 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-// Claimed Profile - Links users to companies
-model ClaimedProfile {
-  id                  String   @id @default(cuid())
-
-  // Link to user and company
-  userId              String
-  companySlug         String   @unique  // Each company can only be claimed once
-
-  // Verification
-  verificationType    String   // 'domain' | 'github' | 'wallet'
-  verificationProof   String?  // Proof of verification (TXT record, GitHub commit, signature)
-  githubUsername      String?  // GitHub username used for verification (if type=github)
-  verified            Boolean  @default(false)
-  verifiedAt          DateTime?
-
-  // Timestamps
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-
-  // Relations
-  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([companySlug])
-}
-
-// Swipe - Track partnership interest
-model Swipe {
-  id            String   @id @default(cuid())
-
-  // Who swiped
-  userId        String
-  companySlug   String   // The user's company
-
-  // Who they swiped on
-  partnerSlug   String   // The partner company
-
-  // Action
-  action        String   // 'interested' | 'passed' | 'super_like'
-
-  // Timestamps
-  createdAt     DateTime @default(now())
-
-  // Relations
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  // Prevent duplicate swipes
-  @@unique([companySlug, partnerSlug])
-  @@index([userId])
-  @@index([companySlug])
-  @@index([partnerSlug])
-}
-
-// Match - Mutual partnership interest
-model Match {
-  id            String   @id @default(cuid())
-
-  // The two companies that matched
-  companyASlug  String
-  companyBSlug  String
-
-  // Match metadata
-  matchScore    Int      // AI compatibility score (0-100)
-
-  // Status
-  status        String   @default("new")  // 'new' | 'chatting' | 'partnership_started' | 'completed' | 'declined'
-
-  // Timestamps
-  matchedAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  // Partnership tracking (optional)
-  partnershipType String?  // 'integration' | 'co-marketing' | 'merger' | 'revenue_share'
-  partnershipMetrics Json?   // Track KPIs (revenue, users, etc.)
-
-  // Relations
-  conversation  Conversation?
-
-  // Prevent duplicate matches (A-B is same as B-A)
-  @@unique([companyASlug, companyBSlug])
-  @@index([companyASlug])
-  @@index([companyBSlug])
-  @@index([status])
-  @@index([matchedAt])
-}
-
-// Conversation - Chat between matched companies
-model Conversation {
-  id        String    @id @default(cuid())
-  matchId   String    @unique
-  match     Match     @relation(fields: [matchId], references: [id], onDelete: Cascade)
-  messages  Message[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  @@index([matchId])
-}
-
-// Message - Individual messages in a conversation
-model Message {
-  id             String       @id @default(cuid())
-  conversationId String
-  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  senderSlug     String       // companySlug of sender
-  content        String       @db.Text
-  read           Boolean      @default(false)
-  createdAt      DateTime     @default(now())
-
-  @@index([conversationId, createdAt])
-  @@index([senderSlug])
 }
 
 // Listing model - Matches existing mock data structure
