@@ -22,6 +22,10 @@ import { WatchlistButton } from "@/components/curate/watchlist-button";
 import { ApyHistoryChart } from "@/components/curate/apy-history-chart";
 import { CompareBar } from "@/components/curate/compare-bar";
 import { PoolComparisonPanel } from "@/components/curate/pool-comparison-panel";
+import { UserPreferencesPanel } from "@/components/curate/user-preferences-panel";
+import { AIRecommendationsSection } from "@/components/curate/ai-recommendations-section";
+import { PoolAIInsights } from "@/components/curate/pool-ai-insights";
+import { PortfolioOptimizer } from "@/components/curate/portfolio-optimizer";
 
 interface PoolDependency {
     type: "protocol" | "asset" | "oracle" | "chain";
@@ -240,6 +244,11 @@ function ExpandedPoolDetails({ pool }: { pool: YieldPool }) {
                     </div>
                 </div>
             </div>
+
+            {/* AI Insights */}
+            <div className="mt-6">
+                <PoolAIInsights poolId={pool.id} />
+            </div>
         </div>
     );
 }
@@ -359,6 +368,19 @@ export default function CuratePage() {
     // Comparison state
     const [selectedPoolIds, setSelectedPoolIds] = useState<Set<string>>(new Set());
     const [comparisonOpen, setComparisonOpen] = useState(false);
+
+    // AI Features state
+    const [preferencesOpen, setPreferencesOpen] = useState(false);
+    const [portfolioOpen, setPortfolioOpen] = useState(false);
+    const [hasPreferences, setHasPreferences] = useState(false);
+    const [userPreferences, setUserPreferences] = useState<{
+        riskTolerance: "conservative" | "moderate" | "aggressive";
+        preferredChains: string[];
+        minApy: number;
+        maxApy: number;
+        stablecoinOnly: boolean;
+        maxAllocationUsd: number | null;
+    } | null>(null);
 
     // Filters
     const [searchQuery, setSearchQuery] = useState("");
@@ -491,6 +513,48 @@ export default function CuratePage() {
         }, 100);
     };
 
+    // Fetch user preferences on mount
+    useEffect(() => {
+        async function fetchPreferences() {
+            if (!session?.user) return;
+            try {
+                const response = await fetch("/api/curate/ai/preferences");
+                if (response.ok) {
+                    const data = await response.json();
+                    setUserPreferences(data);
+                    // Consider has preferences if they've customized anything
+                    setHasPreferences(
+                        data.riskTolerance !== "moderate" ||
+                        data.preferredChains.length > 0 ||
+                        data.minApy > 0 ||
+                        data.maxApy < 100 ||
+                        data.stablecoinOnly
+                    );
+                }
+            } catch (err) {
+                console.error("Failed to fetch preferences:", err);
+            }
+        }
+        fetchPreferences();
+    }, [session?.user]);
+
+    const handleSavePreferences = async (preferences: typeof userPreferences) => {
+        if (!preferences) return;
+        try {
+            const response = await fetch("/api/curate/ai/preferences", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(preferences),
+            });
+            if (response.ok) {
+                setUserPreferences(preferences);
+                setHasPreferences(true);
+            }
+        } catch (err) {
+            console.error("Failed to save preferences:", err);
+        }
+    };
+
     return (
         <div className="space-y-6">
             {/* Hero Section */}
@@ -571,10 +635,30 @@ export default function CuratePage() {
                 </div>
             )}
 
+            {/* AI Recommendations Section */}
+            {session?.user && (
+                <AIRecommendationsSection
+                    hasPreferences={hasPreferences}
+                    onSetPreferences={() => setPreferencesOpen(true)}
+                    onPoolClick={handleExpandFromPick}
+                />
+            )}
+
             {/* All Pools Section */}
-            <div className="flex items-center gap-2">
-                <BarChart3 className="h-4 w-4 text-slate-500" />
-                <h2 className="text-sm font-semibold text-white">All Pools</h2>
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <BarChart3 className="h-4 w-4 text-slate-500" />
+                    <h2 className="text-sm font-semibold text-white">All Pools</h2>
+                </div>
+                {session?.user && (
+                    <button
+                        onClick={() => setPortfolioOpen(true)}
+                        className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-purple-500/30 rounded-lg text-sm text-purple-300 hover:border-purple-500/50 transition-colors"
+                    >
+                        <Sparkles className="h-4 w-4" />
+                        Portfolio Optimizer
+                    </button>
+                )}
             </div>
 
             {/* Filters Row */}
@@ -834,6 +918,21 @@ export default function CuratePage() {
                 pools={selectedPools}
                 isOpen={comparisonOpen}
                 onClose={() => setComparisonOpen(false)}
+            />
+
+            {/* User Preferences Panel */}
+            <UserPreferencesPanel
+                isOpen={preferencesOpen}
+                onClose={() => setPreferencesOpen(false)}
+                onSave={handleSavePreferences}
+                initialPreferences={userPreferences || undefined}
+            />
+
+            {/* Portfolio Optimizer */}
+            <PortfolioOptimizer
+                isOpen={portfolioOpen}
+                onClose={() => setPortfolioOpen(false)}
+                onPoolClick={handleExpandFromPick}
             />
         </div>
     );

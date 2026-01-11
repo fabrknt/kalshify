@@ -86,6 +86,7 @@ model User {
   accounts        Account[]
   sessions        Session[]
   yieldWatchlist  YieldWatchlist[]
+  yieldPreferences UserYieldPreferences?
 
   @@index([walletAddress])
   @@index([email])
@@ -348,5 +349,54 @@ model YieldWatchlist {
 
   @@unique([userId, poolId])
   @@index([userId])
+}
+
+// User Yield Preferences - AI recommendation settings
+model UserYieldPreferences {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+
+  // Risk tolerance
+  riskTolerance     String   @default("moderate") // "conservative" | "moderate" | "aggressive"
+
+  // Chain preferences
+  preferredChains   String[] @default([])
+
+  // APY range
+  minApy            Float    @default(0)
+  maxApy            Float    @default(100)
+
+  // Asset preferences
+  stablecoinOnly    Boolean  @default(false)
+
+  // Allocation constraints
+  maxAllocationUsd  Float?
+
+  // Timestamps
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// Pool Insight Cache - Cached AI-generated insights
+model PoolInsightCache {
+  id              String   @id @default(cuid())
+  poolId          String   @unique
+
+  // Cached insight content
+  insight         Json
+
+  // Pool snapshot for cache invalidation
+  poolSnapshot    Json
+
+  // Timestamps
+  generatedAt     DateTime @default(now())
+  expiresAt       DateTime
+
+  @@index([poolId])
+  @@index([expiresAt])
 }
 
