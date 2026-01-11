@@ -87,6 +87,7 @@ model User {
   sessions        Session[]
   claimedProfiles ClaimedProfile[]
   swipes          Swipe[]
+  yieldWatchlist  YieldWatchlist[]
 
   @@index([walletAddress])
   @@index([email])
@@ -440,5 +441,26 @@ model Notification {
   @@index([userId])
   @@index([read])
   @@index([createdAt])
+}
+
+// Yield Watchlist - Users tracking DeFi yield pools
+model YieldWatchlist {
+  id              String   @id @default(cuid())
+
+  // Pool identification (from DeFiLlama)
+  poolId          String   // DeFiLlama pool UUID
+  chain           String
+  project         String
+  symbol          String
+
+  // Timestamps
+  createdAt       DateTime @default(now())
+
+  // User relation
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+
+  @@unique([userId, poolId])
+  @@index([userId])
 }
 

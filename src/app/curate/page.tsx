@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, Fragment, useCallback } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import {
     Network,
     TrendingUp,
@@ -22,7 +23,9 @@ import {
     ArrowRight,
     Droplet,
     Building2,
+    Bookmark,
 } from "lucide-react";
+import { WatchlistButton } from "@/components/curate/watchlist-button";
 
 interface PoolDependency {
     type: "protocol" | "asset" | "oracle" | "chain";
@@ -450,12 +453,21 @@ function ExpandedPoolDetails({ pool }: { pool: YieldPool }) {
 }
 
 type SortField = "tvl" | "apy" | "risk" | "stability" | "liquidity";
+type TabType = "all" | "watchlist";
 
 export default function CuratePage() {
+    const { data: session } = useSession();
     const [graphData, setGraphData] = useState<DefiGraphData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [expandedPool, setExpandedPool] = useState<string | null>(null);
+
+    // Tab state
+    const [activeTab, setActiveTab] = useState<TabType>("all");
+
+    // Watchlist state
+    const [watchlistPoolIds, setWatchlistPoolIds] = useState<Set<string>>(new Set());
+    const [watchlistLoading, setWatchlistLoading] = useState(false);
 
     // Filters
     const [chain, setChain] = useState("");
@@ -464,6 +476,41 @@ export default function CuratePage() {
     const [stablecoinOnly, setStablecoinOnly] = useState(false);
     const [riskFilter, setRiskFilter] = useState<string>("");
     const [sortBy, setSortBy] = useState<SortField>("tvl");
+
+    // Fetch watchlist on mount if authenticated
+    useEffect(() => {
+        async function fetchWatchlist() {
+            if (!session?.user) return;
+
+            setWatchlistLoading(true);
+            try {
+                const response = await fetch("/api/watchlist/yields");
+                if (response.ok) {
+                    const data = await response.json();
+                    setWatchlistPoolIds(new Set(data.poolIds));
+                }
+            } catch (err) {
+                console.error("Failed to fetch watchlist:", err);
+            } finally {
+                setWatchlistLoading(false);
+            }
+        }
+
+        fetchWatchlist();
+    }, [session?.user]);
+
+    // Handle watchlist toggle
+    const handleWatchlistToggle = useCallback((poolId: string, isAdding: boolean) => {
+        setWatchlistPoolIds((prev) => {
+            const next = new Set(prev);
+            if (isAdding) {
+                next.add(poolId);
+            } else {
+                next.delete(poolId);
+            }
+            return next;
+        });
+    }, []);
 
     useEffect(() => {
         async function fetchData() {
@@ -495,7 +542,15 @@ export default function CuratePage() {
         fetchData();
     }, [chain, minTvl, minApy, stablecoinOnly, riskFilter, sortBy]);
 
-    const riskStats = graphData?.yields.reduce(
+    // Filter yields based on active tab
+    const filteredYields = graphData?.yields.filter((pool) => {
+        if (activeTab === "watchlist") {
+            return watchlistPoolIds.has(pool.id);
+        }
+        return true;
+    }) || [];
+
+    const riskStats = filteredYields.reduce(
         (acc, y) => {
             acc[y.riskLevel]++;
             return acc;
@@ -533,6 +588,36 @@ export default function CuratePage() {
                     Browse Protocols
                     <ArrowRight className="h-3 w-3" />
                 </Link>
+            </div>
+
+            {/* Tabs */}
+            <div className="flex gap-1 bg-slate-900 p-1 rounded-lg w-fit">
+                <button
+                    onClick={() => setActiveTab("all")}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                        activeTab === "all"
+                            ? "bg-slate-800 text-white"
+                            : "text-slate-400 hover:text-white"
+                    }`}
+                >
+                    All Yields
+                </button>
+                <button
+                    onClick={() => setActiveTab("watchlist")}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2 ${
+                        activeTab === "watchlist"
+                            ? "bg-slate-800 text-white"
+                            : "text-slate-400 hover:text-white"
+                    }`}
+                >
+                    <Bookmark className={`h-4 w-4 ${watchlistPoolIds.size > 0 ? "fill-current text-yellow-400" : ""}`} />
+                    Watchlist
+                    {watchlistPoolIds.size > 0 && (
+                        <span className="bg-yellow-400/20 text-yellow-400 px-1.5 py-0.5 rounded text-xs">
+                            {watchlistPoolIds.size}
+                        </span>
+                    )}
+                </button>
             </div>
 
             {/* Risk Legend */}
@@ -675,9 +760,9 @@ export default function CuratePage() {
                         <div className="bg-card border border-border rounded-lg p-4">
                             <div className="flex items-center gap-2 text-slate-400 mb-1">
                                 <Percent className="h-4 w-4" />
-                                <span className="text-xs">Pools</span>
+                                <span className="text-xs">{activeTab === "watchlist" ? "Watched" : "Pools"}</span>
                             </div>
-                            <div className="text-2xl font-bold text-white">{graphData.yields.length}</div>
+                            <div className="text-2xl font-bold text-white">{filteredYields.length}</div>
                         </div>
                         <div className="bg-card border border-green-500/30 rounded-lg p-4">
                             <div className="flex items-center gap-2 text-green-400 mb-1">
@@ -715,6 +800,7 @@ export default function CuratePage() {
                             <table className="w-full">
                                 <thead className="bg-slate-800/50">
                                     <tr>
+                                        <th className="text-center px-2 py-3 text-xs font-semibold text-slate-400 uppercase w-10"></th>
                                         <th className="text-left px-4 py-3 text-xs font-semibold text-slate-400 uppercase">Pool</th>
                                         <th className="text-left px-4 py-3 text-xs font-semibold text-slate-400 uppercase">Chain</th>
                                         <th className="text-right px-4 py-3 text-xs font-semibold text-slate-400 uppercase">TVL</th>
@@ -727,9 +813,20 @@ export default function CuratePage() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-800">
-                                    {graphData.yields.map((pool) => (
+                                    {filteredYields.map((pool) => (
                                         <Fragment key={pool.id}>
                                             <tr className="hover:bg-slate-800/30 transition-colors">
+                                                <td className="px-2 py-3 text-center">
+                                                    <WatchlistButton
+                                                        poolId={pool.id}
+                                                        chain={pool.chain}
+                                                        project={pool.project}
+                                                        symbol={pool.symbol}
+                                                        isInWatchlist={watchlistPoolIds.has(pool.id)}
+                                                        onToggle={handleWatchlistToggle}
+                                                        disabled={!session?.user}
+                                                    />
+                                                </td>
                                                 <td className="px-4 py-3">
                                                     <div className="flex flex-col">
                                                         <span className="text-white font-medium text-sm">{pool.project}</span>
@@ -783,7 +880,7 @@ export default function CuratePage() {
                                             </tr>
                                             {expandedPool === pool.id && (
                                                 <tr>
-                                                    <td colSpan={9} className="p-0">
+                                                    <td colSpan={10} className="p-0">
                                                         <ExpandedPoolDetails pool={pool} />
                                                     </td>
                                                 </tr>
@@ -793,9 +890,17 @@ export default function CuratePage() {
                                 </tbody>
                             </table>
                         </div>
-                        {graphData.yields.length === 0 && (
+                        {filteredYields.length === 0 && (
                             <div className="text-center py-8 text-slate-500">
-                                No pools match your filters. Try adjusting the criteria.
+                                {activeTab === "watchlist" ? (
+                                    <div className="flex flex-col items-center gap-2">
+                                        <Bookmark className="h-8 w-8 text-slate-600" />
+                                        <p>No pools in your watchlist yet.</p>
+                                        <p className="text-sm">Click the bookmark icon on any pool to add it.</p>
+                                    </div>
+                                ) : (
+                                    "No pools match your filters. Try adjusting the criteria."
+                                )}
                             </div>
                         )}
                     </div>
