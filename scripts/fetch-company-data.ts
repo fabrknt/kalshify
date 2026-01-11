@@ -24,12 +24,6 @@ import {
 } from "../src/lib/cindex/registry";
 import { IndexData, IndexScore } from "../src/lib/api/types";
 import { Company } from "../src/lib/cindex/companies";
-import { CrawlerService } from "../src/lib/cindex/crawler";
-import { LLMService } from "../src/lib/cindex/llm";
-
-// Initialize Services
-const crawler = new CrawlerService();
-const llm = new LLMService();
 
 // Storage configuration
 const DATA_DIR = join(process.cwd(), "data", "companies");
@@ -80,31 +74,12 @@ async function loadExistingCompanyData(
  * Merge GitHub data - prefer new if it has activity, otherwise keep old
  */
 function mergeGitHubData(existing: any, newData: any): any {
-    // If new data has activity, use it
     if (newData.totalCommits30d > 0 || newData.totalContributors > 0) {
         return newData;
     }
-    // If old data has activity, keep it
     if (existing?.totalCommits30d > 0 || existing?.totalContributors > 0) {
         return existing;
     }
-    // Otherwise use new (even if zero)
-    return newData;
-}
-
-/**
- * Merge Twitter data - prefer new if it has followers, otherwise keep old
- */
-function mergeTwitterData(existing: any, newData: any): any {
-    // If new data has followers, use it
-    if (newData.followers > 0) {
-        return newData;
-    }
-    // If old data has followers, keep it
-    if (existing?.followers > 0) {
-        return existing;
-    }
-    // Otherwise use new
     return newData;
 }
 
@@ -112,15 +87,12 @@ function mergeTwitterData(existing: any, newData: any): any {
  * Merge on-chain data - prefer new if it has transactions, otherwise keep old
  */
 function mergeOnchainData(existing: any, newData: any): any {
-    // If new data has transactions, use it
     if (newData.transactionCount30d > 0 || newData.uniqueWallets30d > 0) {
         return newData;
     }
-    // If old data has transactions, keep it
     if (existing?.transactionCount30d > 0 || existing?.uniqueWallets30d > 0) {
         return existing;
     }
-    // Otherwise use new
     return newData;
 }
 
@@ -152,17 +124,10 @@ function mergeCompanyData(
             existing.rawData.github,
             newData.rawData.github
         ),
-        twitter: mergeTwitterData(
-            existing.rawData.twitter,
-            newData.rawData.twitter
-        ),
         onchain: mergeOnchainData(
             existing.rawData.onchain,
             newData.rawData.onchain
         ),
-        news: newData.rawData.news?.length
-            ? newData.rawData.news
-            : existing.rawData.news || [],
         calculatedAt:
             newData.rawData.calculatedAt || existing.rawData.calculatedAt,
     };
@@ -196,7 +161,6 @@ function mergeCompanyData(
     const mergedCompany: Company = {
         ...existing.company,
         ...newData.company,
-        // Preserve old scores if new ones are zero
         overallScore:
             newData.company.overallScore > 0
                 ? newData.company.overallScore
@@ -337,11 +301,6 @@ async function fetchCompanyData(slug: string) {
         `  - GITHUB_TOKEN: ${process.env.GITHUB_TOKEN ? "✓ Set" : "✗ Missing"}`
     );
     console.log(
-        `  - TWITTER_BEARER_TOKEN: ${
-            process.env.TWITTER_BEARER_TOKEN ? "✓ Set" : "✗ Missing"
-        }`
-    );
-    console.log(
         `  - ${rpcEnvVar}: ${
             process.env[rpcEnvVar]
                 ? "✓ Set"
@@ -392,23 +351,6 @@ async function fetchCompanyData(slug: string) {
         console.log(`  - Total Commits (30d): ${data.github.totalCommits30d}`);
         console.log(`  - Avg Commits/Day: ${data.github.avgCommitsPerDay}`);
 
-        console.log("\n🐦 Twitter Metrics:");
-        console.log(
-            `  - Followers: ${data.twitter.followers.toLocaleString()}`
-        );
-        console.log(
-            `  - Following: ${data.twitter.following.toLocaleString()}`
-        );
-        console.log(`  - Verified: ${data.twitter.verified ? "Yes" : "No"}`);
-        if (data.twitter.engagement30d) {
-            console.log(
-                `  - Likes (30d): ${data.twitter.engagement30d.likes.toLocaleString()}`
-            );
-            console.log(
-                `  - Retweets (30d): ${data.twitter.engagement30d.retweets.toLocaleString()}`
-            );
-        }
-
         console.log("\n⛓️  On-Chain Metrics:");
         console.log(`  - Contract/Program: ${data.onchain.contractAddress}`);
         console.log(`  - Chain: ${data.onchain.chain}`);
@@ -428,47 +370,6 @@ async function fetchCompanyData(slug: string) {
             }`
         );
 
-        // Step 1.5: Crawl News (Blog/Medium)
-        if (metadata.blogUrl || metadata.mediumUrl) {
-            console.log("\n📰 Step 1.5: Crawling news sources...");
-            data.news = [];
-
-            if (metadata.blogUrl) {
-                const news = await crawler.crawlCompanyNews(
-                    metadata.blogUrl,
-                    "Official Blog"
-                );
-                data.news.push(...news);
-            }
-            if (metadata.mediumUrl) {
-                const news = await crawler.crawlCompanyNews(
-                    metadata.mediumUrl,
-                    "Medium"
-                );
-                data.news.push(...news);
-            }
-
-            // Summarize partnerships
-            if (data.news.length > 0) {
-                console.log(
-                    `\n🤖 Summarizing ${data.news.length} news items for partnerships...`
-                );
-                for (const item of data.news) {
-                    item.summary = await llm.summarizePartnerships(
-                        item.title,
-                        item.url
-                    );
-                    if (item.summary !== "Not a partnership") {
-                        console.log(
-                            `   - [Partnership Opportunity] ${item.title}: ${item.summary}`
-                        );
-                    }
-                }
-            } else {
-                console.log("   No news items found.");
-            }
-        }
-
         // Step 2: Calculate Index Score
         console.log("\n🧮 Step 2: Calculating Index Score...");
         const score = await module.calculateScore(data);
@@ -478,8 +379,6 @@ async function fetchCompanyData(slug: string) {
         console.log(`  - Overall Score: ${score.overall}/100`);
         console.log(`  - Team Health: ${score.teamHealth}/100`);
         console.log(`  - Growth Score: ${score.growthScore}/100`);
-        console.log(`  - Social Score: ${score.socialScore}/100`);
-        console.log(`  - Wallet Quality: ${score.walletQuality}/100`);
 
         console.log("\n📊 Detailed Breakdown:");
         console.log("  GitHub:");
@@ -502,22 +401,9 @@ async function fetchCompanyData(slug: string) {
         );
         console.log(`    - TVL Score: ${score.breakdown.onchain.tvlScore}/100`);
 
-        console.log("  Social:");
-        console.log(
-            `    - Followers Score: ${score.breakdown.social.followersScore}/100`
-        );
-        console.log(
-            `    - Engagement Score: ${score.breakdown.social.engagementScore}/100`
-        );
-
         // Step 3: Get complete company data
         console.log("\n🏢 Step 3: Converting to Company format...");
         const company = await module.getCompanyData(data, score);
-
-        // Ensure news is included in the company object
-        if (data.news && data.news.length > 0) {
-            company.news = data.news;
-        }
 
         console.log("\n✅ Company data ready!");
         console.log("\n📝 Company Profile:");
@@ -573,7 +459,6 @@ async function main() {
         console.error("\nUsage:");
         console.error("  pnpm fetch:company <slug>");
         console.error("  pnpm fetch:company all");
-        console.error("  pnpm fetch:company funding");
         console.error(
             `\nAvailable companies: ${getAvailableCompanySlugs().join(", ")}`
         );
@@ -615,38 +500,6 @@ async function main() {
             `\n✨ Completed! Fetched ${results.length}/${slugs.length} companies.`
         );
         console.log(`📁 Data stored in: ${DATA_DIR}`);
-    } else if (companySlug === "funding") {
-        // Fetch Global Funding News
-        console.log("\n💰 Fetching global funding news...");
-        const opportunities = await crawler.crawlFundingNews();
-
-        console.log(`\n✅ Found ${opportunities.length} funding items.`);
-        const potentialSeeds = opportunities.filter((o) => o.isPotentialSeed);
-        console.log(`🌱 Potential Seed Rounds: ${potentialSeeds.length}`);
-
-        if (potentialSeeds.length > 0) {
-            console.log("\n🔍 Analyzing Potentials:");
-            for (const seed of potentialSeeds) {
-                console.log(
-                    `   - ${seed.companyName} (${seed.amount}): ${seed.roundType}`
-                );
-            }
-        }
-
-        const fundingPath = join(DATA_DIR, "funding.json");
-        await fs.writeFile(
-            fundingPath,
-            JSON.stringify(
-                {
-                    fetchedAt: new Date().toISOString(),
-                    opportunities,
-                },
-                null,
-                2
-            )
-        );
-
-        console.log(`\n💾 Funding data saved to: ${fundingPath}`);
     } else {
         // Fetch single company
         await fetchCompanyData(companySlug);

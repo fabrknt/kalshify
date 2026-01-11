@@ -1,34 +1,41 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import Anthropic from "@anthropic-ai/sdk";
 
 export class LLMService {
-    private model;
+    private client: Anthropic | null = null;
 
     constructor() {
-        if (!process.env.GEMINI_API_KEY) {
-            console.warn("GEMINI_API_KEY is not set. LLM features will be disabled.");
+        if (!process.env.ANTHROPIC_API_KEY) {
+            console.warn("ANTHROPIC_API_KEY is not set. LLM features will be disabled.");
         } else {
-            const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-            this.model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+            this.client = new Anthropic({
+                apiKey: process.env.ANTHROPIC_API_KEY,
+            });
         }
     }
 
     async summarizePartnerships(title: string, url: string): Promise<string> {
-        if (!this.model) return "LLM Summary Unavailable";
+        if (!this.client) return "LLM Summary Unavailable";
 
         try {
-            const prompt = `
-            Analyze this news headline and URL for Web3 partnership or integration details.
-            
-            Headline: "${title}"
-            URL: "${url}"
-            
-            If this news indicates a partnership, integration, or collaboration, provide a 1-sentence summary.
-            If it's a generic update or not relevant to partnerships, return "Not a partnership".
-            `;
+            const message = await this.client.messages.create({
+                model: "claude-sonnet-4-20250514",
+                max_tokens: 256,
+                messages: [
+                    {
+                        role: "user",
+                        content: `Analyze this news headline and URL for Web3 partnership or integration details.
 
-            const result = await this.model.generateContent(prompt);
-            const response = result.response;
-            return response.text();
+Headline: "${title}"
+URL: "${url}"
+
+If this news indicates a partnership, integration, or collaboration, provide a 1-sentence summary.
+If it's a generic update or not relevant to partnerships, return "Not a partnership".`,
+                    },
+                ],
+            });
+
+            const textBlock = message.content.find((block) => block.type === "text");
+            return textBlock ? textBlock.text : "Summary unavailable";
         } catch (error) {
             console.error("LLM Summarization failed:", error);
             return "Summary failed";
@@ -36,14 +43,11 @@ export class LLMService {
     }
 
     async analyzeFundingPotential(companyName: string, roundType: string): Promise<boolean> {
-        // Simple heuristic for now, but could use LLM for more complex sentiment analysis
-        // on news snippets if we had full article text.
         return roundType.toLowerCase().includes("seed") || roundType.toLowerCase().includes("pre-seed");
     }
 
     /**
      * Analyze partnership quality with AI context understanding
-     * Returns structured partnership analysis with quality tier and confidence
      */
     async analyzePartnershipQuality(newsItem: {
         title: string;
@@ -53,20 +57,13 @@ export class LLMService {
         isPartnership: boolean;
         quality: "tier1" | "tier2" | "tier3" | "none";
         partnerNames: string[];
-        relationshipType:
-            | "integration"
-            | "collaboration"
-            | "investment"
-            | "grant"
-            | "other";
+        relationshipType: "integration" | "collaboration" | "investment" | "grant" | "other";
         confidence: number;
         reasoning: string;
     }> {
-        if (!this.model) {
-            // Fallback to basic regex detection if LLM unavailable
+        if (!this.client) {
             const title = newsItem.title.toLowerCase();
-            const hasKeyword =
-                /\b(partner|integration|collaboration)\b/i.test(title);
+            const hasKeyword = /\b(partner|integration|collaboration)\b/i.test(title);
             return {
                 isPartnership: hasKeyword,
                 quality: hasKeyword ? "tier3" : "none",
@@ -78,8 +75,13 @@ export class LLMService {
         }
 
         try {
-            const prompt = `
-Analyze this announcement for partnership/integration signals in the Web3 space.
+            const message = await this.client.messages.create({
+                model: "claude-sonnet-4-20250514",
+                max_tokens: 512,
+                messages: [
+                    {
+                        role: "user",
+                        content: `Analyze this announcement for partnership/integration signals in the Web3 space.
 
 Title: "${newsItem.title}"
 ${newsItem.content ? `Content: "${newsItem.content.slice(0, 500)}..."` : ""}
@@ -87,53 +89,41 @@ ${newsItem.url ? `URL: ${newsItem.url}` : ""}
 
 Determine:
 1. Is this a REAL partnership/integration? (not just mentioning another company)
-   - Real: "Partners with Coinbase", "Integrating Uniswap", "Collaborating with Alchemy"
-   - Not real: "Building on Ethereum", "Users can use USDC", "Similar to Uniswap"
-
-2. Quality tier (based on partner prominence):
-   - tier1: Major companies (Coinbase, Binance, Circle, Alchemy, a16z, Paradigm, etc.)
-   - tier2: Established protocols (Uniswap, Aave, Chainlink, TheGraph, etc.)
-   - tier3: Smaller partners or tool integrations
+2. Quality tier based on partner prominence:
+   - tier1: Major companies (Coinbase, Binance, Circle, Alchemy, a16z, etc.)
+   - tier2: Established protocols (Uniswap, Aave, Chainlink, etc.)
+   - tier3: Smaller partners
    - none: Not a partnership
+3. Partner names
+4. Relationship type: integration | collaboration | investment | grant | other
+5. Confidence (0-100)
 
-3. Partner names: Extract actual partner company names
-
-4. Relationship type:
-   - integration: Technical integration (API, SDK, protocol)
-   - collaboration: Joint initiative or co-marketing
-   - investment: Funding or grant received
-   - grant: Grant program announcement
-   - other: Other type of partnership
-
-5. Confidence (0-100): How confident are you this is a real partnership?
-
-Return ONLY valid JSON (no markdown, no explanations):
+Return ONLY valid JSON:
 {
   "isPartnership": true/false,
   "quality": "tier1" | "tier2" | "tier3" | "none",
-  "partnerNames": ["Company1", "Company2"],
+  "partnerNames": ["Company1"],
   "relationshipType": "integration" | "collaboration" | "investment" | "grant" | "other",
   "confidence": 0-100,
-  "reasoning": "Brief 1-sentence explanation"
-}`;
+  "reasoning": "Brief explanation"
+}`,
+                    },
+                ],
+            });
 
-            const result = await this.model.generateContent(prompt);
-            const response = result.response.text();
+            const textBlock = message.content.find((block) => block.type === "text");
+            if (!textBlock) throw new Error("No text response from Claude");
 
-            // Clean response (remove markdown code blocks if present)
-            const cleanedResponse = response
+            const cleanedResponse = textBlock.text
                 .replace(/```json\n?/g, "")
                 .replace(/```\n?/g, "")
                 .trim();
 
             const analysis = JSON.parse(cleanedResponse);
 
-            // Validate structure
             if (
                 typeof analysis.isPartnership !== "boolean" ||
-                !["tier1", "tier2", "tier3", "none"].includes(
-                    analysis.quality
-                ) ||
+                !["tier1", "tier2", "tier3", "none"].includes(analysis.quality) ||
                 !Array.isArray(analysis.partnerNames) ||
                 typeof analysis.confidence !== "number"
             ) {
@@ -143,15 +133,8 @@ Return ONLY valid JSON (no markdown, no explanations):
             return analysis;
         } catch (error) {
             console.error("Partnership analysis failed:", error);
-            // Fallback to basic detection
             const title = newsItem.title.toLowerCase();
-            const content = (newsItem.content || "").toLowerCase();
-            const combined = `${title} ${content}`;
-
-            const hasKeyword =
-                /\b(partnership|integration|collaborat|partner with)\b/i.test(
-                    combined
-                );
+            const hasKeyword = /\b(partnership|integration|collaborat|partner with)\b/i.test(title);
 
             return {
                 isPartnership: hasKeyword,
@@ -166,7 +149,6 @@ Return ONLY valid JSON (no markdown, no explanations):
 
     /**
      * Batch analyze multiple news items for partnerships
-     * More efficient than individual calls
      */
     async batchAnalyzePartnerships(
         newsItems: Array<{ title: string; content?: string; url?: string }>
@@ -180,7 +162,7 @@ Return ONLY valid JSON (no markdown, no explanations):
             reasoning: string;
         }>
     > {
-        if (!this.model || newsItems.length === 0) {
+        if (!this.client || newsItems.length === 0) {
             return newsItems.map(() => ({
                 isPartnership: false,
                 quality: "none" as const,
@@ -192,20 +174,21 @@ Return ONLY valid JSON (no markdown, no explanations):
         }
 
         try {
-            const prompt = `
-Analyze these ${newsItems.length} news announcements for partnership signals.
+            const message = await this.client.messages.create({
+                model: "claude-sonnet-4-20250514",
+                max_tokens: 2048,
+                messages: [
+                    {
+                        role: "user",
+                        content: `Analyze these ${newsItems.length} news announcements for partnership signals.
 
 ${newsItems
     .map(
-        (item, i) => `
-News ${i + 1}:
+        (item, i) => `News ${i + 1}:
 Title: "${item.title}"
-${item.content ? `Content: "${item.content.slice(0, 300)}..."` : ""}
-`
+${item.content ? `Content: "${item.content.slice(0, 300)}..."` : ""}`
     )
-    .join("\n")}
-
-For each news item, determine if it's a real partnership and rate quality.
+    .join("\n\n")}
 
 Quality tiers:
 - tier1: Major companies (Coinbase, Binance, Circle, Alchemy, a16z, etc.)
@@ -213,7 +196,7 @@ Quality tiers:
 - tier3: Smaller partners
 - none: Not a partnership
 
-Return ONLY a JSON array (no markdown):
+Return ONLY a JSON array:
 [
   {
     "isPartnership": true/false,
@@ -222,14 +205,16 @@ Return ONLY a JSON array (no markdown):
     "relationshipType": "integration" | "collaboration" | "investment" | "grant" | "other",
     "confidence": 0-100,
     "reasoning": "Brief explanation"
-  },
-  ...
-]`;
+  }
+]`,
+                    },
+                ],
+            });
 
-            const result = await this.model.generateContent(prompt);
-            const response = result.response.text();
+            const textBlock = message.content.find((block) => block.type === "text");
+            if (!textBlock) throw new Error("No text response from Claude");
 
-            const cleanedResponse = response
+            const cleanedResponse = textBlock.text
                 .replace(/```json\n?/g, "")
                 .replace(/```\n?/g, "")
                 .trim();
@@ -243,10 +228,7 @@ Return ONLY a JSON array (no markdown):
             return analyses;
         } catch (error) {
             console.error("Batch partnership analysis failed:", error);
-            // Fallback to individual analysis
-            return Promise.all(
-                newsItems.map((item) => this.analyzePartnershipQuality(item))
-            );
+            return Promise.all(newsItems.map((item) => this.analyzePartnershipQuality(item)));
         }
     }
 }
