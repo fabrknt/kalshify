@@ -12,7 +12,7 @@ export default function LandingPage() {
                         <Logo size="sm" />
                         <div className="flex items-center gap-4">
                             <Link
-                                href="/login"
+                                href="/auth/signin"
                                 className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                             >
                                 <LogIn className="h-4 w-4" />
@@ -122,7 +122,7 @@ export default function LandingPage() {
                                 <ArrowRight className="h-5 w-5" />
                             </Link>
                             <Link
-                                href="/login"
+                                href="/auth/signin"
                                 className="inline-flex items-center gap-2 px-6 py-4 rounded-lg border border-border text-foreground hover:bg-card transition-all font-medium"
                             >
                                 <LogIn className="h-5 w-5" />
