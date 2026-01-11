@@ -49,6 +49,21 @@ interface ApyStability {
     dataPoints: number;         // Number of data points used
 }
 
+interface LiquidityRisk {
+    score: number;              // 0-100, lower = more liquid (safer to exit)
+    poolTvl: number;            // Total pool TVL in USD
+    maxSafeAllocation: number;  // Max position size for safe exit (in USD)
+    safeAllocationPercent: number;  // What % of pool is safe to hold
+    slippageEstimates: {        // Estimated slippage at different position sizes
+        at100k: number;
+        at500k: number;
+        at1m: number;
+        at5m: number;
+        at10m: number;
+    };
+    exitabilityRating: "excellent" | "good" | "moderate" | "poor" | "very_poor";
+}
+
 interface YieldPool {
     id: string;
     chain: string;
@@ -68,6 +83,7 @@ interface YieldPool {
     dependencies: PoolDependency[];
     underlyingAssets: string[];
     apyStability: ApyStability | null;
+    liquidityRisk: LiquidityRisk;
 }
 
 interface DefiRelationshipData {
@@ -114,13 +130,18 @@ export async function GET(request: Request) {
     const stablecoinOnly = searchParams.get("stablecoinOnly") === "true";
     const riskLevel = searchParams.get("riskLevel"); // low, medium, high, very_high
     const maxRiskScore = parseInt(searchParams.get("maxRiskScore") || "100");
-    const sortBy = searchParams.get("sortBy") || "tvl"; // tvl, apy, risk, stability
+    const sortBy = searchParams.get("sortBy") || "tvl"; // tvl, apy, risk, stability, liquidity
     const yieldLimit = parseInt(searchParams.get("yieldLimit") || "100");
 
     // Stability filters
     const minStability = parseInt(searchParams.get("minStability") || "0");
     const stableOnly = searchParams.get("stableOnly") === "true"; // Only pools with stability data
     const trend = searchParams.get("trend"); // up, down, stable
+
+    // Liquidity filters
+    const maxLiquidityRisk = parseInt(searchParams.get("maxLiquidityRisk") || "100");
+    const exitability = searchParams.get("exitability"); // excellent, good, moderate, poor, very_poor
+    const minSafeAllocation = parseInt(searchParams.get("minSafeAllocation") || "0"); // minimum safe allocation in USD
 
     const data = loadDefiData();
 
@@ -226,6 +247,25 @@ export async function GET(request: Request) {
         );
     }
 
+    // Liquidity filtering
+    if (maxLiquidityRisk < 100) {
+        filteredYields = filteredYields.filter(y =>
+            y.liquidityRisk && y.liquidityRisk.score <= maxLiquidityRisk
+        );
+    }
+
+    if (exitability) {
+        filteredYields = filteredYields.filter(y =>
+            y.liquidityRisk && y.liquidityRisk.exitabilityRating === exitability
+        );
+    }
+
+    if (minSafeAllocation > 0) {
+        filteredYields = filteredYields.filter(y =>
+            y.liquidityRisk && y.liquidityRisk.maxSafeAllocation >= minSafeAllocation
+        );
+    }
+
     // Sort yields
     if (sortBy === "apy") {
         filteredYields = filteredYields.sort((a, b) => b.apy - a.apy);
@@ -237,6 +277,13 @@ export async function GET(request: Request) {
             const aScore = a.apyStability?.score ?? -1;
             const bScore = b.apyStability?.score ?? -1;
             return bScore - aScore;
+        });
+    } else if (sortBy === "liquidity") {
+        // Sort by liquidity risk (lowest first = most liquid)
+        filteredYields = filteredYields.sort((a, b) => {
+            const aScore = a.liquidityRisk?.score ?? 100;
+            const bScore = b.liquidityRisk?.score ?? 100;
+            return aScore - bScore;
         });
     } else {
         filteredYields = filteredYields.sort((a, b) => b.tvlUsd - a.tvlUsd);

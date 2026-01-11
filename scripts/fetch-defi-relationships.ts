@@ -70,6 +70,22 @@ interface ApyStability {
     dataPoints: number;         // Number of data points used
 }
 
+// Liquidity Risk metrics for exit-ability assessment
+interface LiquidityRisk {
+    score: number;              // 0-100, lower = more liquid (safer to exit)
+    poolTvl: number;            // Total pool TVL in USD
+    maxSafeAllocation: number;  // Max position size for safe exit (in USD)
+    safeAllocationPercent: number;  // What % of pool is safe to hold
+    slippageEstimates: {        // Estimated slippage at different position sizes
+        at100k: number;         // Slippage % for $100K position
+        at500k: number;         // Slippage % for $500K position
+        at1m: number;           // Slippage % for $1M position
+        at5m: number;           // Slippage % for $5M position
+        at10m: number;          // Slippage % for $10M position
+    };
+    exitabilityRating: "excellent" | "good" | "moderate" | "poor" | "very_poor";
+}
+
 interface PoolDependency {
     type: "protocol" | "asset" | "oracle" | "chain";
     name: string;
@@ -105,6 +121,8 @@ interface ProcessedYieldPool {
     underlyingAssets: string[];
     // APY Stability fields (from historical data)
     apyStability: ApyStability | null;  // null if no historical data available
+    // Liquidity Risk fields
+    liquidityRisk: LiquidityRisk;
 }
 
 interface DefiRelationship {
@@ -358,6 +376,141 @@ async function fetchHistoricalDataForPools(
 
     console.log(`   ✅ Got stability data for ${withData} pools`);
     return stabilityMap;
+}
+
+/**
+ * Calculate Liquidity Risk Index for a pool
+ *
+ * The Liquidity Risk measures how easily a curator can exit a position.
+ * Key factors:
+ * - Pool TVL: Larger pools = easier to exit
+ * - Safe allocation: Generally 2-5% of pool TVL can be exited without major slippage
+ * - Slippage estimation: Based on position size relative to pool depth
+ *
+ * For AMM pools: Slippage ≈ (position_size / pool_tvl) * constant_factor
+ * For lending pools: Usually better liquidity (can withdraw available liquidity)
+ */
+function calculateLiquidityRisk(tvlUsd: number, projectSlug: string): LiquidityRisk {
+    // Lending protocols typically have better exit liquidity than AMM pools
+    const isLendingProtocol = [
+        "aave", "aave-v3", "compound", "compound-v3", "morpho", "morpho-v1",
+        "spark", "sparklend", "maker", "sky-lending", "maple", "euler",
+        "euler-v2", "radiant", "benqi", "venus", "kamino-lend", "marginfi",
+        "solend"
+    ].some(p => projectSlug.includes(p));
+
+    // Liquid staking protocols also have good liquidity
+    const isLiquidStaking = [
+        "lido", "rocket-pool", "jito", "marinade", "ether.fi", "frax-ether"
+    ].some(p => projectSlug.includes(p));
+
+    // Base slippage factor (AMM pools have higher slippage)
+    // Lending protocols: ~0.5x slippage factor
+    // Liquid staking: ~0.3x slippage factor
+    // AMM pools: 1x slippage factor
+    const slippageFactor = isLiquidStaking ? 0.3 : isLendingProtocol ? 0.5 : 1.0;
+
+    // Safe allocation percentage based on pool size
+    // Larger pools can safely hold larger positions
+    let safeAllocationPercent: number;
+    if (tvlUsd >= 1_000_000_000) {
+        safeAllocationPercent = 5; // $1B+ pools: 5% is safe
+    } else if (tvlUsd >= 100_000_000) {
+        safeAllocationPercent = 3; // $100M-$1B: 3% is safe
+    } else if (tvlUsd >= 10_000_000) {
+        safeAllocationPercent = 2; // $10M-$100M: 2% is safe
+    } else {
+        safeAllocationPercent = 1; // <$10M: only 1% is safe
+    }
+
+    // Lending protocols can handle larger allocations
+    if (isLendingProtocol) {
+        safeAllocationPercent *= 2;
+    }
+
+    const maxSafeAllocation = tvlUsd * (safeAllocationPercent / 100);
+
+    // Calculate slippage estimates at different position sizes
+    // Formula: slippage% ≈ (position / tvl) * 100 * slippageFactor
+    // This is a simplified model; real slippage depends on pool curve
+    const calculateSlippage = (positionSize: number): number => {
+        if (tvlUsd === 0) return 100;
+        const ratio = positionSize / tvlUsd;
+        // Slippage increases non-linearly with position size
+        const slippage = ratio * 100 * slippageFactor * (1 + ratio * 2);
+        return Math.min(Math.round(slippage * 100) / 100, 100);
+    };
+
+    const slippageEstimates = {
+        at100k: calculateSlippage(100_000),
+        at500k: calculateSlippage(500_000),
+        at1m: calculateSlippage(1_000_000),
+        at5m: calculateSlippage(5_000_000),
+        at10m: calculateSlippage(10_000_000),
+    };
+
+    // Calculate overall liquidity risk score (0-100, lower = more liquid)
+    // Based on:
+    // - Pool TVL (larger = better)
+    // - Slippage at $1M (common position size)
+    // - Protocol type bonus
+    let score: number;
+
+    if (tvlUsd >= 1_000_000_000) {
+        score = 5; // Excellent liquidity
+    } else if (tvlUsd >= 500_000_000) {
+        score = 10;
+    } else if (tvlUsd >= 100_000_000) {
+        score = 20;
+    } else if (tvlUsd >= 50_000_000) {
+        score = 30;
+    } else if (tvlUsd >= 10_000_000) {
+        score = 45;
+    } else if (tvlUsd >= 5_000_000) {
+        score = 60;
+    } else if (tvlUsd >= 1_000_000) {
+        score = 75;
+    } else {
+        score = 90; // Poor liquidity
+    }
+
+    // Adjust for protocol type
+    if (isLendingProtocol) {
+        score = Math.max(0, score - 10);
+    }
+    if (isLiquidStaking) {
+        score = Math.max(0, score - 15);
+    }
+
+    // Adjust based on actual slippage at $1M
+    if (slippageEstimates.at1m > 5) {
+        score = Math.min(100, score + 10);
+    } else if (slippageEstimates.at1m < 0.5) {
+        score = Math.max(0, score - 10);
+    }
+
+    // Determine exitability rating
+    let exitabilityRating: LiquidityRisk["exitabilityRating"];
+    if (score <= 15) {
+        exitabilityRating = "excellent";
+    } else if (score <= 30) {
+        exitabilityRating = "good";
+    } else if (score <= 50) {
+        exitabilityRating = "moderate";
+    } else if (score <= 70) {
+        exitabilityRating = "poor";
+    } else {
+        exitabilityRating = "very_poor";
+    }
+
+    return {
+        score,
+        poolTvl: tvlUsd,
+        maxSafeAllocation,
+        safeAllocationPercent,
+        slippageEstimates,
+        exitabilityRating,
+    };
 }
 
 function buildParentChildRelationships(protocols: DefiLlamaProtocol[]): DefiRelationship[] {
@@ -639,6 +792,9 @@ function processYieldPools(pools: YieldPool[], protocolSlugs: Set<string>): Proc
             dependencies.push({ type: "asset", name: asset, risk: assetRisk as "low" | "medium" | "high" });
         }
 
+        // Calculate liquidity risk
+        const liquidityRisk = calculateLiquidityRisk(pool.tvlUsd, projectSlug);
+
         processed.push({
             id: pool.pool,
             chain: pool.chain,
@@ -658,6 +814,7 @@ function processYieldPools(pools: YieldPool[], protocolSlugs: Set<string>): Proc
             dependencies,
             underlyingAssets,
             apyStability: null, // Will be populated with historical data
+            liquidityRisk,
         });
     }
 
@@ -911,6 +1068,66 @@ async function main() {
             const stability = pool.apyStability!;
             const trendIcon = stability.trend === "up" ? "↑" : stability.trend === "down" ? "↓" : "→";
             console.log(`   Risk:${pool.riskScore} Stab:${stability.score}${trendIcon} | ${pool.project} | ${pool.symbol} | ${pool.apy.toFixed(2)}% APY | ${tvlStr}`);
+        }
+
+        // Print liquidity risk distribution
+        console.log("\n💧 LIQUIDITY RISK DISTRIBUTION:");
+        const liquidityCounts = { excellent: 0, good: 0, moderate: 0, poor: 0, very_poor: 0 };
+        for (const pool of processedYields) {
+            liquidityCounts[pool.liquidityRisk.exitabilityRating]++;
+        }
+        console.log(`   Excellent (≤15):  ${liquidityCounts.excellent} pools`);
+        console.log(`   Good (16-30):     ${liquidityCounts.good} pools`);
+        console.log(`   Moderate (31-50): ${liquidityCounts.moderate} pools`);
+        console.log(`   Poor (51-70):     ${liquidityCounts.poor} pools`);
+        console.log(`   Very Poor (71+):  ${liquidityCounts.very_poor} pools`);
+
+        // Print best liquidity pools with good APY
+        console.log("\n🏊 BEST EXIT LIQUIDITY (Excellent/Good + APY > 3%):");
+        const liquidPools = processedYields
+            .filter(p =>
+                (p.liquidityRisk.exitabilityRating === "excellent" || p.liquidityRisk.exitabilityRating === "good") &&
+                p.apy >= 3
+            )
+            .sort((a, b) => a.liquidityRisk.score - b.liquidityRisk.score)
+            .slice(0, 10);
+        for (const pool of liquidPools) {
+            const tvlStr = pool.tvlUsd > 1_000_000_000
+                ? `$${(pool.tvlUsd / 1_000_000_000).toFixed(1)}B`
+                : `$${(pool.tvlUsd / 1_000_000).toFixed(0)}M`;
+            const maxAlloc = pool.liquidityRisk.maxSafeAllocation > 1_000_000
+                ? `$${(pool.liquidityRisk.maxSafeAllocation / 1_000_000).toFixed(1)}M`
+                : `$${(pool.liquidityRisk.maxSafeAllocation / 1_000).toFixed(0)}K`;
+            console.log(`   Liq:${pool.liquidityRisk.score} | ${pool.project} | ${pool.symbol} | ${pool.apy.toFixed(2)}% APY | ${tvlStr} | Max Safe: ${maxAlloc}`);
+        }
+
+        // Print ultimate curator picks (all factors combined)
+        console.log("\n🏆 ULTIMATE CURATOR PICKS (Low Risk + Stable + Liquid + APY > 3%):");
+        const ultimatePicks = processedYields
+            .filter(p =>
+                p.riskLevel === "low" &&
+                p.liquidityRisk.score <= 30 &&
+                p.apyStability &&
+                p.apyStability.score >= 60 &&
+                p.apy >= 3
+            )
+            .sort((a, b) => {
+                // Combined score: APY * stability * (100 - risk) * (100 - liquidity) / 1000000
+                const scoreA = a.apy * a.apyStability!.score * (100 - a.riskScore) * (100 - a.liquidityRisk.score);
+                const scoreB = b.apy * b.apyStability!.score * (100 - b.riskScore) * (100 - b.liquidityRisk.score);
+                return scoreB - scoreA;
+            })
+            .slice(0, 10);
+        for (const pool of ultimatePicks) {
+            const tvlStr = pool.tvlUsd > 1_000_000_000
+                ? `$${(pool.tvlUsd / 1_000_000_000).toFixed(1)}B`
+                : `$${(pool.tvlUsd / 1_000_000).toFixed(0)}M`;
+            const stability = pool.apyStability!;
+            const trendIcon = stability.trend === "up" ? "↑" : stability.trend === "down" ? "↓" : "→";
+            const maxAlloc = pool.liquidityRisk.maxSafeAllocation > 1_000_000
+                ? `$${(pool.liquidityRisk.maxSafeAllocation / 1_000_000).toFixed(0)}M`
+                : `$${(pool.liquidityRisk.maxSafeAllocation / 1_000).toFixed(0)}K`;
+            console.log(`   R:${pool.riskScore} S:${stability.score}${trendIcon} L:${pool.liquidityRisk.score} | ${pool.project} | ${pool.symbol} | ${pool.apy.toFixed(2)}% | ${tvlStr} | Safe:${maxAlloc}`);
         }
 
         console.log("\n" + "=".repeat(60));

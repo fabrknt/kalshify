@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { DependencyGraph, GraphNode, GraphLink } from "@/components/curate/dependency-graph";
 import {
     Network,
@@ -22,6 +22,7 @@ import {
     Layers,
     Activity,
     ArrowRight,
+    Droplet,
 } from "lucide-react";
 
 interface PoolDependency {
@@ -46,6 +47,21 @@ interface ApyStability {
     maxApy: number;
     trend: "up" | "down" | "stable";
     dataPoints: number;
+}
+
+interface LiquidityRisk {
+    score: number;
+    poolTvl: number;
+    maxSafeAllocation: number;
+    safeAllocationPercent: number;
+    slippageEstimates: {
+        at100k: number;
+        at500k: number;
+        at1m: number;
+        at5m: number;
+        at10m: number;
+    };
+    exitabilityRating: "excellent" | "good" | "moderate" | "poor" | "very_poor";
 }
 
 interface DefiProtocol {
@@ -85,6 +101,7 @@ interface YieldPool {
     dependencies: PoolDependency[];
     underlyingAssets: string[];
     apyStability: ApyStability | null;
+    liquidityRisk: LiquidityRisk;
 }
 
 interface DefiGraphData {
@@ -203,6 +220,46 @@ function StabilityBadge({ stability }: { stability: ApyStability | null }) {
     );
 }
 
+function LiquidityBadge({ liquidity }: { liquidity: LiquidityRisk | undefined }) {
+    if (!liquidity) {
+        return (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-slate-700/50 text-slate-500 border border-slate-600/30">
+                —
+            </span>
+        );
+    }
+
+    const { score, exitabilityRating } = liquidity;
+
+    // Color based on liquidity score (lower = more liquid = better)
+    const getColors = () => {
+        if (score <= 15) return { bg: "bg-blue-500/10", text: "text-blue-400", border: "border-blue-500/30" };
+        if (score <= 30) return { bg: "bg-cyan-500/10", text: "text-cyan-400", border: "border-cyan-500/30" };
+        if (score <= 50) return { bg: "bg-yellow-500/10", text: "text-yellow-400", border: "border-yellow-500/30" };
+        if (score <= 70) return { bg: "bg-orange-500/10", text: "text-orange-400", border: "border-orange-500/30" };
+        return { bg: "bg-red-500/10", text: "text-red-400", border: "border-red-500/30" };
+    };
+
+    const colors = getColors();
+
+    return (
+        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${colors.bg} ${colors.text} border ${colors.border}`}>
+            <Droplet className="h-3 w-3" />
+            {score}
+        </span>
+    );
+}
+
+function formatSafeAllocation(amount: number): string {
+    if (amount >= 1_000_000_000) {
+        return `$${(amount / 1_000_000_000).toFixed(1)}B`;
+    }
+    if (amount >= 1_000_000) {
+        return `$${(amount / 1_000_000).toFixed(1)}M`;
+    }
+    return `$${(amount / 1_000).toFixed(0)}K`;
+}
+
 function DependencyChips({ dependencies }: { dependencies: PoolDependency[] }) {
     const protocols = dependencies.filter(d => d.type === "protocol");
     const assets = dependencies.filter(d => d.type === "asset");
@@ -234,11 +291,11 @@ function DependencyChips({ dependencies }: { dependencies: PoolDependency[] }) {
 }
 
 function ExpandedPoolDetails({ pool }: { pool: YieldPool }) {
-    const { riskBreakdown, apyStability } = pool;
+    const { riskBreakdown, apyStability, liquidityRisk } = pool;
 
     return (
         <div className="bg-slate-800/50 p-4 border-t border-slate-700">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Risk Breakdown */}
                 <div>
                     <h4 className="text-sm font-semibold text-white mb-2 flex items-center gap-2">
@@ -335,6 +392,60 @@ function ExpandedPoolDetails({ pool }: { pool: YieldPool }) {
                     )}
                 </div>
 
+                {/* Liquidity Risk */}
+                <div>
+                    <h4 className="text-sm font-semibold text-white mb-2 flex items-center gap-2">
+                        <Droplet className="h-4 w-4 text-cyan-400" />
+                        Liquidity Risk (Lower = Easier Exit)
+                    </h4>
+                    {liquidityRisk ? (
+                        <div className="space-y-2">
+                            <div className="flex justify-between text-xs">
+                                <span className="text-slate-400">Liquidity Score</span>
+                                <span className={liquidityRisk.score <= 15 ? "text-blue-400" : liquidityRisk.score <= 30 ? "text-cyan-400" : liquidityRisk.score <= 50 ? "text-yellow-400" : "text-orange-400"}>
+                                    {liquidityRisk.score}/100
+                                </span>
+                            </div>
+                            <div className="flex justify-between text-xs">
+                                <span className="text-slate-400">Exitability</span>
+                                <span className={`capitalize ${
+                                    liquidityRisk.exitabilityRating === "excellent" ? "text-blue-400" :
+                                    liquidityRisk.exitabilityRating === "good" ? "text-cyan-400" :
+                                    liquidityRisk.exitabilityRating === "moderate" ? "text-yellow-400" :
+                                    "text-orange-400"
+                                }`}>
+                                    {liquidityRisk.exitabilityRating.replace("_", " ")}
+                                </span>
+                            </div>
+                            <div className="flex justify-between text-xs">
+                                <span className="text-slate-400">Max Safe Allocation</span>
+                                <span className="text-slate-300">{formatSafeAllocation(liquidityRisk.maxSafeAllocation)}</span>
+                            </div>
+                            <div className="flex justify-between text-xs">
+                                <span className="text-slate-400">Safe % of Pool</span>
+                                <span className="text-slate-300">{liquidityRisk.safeAllocationPercent}%</span>
+                            </div>
+                            <div className="border-t border-slate-700 pt-2 mt-2">
+                                <span className="text-slate-500 text-xs">Est. Slippage:</span>
+                                <div className="grid grid-cols-2 gap-1 mt-1 text-xs">
+                                    <span className="text-slate-400">$100K:</span>
+                                    <span className={liquidityRisk.slippageEstimates.at100k < 0.5 ? "text-green-400" : liquidityRisk.slippageEstimates.at100k < 1 ? "text-yellow-400" : "text-orange-400"}>
+                                        {liquidityRisk.slippageEstimates.at100k}%
+                                    </span>
+                                    <span className="text-slate-400">$1M:</span>
+                                    <span className={liquidityRisk.slippageEstimates.at1m < 0.5 ? "text-green-400" : liquidityRisk.slippageEstimates.at1m < 2 ? "text-yellow-400" : "text-orange-400"}>
+                                        {liquidityRisk.slippageEstimates.at1m}%
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="text-xs text-slate-500 italic">
+                            No liquidity data available. Run fetch:defi to update.
+                        </div>
+                    )}
+                </div>
+
                 {/* Dependencies */}
                 <div>
                     <h4 className="text-sm font-semibold text-white mb-2 flex items-center gap-2">
@@ -386,7 +497,7 @@ function ExpandedPoolDetails({ pool }: { pool: YieldPool }) {
 }
 
 type TabType = "yields" | "graph";
-type SortField = "tvl" | "apy" | "risk" | "stability";
+type SortField = "tvl" | "apy" | "risk" | "stability" | "liquidity";
 
 export default function DefiRelationshipsPage() {
     const [graphData, setGraphData] = useState<DefiGraphData | null>(null);
@@ -593,6 +704,7 @@ export default function DefiRelationshipsPage() {
                                     <option value="apy">Sort by APY</option>
                                     <option value="risk">Sort by Risk (Safest)</option>
                                     <option value="stability">Sort by Stability</option>
+                                    <option value="liquidity">Sort by Liquidity</option>
                                 </select>
                             </div>
 
@@ -680,14 +792,15 @@ export default function DefiRelationshipsPage() {
                                         <th className="text-right px-4 py-3 text-xs font-semibold text-slate-400 uppercase">APY</th>
                                         <th className="text-center px-4 py-3 text-xs font-semibold text-slate-400 uppercase">Risk</th>
                                         <th className="text-center px-4 py-3 text-xs font-semibold text-slate-400 uppercase">Stability</th>
+                                        <th className="text-center px-4 py-3 text-xs font-semibold text-slate-400 uppercase">Liquidity</th>
                                         <th className="text-left px-4 py-3 text-xs font-semibold text-slate-400 uppercase hidden lg:table-cell">Dependencies</th>
                                         <th className="text-center px-4 py-3 text-xs font-semibold text-slate-400 uppercase">Details</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-800">
                                     {graphData.yields.map((pool) => (
-                                        <>
-                                            <tr key={pool.id} className="hover:bg-slate-800/30 transition-colors">
+                                        <Fragment key={pool.id}>
+                                            <tr className="hover:bg-slate-800/30 transition-colors">
                                                 <td className="px-4 py-3">
                                                     <div className="flex flex-col">
                                                         <span className="text-white font-medium text-sm">{pool.project}</span>
@@ -720,6 +833,9 @@ export default function DefiRelationshipsPage() {
                                                 <td className="px-4 py-3 text-center">
                                                     <StabilityBadge stability={pool.apyStability} />
                                                 </td>
+                                                <td className="px-4 py-3 text-center">
+                                                    <LiquidityBadge liquidity={pool.liquidityRisk} />
+                                                </td>
                                                 <td className="px-4 py-3 hidden lg:table-cell">
                                                     <DependencyChips dependencies={pool.dependencies} />
                                                 </td>
@@ -737,13 +853,13 @@ export default function DefiRelationshipsPage() {
                                                 </td>
                                             </tr>
                                             {expandedPool === pool.id && (
-                                                <tr key={`${pool.id}-expanded`}>
-                                                    <td colSpan={8} className="p-0">
+                                                <tr>
+                                                    <td colSpan={9} className="p-0">
                                                         <ExpandedPoolDetails pool={pool} />
                                                     </td>
                                                 </tr>
                                             )}
-                                        </>
+                                        </Fragment>
                                     ))}
                                 </tbody>
                             </table>
