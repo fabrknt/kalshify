@@ -443,8 +443,36 @@ export default function CuratePage() {
     const chain = SOLANA_CHAIN;
     const [minTvl, setMinTvl] = useState(1_000_000);
     const [stablecoinOnly, setStablecoinOnly] = useState(false);
-    const [riskFilter, setRiskFilter] = useState<string>("");
+    const [riskFilter, setRiskFilter] = useState<string>("low");
     const [sortBy, setSortBy] = useState<SortField>("tvl");
+
+    // Hero stats (unfiltered totals)
+    const [heroStats, setHeroStats] = useState<{ totalPools: number; totalTvl: number; lowRiskCount: number } | null>(null);
+
+    // Fetch hero stats (unfiltered)
+    useEffect(() => {
+        async function fetchHeroStats() {
+            try {
+                const params = new URLSearchParams();
+                params.set("chain", SOLANA_CHAIN);
+                params.set("minTvl", "1000000");
+                params.set("yieldLimit", "500");
+                const response = await fetch(`/api/curate/defi?${params}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    const pools = data.yields || [];
+                    setHeroStats({
+                        totalPools: pools.length,
+                        totalTvl: pools.reduce((sum: number, p: YieldPool) => sum + p.tvlUsd, 0),
+                        lowRiskCount: pools.filter((p: YieldPool) => p.riskScore <= 20).length,
+                    });
+                }
+            } catch (err) {
+                console.error("Failed to fetch hero stats:", err);
+            }
+        }
+        fetchHeroStats();
+    }, []);
 
     // Fetch watchlist
     useEffect(() => {
@@ -557,7 +585,7 @@ export default function CuratePage() {
         return {
             totalTvl: pools.reduce((sum, p) => sum + p.tvlUsd, 0),
             poolCount: pools.length,
-            lowRiskCount: pools.filter(p => p.riskScore <= 25).length,
+            lowRiskCount: pools.filter(p => p.riskScore <= 20).length,
         };
     }, [graphData?.yields]);
 
@@ -631,9 +659,9 @@ export default function CuratePage() {
 
                             {/* Main headline - outcome focused */}
                             <h1 className="text-2xl md:text-3xl font-bold text-white mb-3">
-                                {summaryStats.poolCount}+ pools analyzed.{" "}
+                                {heroStats?.totalPools || summaryStats.poolCount}+ pools analyzed.{" "}
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
-                                    {summaryStats.lowRiskCount} you can trust.
+                                    {heroStats?.lowRiskCount || summaryStats.lowRiskCount} you can trust.
                                 </span>
                             </h1>
 
@@ -662,18 +690,18 @@ export default function CuratePage() {
                         </div>
 
                         {/* Stats - proof of coverage */}
-                        {!loading && (
+                        {heroStats && (
                             <div className="flex lg:flex-col gap-6 lg:gap-3 lg:text-right">
                                 <div>
-                                    <p className="text-2xl font-bold text-white">{formatTvl(summaryStats.totalTvl)}</p>
+                                    <p className="text-2xl font-bold text-white">{formatTvl(heroStats.totalTvl)}</p>
                                     <p className="text-xs text-slate-500">TVL analyzed</p>
                                 </div>
                                 <div>
-                                    <p className="text-2xl font-bold text-white">{summaryStats.poolCount}</p>
+                                    <p className="text-2xl font-bold text-white">{heroStats.totalPools}</p>
                                     <p className="text-xs text-slate-500">Pools tracked</p>
                                 </div>
                                 <div>
-                                    <p className="text-2xl font-bold text-green-400">{summaryStats.lowRiskCount}</p>
+                                    <p className="text-2xl font-bold text-green-400">{heroStats.lowRiskCount}</p>
                                     <p className="text-xs text-slate-500">Low risk</p>
                                 </div>
                             </div>
