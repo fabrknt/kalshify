@@ -5,6 +5,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { AuthProvider } from "./providers/session-provider";
+import { SolanaProvider } from "./providers/solana-provider";
 import { queryClient } from "@/lib/query-client";
 import { getWagmiConfig } from "@/lib/wagmi-config";
 import "@rainbow-me/rainbowkit/styles.css";
@@ -30,11 +31,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
     return (
         <AuthProvider>
-            <WagmiProvider config={config}>
-                <QueryClientProvider client={queryClient}>
-                    <RainbowKitProvider locale="en">{children}</RainbowKitProvider>
-                </QueryClientProvider>
-            </WagmiProvider>
+            <SolanaProvider>
+                <WagmiProvider config={config}>
+                    <QueryClientProvider client={queryClient}>
+                        <RainbowKitProvider locale="en">{children}</RainbowKitProvider>
+                    </QueryClientProvider>
+                </WagmiProvider>
+            </SolanaProvider>
         </AuthProvider>
     );
 }
