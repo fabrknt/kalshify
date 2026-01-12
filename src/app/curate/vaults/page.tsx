@@ -47,7 +47,8 @@ interface VaultData {
     allocations: VaultAllocation[];
 }
 
-export default function VaultsPage() {
+// Content component that uses wagmi hooks (only rendered after mount)
+function VaultsPageContent() {
     const { data: session, status: sessionStatus } = useSession();
     const { isConnected } = useAccount();
 
@@ -92,12 +93,10 @@ export default function VaultsPage() {
     };
 
     const handleVaultCreated = (vaultAddress: string, txHash: string) => {
-        // Refresh the vault list after creation
         fetchVaults();
     };
 
     const handleManageVault = (vault: VaultData) => {
-        // TODO: Open vault management modal
         console.log("Manage vault:", vault);
     };
 
@@ -192,6 +191,30 @@ export default function VaultsPage() {
             )}
         </div>
     );
+}
+
+// Main page component with SSR-safe mounting
+export default function VaultsPage() {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    // Show loading state during SSR and initial mount
+    if (!mounted) {
+        return (
+            <div className="space-y-6">
+                <Header onCreateClick={() => {}} showCreate={false} />
+                <div className="flex items-center justify-center h-96">
+                    <Loader2 className="h-8 w-8 text-cyan-500 animate-spin" />
+                </div>
+            </div>
+        );
+    }
+
+    // Only render content with wagmi hooks after mounting on client
+    return <VaultsPageContent />;
 }
 
 // Header Component
