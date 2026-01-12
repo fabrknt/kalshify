@@ -7,8 +7,9 @@ export async function GET(request: NextRequest) {
     try {
         const session = await auth();
 
+        // Return empty array if not authenticated (vaults page doesn't require sign-in)
         if (!session?.user?.id) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+            return NextResponse.json({ vaults: [] });
         }
 
         const searchParams = request.nextUrl.searchParams;
