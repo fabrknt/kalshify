@@ -107,7 +107,7 @@ export function ProtocolComparison({ onProtocolClick }: ProtocolComparisonProps)
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <GitCompare className="h-5 w-5 text-purple-400" />
-                    <h2 className="text-lg font-semibold text-white">Compare Solana Protocols</h2>
+                    <h2 className="text-lg font-semibold text-white">Top Protocols</h2>
                 </div>
                 <div className="flex items-center gap-4 text-sm text-slate-400">
                     <span>{protocols.length} protocols</span>
