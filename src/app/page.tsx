@@ -614,71 +614,71 @@ export default function CuratePage() {
         <CurateLayoutClient>
         <div className="space-y-6">
             {/* Hero Section */}
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border border-slate-700/50 p-6">
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border border-slate-700/50 p-6 md:p-8">
                 {/* Background glow */}
                 <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
                 <div className="relative">
-                    {/* Feature Badges */}
-                    <div className="flex gap-2 mb-4">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-gradient-to-r from-purple-500/10 to-purple-500/5 text-purple-400 border border-purple-500/30 text-xs font-semibold">
-                            <div className="w-1.5 h-1.5 bg-purple-400 rounded-full" />
-                            SOLANA
-                        </span>
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-gradient-to-r from-cyan-500/10 to-cyan-500/5 text-cyan-400 border border-cyan-500/30 text-xs font-semibold">
-                            <Sparkles className="h-3 w-3" />
-                            AI-POWERED
-                        </span>
-                    </div>
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                        <div className="max-w-2xl">
+                            {/* Badges */}
+                            <div className="flex gap-2 mb-3">
+                                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20 text-[10px] font-medium uppercase tracking-wide">
+                                    Solana
+                                </span>
+                            </div>
 
-                    <div className="flex items-start justify-between">
-                        <div>
-                            <h1 className="text-2xl font-bold text-white mb-2">
-                                Solana Yield Intelligence
+                            {/* Main headline - outcome focused */}
+                            <h1 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                                {summaryStats.poolCount}+ pools analyzed.{" "}
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
+                                    {summaryStats.lowRiskCount} you can trust.
+                                </span>
                             </h1>
-                            <p className="text-slate-400 text-sm max-w-lg">
-                                Cross-protocol yield comparison, intelligent risk scoring, and AI-powered recommendations.
-                                Compare Kamino, Marginfi, Meteora, and more in one place.
+
+                            {/* Value prop - what painful decision it replaces */}
+                            <p className="text-slate-400 text-sm md:text-base leading-relaxed">
+                                An AI yield analyst that filters Solana DeFi by{" "}
+                                <span className="text-slate-300">risk-adjusted return</span>, not raw APY.
+                                Stop chasing numbers. Start allocating with confidence.
                             </p>
+
+                            {/* How it works - quick proof */}
+                            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-4 text-xs text-slate-500">
+                                <span className="flex items-center gap-1">
+                                    <Shield className="h-3 w-3 text-cyan-500" />
+                                    Risk scoring
+                                </span>
+                                <span className="flex items-center gap-1">
+                                    <TrendingUp className="h-3 w-3 text-green-500" />
+                                    APY stability analysis
+                                </span>
+                                <span className="flex items-center gap-1">
+                                    <Sparkles className="h-3 w-3 text-purple-500" />
+                                    AI recommendations
+                                </span>
+                            </div>
                         </div>
 
-                        {/* Quick Stats */}
+                        {/* Stats - proof of coverage */}
                         {!loading && (
-                            <div className="hidden md:flex gap-6">
-                                <div className="text-right">
+                            <div className="flex lg:flex-col gap-6 lg:gap-3 lg:text-right">
+                                <div>
                                     <p className="text-2xl font-bold text-white">{formatTvl(summaryStats.totalTvl)}</p>
-                                    <p className="text-xs text-slate-500">TVL Tracked</p>
+                                    <p className="text-xs text-slate-500">TVL analyzed</p>
                                 </div>
-                                <div className="text-right">
+                                <div>
                                     <p className="text-2xl font-bold text-white">{summaryStats.poolCount}</p>
-                                    <p className="text-xs text-slate-500">Pools Analyzed</p>
+                                    <p className="text-xs text-slate-500">Pools tracked</p>
                                 </div>
-                                <div className="text-right">
+                                <div>
                                     <p className="text-2xl font-bold text-green-400">{summaryStats.lowRiskCount}</p>
-                                    <p className="text-xs text-slate-500">Low Risk</p>
+                                    <p className="text-xs text-slate-500">Low risk</p>
                                 </div>
                             </div>
                         )}
                     </div>
-
-                    {/* Mobile Stats */}
-                    {!loading && (
-                        <div className="flex md:hidden gap-4 mt-4 pt-4 border-t border-slate-700/50">
-                            <div>
-                                <p className="text-lg font-bold text-white">{formatTvl(summaryStats.totalTvl)}</p>
-                                <p className="text-xs text-slate-500">TVL Tracked</p>
-                            </div>
-                            <div>
-                                <p className="text-lg font-bold text-white">{summaryStats.poolCount}</p>
-                                <p className="text-xs text-slate-500">Pools</p>
-                            </div>
-                            <div>
-                                <p className="text-lg font-bold text-green-400">{summaryStats.lowRiskCount}</p>
-                                <p className="text-xs text-slate-500">Low Risk</p>
-                            </div>
-                        </div>
-                    )}
                 </div>
             </div>
 
