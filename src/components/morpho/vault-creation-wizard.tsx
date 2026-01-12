@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useAccount, useChainId, useWriteContract, useWaitForTransactionReceipt, useSwitchChain } from "wagmi";
 import { parseUnits, keccak256, encodePacked } from "viem";
-import { mainnet, base, sepolia, baseSepolia } from "wagmi/chains";
+import { mainnet, base } from "wagmi/chains";
 import {
     CHAIN_ADDRESSES,
     META_MORPHO_FACTORY_ABI,
@@ -12,12 +12,9 @@ import {
 import { CHAIN_NAMES, BLOCK_EXPLORERS } from "@/lib/wagmi/config";
 import { ArrowLeft, ArrowRight, Check, Loader2, AlertTriangle, Wallet } from "lucide-react";
 
-const isProduction = process.env.NODE_ENV === "production";
-
-// Available chains based on environment
-const AVAILABLE_CHAINS = isProduction
-    ? [mainnet, base]
-    : [sepolia, baseSepolia, mainnet, base];
+// MetaMorpho Factory is only deployed on mainnet and Base
+// Testnets (Sepolia, Base Sepolia) do NOT have MetaMorpho Factory
+const AVAILABLE_CHAINS = [mainnet, base];
 
 interface VaultCreationWizardProps {
     onClose: () => void;
@@ -231,9 +228,7 @@ export function VaultCreationWizard({ onClose, onSuccess }: VaultCreationWizardP
                                                 {CHAIN_NAMES[chain.id]}
                                             </div>
                                             <div className="text-xs text-slate-400 mt-1">
-                                                {chain.id === sepolia.id || chain.id === baseSepolia.id
-                                                    ? "Testnet"
-                                                    : chain.id === mainnet.id
+                                                {chain.id === mainnet.id
                                                     ? "Higher liquidity"
                                                     : "Lower gas fees"}
                                             </div>
