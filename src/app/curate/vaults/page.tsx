@@ -118,7 +118,7 @@ function VaultsPageContent() {
             />
 
             {/* Wallet Connection Notice */}
-            {!isConnected && (
+            {!isConnected && !isProduction && (
                 <div className="flex items-center justify-between p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg">
                     <div className="flex items-center gap-3">
                         <AlertTriangle className="h-5 w-5 text-amber-400" />
