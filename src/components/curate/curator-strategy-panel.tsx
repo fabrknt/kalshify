@@ -5,6 +5,8 @@ import { X, TrendingUp, TrendingDown, Minus, Lightbulb, AlertTriangle, Loader2, 
 import { motion, AnimatePresence } from "framer-motion";
 import { CuratorProfile } from "@/lib/curate/curators";
 import { CuratorStrategy, CuratorInsight } from "@/lib/curate/curator-strategies";
+import { HistoricalPerformanceDisplay } from "./historical-performance";
+import { ScenarioSimulator } from "./scenario-simulator";
 
 interface CuratorStrategyPanelProps {
     curatorSlug: string;
@@ -268,6 +270,25 @@ export function CuratorStrategyPanel({ curatorSlug, isOpen, onClose }: CuratorSt
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+
+                                    {/* Historical Performance */}
+                                    {currentStrategy.historicalPerformance && currentStrategy.historicalPerformance.length > 0 && (
+                                        <div className="mb-6">
+                                            <HistoricalPerformanceDisplay
+                                                performance={currentStrategy.historicalPerformance}
+                                                curatorName={data.profile.name}
+                                            />
+                                        </div>
+                                    )}
+
+                                    {/* Scenario Analysis */}
+                                    <div className="mb-6">
+                                        <ScenarioSimulator
+                                            allocations={currentStrategy.allocations}
+                                            totalAmount={Number(investmentAmount) || 10000}
+                                            title="Stress Test This Strategy"
+                                        />
                                     </div>
 
                                     {/* Allocations */}

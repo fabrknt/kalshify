@@ -24,6 +24,7 @@ import {
 import { generateStrategyFeedback, StrategyFeedback } from "@/lib/curate/strategy-feedback";
 import { StrategyFeedbackDisplay } from "./strategy-feedback";
 import { StrategyComparison } from "./strategy-comparison";
+import { ScenarioSimulator } from "./scenario-simulator";
 
 const RISK_COLORS = {
     low: "text-green-400 bg-green-500/10 border-green-500/30",
@@ -459,6 +460,13 @@ export function StrategyBuilder() {
 
                     {/* Comparison */}
                     {showComparison && <StrategyComparison strategy={strategy} />}
+
+                    {/* Scenario simulator */}
+                    <ScenarioSimulator
+                        allocations={strategy.allocations}
+                        totalAmount={strategy.totalAmount}
+                        title="What If Scenarios"
+                    />
                 </div>
             </div>
         </div>
