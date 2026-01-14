@@ -197,7 +197,7 @@ export function detectYieldSpreads(
             const confidence = calculateConfidence(apySpread, minLiquidity, isBaseApyDriven);
 
             spreads.push({
-                id: `${asset}-${highPool.project}-${lowPool.project}`.toLowerCase().replace(/\s+/g, "-"),
+                id: `${highPool.id}-vs-${lowPool.id}`,
                 asset,
                 assetType,
                 highPool: {
