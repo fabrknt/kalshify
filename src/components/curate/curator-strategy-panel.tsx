@@ -309,6 +309,13 @@ export function CuratorStrategyPanel({ curatorSlug, isOpen, onClose }: CuratorSt
                                             ))}
                                         </ul>
                                     </div>
+
+                                    {/* End of content indicator */}
+                                    <div className="mt-6 pt-4 border-t border-slate-800 text-center">
+                                        <p className="text-xs text-slate-600">
+                                            End of strategy details
+                                        </p>
+                                    </div>
                                 </>
                             ) : null}
                         </div>
