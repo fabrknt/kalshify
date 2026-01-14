@@ -44,7 +44,7 @@ import {
 } from "@/components/curate/learning";
 import { YieldSpreadsPanel } from "@/components/curate/yield-spreads-panel";
 import { CuratorSection } from "@/components/curate/curator-section";
-import { TabNavigation, TabContent, TabId } from "@/components/curate/tab-navigation";
+import { TabNavigation, TabContent, TabId, MobileTabSpacer } from "@/components/curate/tab-navigation";
 import { getProtocolSlug } from "@/lib/solana/protocols";
 
 interface PoolDependency {
@@ -1120,6 +1120,9 @@ export default function CuratePage() {
                 onClose={() => setBacktestOpen(false)}
                 selectedPoolIds={Array.from(selectedPoolIds)}
             />
+
+            {/* Mobile bottom tab spacer - prevents content from being hidden */}
+            <MobileTabSpacer />
         </div>
         </CurateLayoutClient>
     );

@@ -66,11 +66,13 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
                     ))}
                 </div>
             </div>
-
-            {/* Mobile: Bottom padding spacer to prevent content from being hidden */}
-            <div className="md:hidden h-24" />
         </>
     );
+}
+
+// Spacer component to add at the END of page content (prevents content from being hidden by bottom tabs)
+export function MobileTabSpacer() {
+    return <div className="md:hidden h-24" />;
 }
 
 interface TabContentProps {
