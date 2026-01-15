@@ -133,7 +133,7 @@ export function CuratorSection() {
                 <div className="p-4 border-b border-slate-800">
                     <div className="flex items-center gap-2">
                         <Users className="h-5 w-5 text-purple-400" />
-                        <h3 className="text-lg font-semibold text-white">Learn from proven strategies of top DeFi curators</h3>
+                        <h3 className="text-lg font-semibold text-white">Curator Strategies</h3>
                     </div>
                 </div>
 

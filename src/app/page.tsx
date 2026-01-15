@@ -44,7 +44,13 @@ import {
 } from "@/components/curate/learning";
 import { YieldSpreadsPanel } from "@/components/curate/yield-spreads-panel";
 import { CuratorSection } from "@/components/curate/curator-section";
+import { WelcomeBanner } from "@/components/curate/welcome-banner";
+import { PrinciplesStrip } from "@/components/curate/principles-strip";
+import { ExploreHero } from "@/components/curate/explore-hero";
 import { LearnCurationSection } from "@/components/curate/learn-curation-section";
+import { LearnTabs } from "@/components/curate/learn-tabs";
+import { ToolPicker } from "@/components/curate/tool-picker";
+import { WhyLearnCuration } from "@/components/curate/why-learn-curation";
 import { StrategyBuilder } from "@/components/curate/strategy-builder";
 import { TabNavigation, TabContent, TabId, MobileTabSpacer } from "@/components/curate/tab-navigation";
 import { getProtocolSlug } from "@/lib/solana/protocols";
@@ -671,6 +677,10 @@ export default function CuratePage() {
                     /* INSIGHTS TAB - Strategy selection */
                     insights: (
                         <div className="space-y-6">
+                            {/* Welcome banner - dismissible one-time intro */}
+                            <WelcomeBanner />
+                            {/* Curation principles - quick reference */}
+                            <PrinciplesStrip />
                             {/* Curator Strategies - Primary focus */}
                             <CuratorSection />
                         </div>
@@ -679,23 +689,11 @@ export default function CuratePage() {
                     /* EXPLORE TAB - Browse all pools */
                     explore: (
                         <div className="space-y-6">
-                            {/* Stats Bar */}
-                            <div className="flex flex-wrap items-center gap-4 p-4 bg-slate-900/50 border border-slate-800 rounded-xl">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-2xl font-bold text-white">{heroStats?.totalPools || summaryStats.poolCount}+</span>
-                                    <span className="text-sm text-slate-400">pools</span>
-                                </div>
-                                <div className="w-px h-8 bg-slate-700 hidden sm:block" />
-                                <div className="flex items-center gap-2">
-                                    <span className="text-2xl font-bold text-green-400">{heroStats?.lowRiskCount || summaryStats.lowRiskCount}</span>
-                                    <span className="text-sm text-slate-400">low risk</span>
-                                </div>
-                                <div className="w-px h-8 bg-slate-700 hidden sm:block" />
-                                <div className="flex items-center gap-2 text-xs text-slate-500">
-                                    <Shield className="h-4 w-4 text-cyan-500" />
-                                    <span>Solana DeFi yield opportunities</span>
-                                </div>
-                            </div>
+                            {/* Explore Hero */}
+                            <ExploreHero
+                                poolCount={heroStats?.totalPools || summaryStats.poolCount}
+                                lowRiskCount={heroStats?.lowRiskCount || summaryStats.lowRiskCount}
+                            />
 
                             {/* Pool Table Header */}
             <div id="pool-table-section" className="flex items-center justify-between">
@@ -1005,28 +1003,32 @@ export default function CuratePage() {
 
                     /* LEARN TAB - Educational content */
                     learn: (
-                        <div className="space-y-6">
-                            {/* Learn Curation - 6 Core Principles */}
-                            <LearnCurationSection />
-
-                            {/* Strategy Builder - Practice making allocations */}
-                            <StrategyBuilder />
-
-                            {/* Protocol Comparison - Educational */}
-                            <ProtocolComparison onProtocolClick={(slug) => filterPoolsByProtocol(slug)} />
-
-                            {/* LST Comparison - Educational */}
-                            <LSTComparison />
-
-                            {/* Yield Opportunities - Cross-protocol spreads */}
-                            <YieldSpreadsPanel />
-
-                            {/* Alternative Yields - Educational */}
-                            <AlternativeYields />
-
-                            {/* IL Calculator - Tool */}
-                            <QuickILCalculator />
-                        </div>
+                        <LearnTabs>
+                            {{
+                                principles: (
+                                    <div className="space-y-6">
+                                        <WhyLearnCuration />
+                                        <LearnCurationSection />
+                                    </div>
+                                ),
+                                practice: (
+                                    <div className="space-y-6">
+                                        <StrategyBuilder />
+                                    </div>
+                                ),
+                                compare: (
+                                    <ToolPicker>
+                                        {{
+                                            "protocol-comparison": <ProtocolComparison onProtocolClick={(slug) => filterPoolsByProtocol(slug)} />,
+                                            "lst-comparison": <LSTComparison />,
+                                            "yield-spreads": <YieldSpreadsPanel />,
+                                            "alternative-yields": <AlternativeYields />,
+                                            "il-calculator": <QuickILCalculator />,
+                                        }}
+                                    </ToolPicker>
+                                ),
+                            }}
+                        </LearnTabs>
                     ),
                 }}
             </TabContent>

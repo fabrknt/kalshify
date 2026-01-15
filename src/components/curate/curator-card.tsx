@@ -1,9 +1,20 @@
 "use client";
 
-import { useState } from "react";
-import { Shield, TrendingUp, ChevronRight, ChevronDown, Lightbulb } from "lucide-react";
+import { useState, useMemo } from "react";
+import { Shield, TrendingUp, ChevronRight, ChevronDown, Lightbulb, Scale, Grid3X3, Clock, Droplet, Link2 } from "lucide-react";
 import { CuratorProfile } from "@/lib/curate/curators";
 import { PrincipleBadgeGroup, PrincipleModal, usePrincipleModal } from "./curation-principles";
+import { getPrinciple } from "@/lib/curate/curation-principles";
+
+// Mini icon map for principle badges
+const miniIconMap: Record<string, React.ElementType> = {
+    scale: Scale,
+    grid: Grid3X3,
+    clock: Clock,
+    shield: Shield,
+    droplet: Droplet,
+    link: Link2,
+};
 
 interface AllocationReasoning {
     whyThisAsset: string;
@@ -70,6 +81,21 @@ export function CuratorCard({ curator, strategyMetrics, onViewStrategy }: Curato
 
     const displayAllocations = strategyMetrics?.allocations || [];
 
+    // Calculate top principles used across all allocations
+    const topPrinciples = useMemo(() => {
+        const principleCount: Record<string, number> = {};
+        displayAllocations.forEach(alloc => {
+            alloc.principleIds?.forEach(id => {
+                principleCount[id] = (principleCount[id] || 0) + 1;
+            });
+        });
+        return Object.entries(principleCount)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 3)
+            .map(([id]) => getPrinciple(id))
+            .filter(Boolean);
+    }, [displayAllocations]);
+
     return (
         <div className="bg-slate-800/50 border border-slate-700 rounded-xl overflow-hidden hover:border-slate-600 transition-all">
             {/* Header */}
@@ -102,6 +128,28 @@ export function CuratorCard({ curator, strategyMetrics, onViewStrategy }: Curato
                             {strategyMetrics.avgApy.toFixed(1)}%
                         </span>
                         <span className="text-sm text-slate-400">APY</span>
+                    </div>
+                )}
+
+                {/* Top principles used by this curator */}
+                {topPrinciples.length > 0 && (
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="text-xs text-slate-500">Focus:</span>
+                        {topPrinciples.map(principle => {
+                            if (!principle) return null;
+                            const Icon = miniIconMap[principle.icon];
+                            return (
+                                <button
+                                    key={principle.id}
+                                    onClick={() => openPrinciple(principle)}
+                                    className="flex items-center gap-1 px-1.5 py-0.5 text-xs rounded bg-slate-700/50 text-slate-300 hover:bg-slate-700 transition-colors"
+                                    title={principle.name}
+                                >
+                                    <Icon className="h-3 w-3" />
+                                    <span>{principle.shortName}</span>
+                                </button>
+                            );
+                        })}
                     </div>
                 )}
             </div>
