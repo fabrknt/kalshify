@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, Fragment, useCallback, useMemo } from "react";
+import { useEffect, useState, Fragment, useCallback, useMemo, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -419,7 +419,7 @@ function QuickILCalculator() {
     );
 }
 
-export default function CuratePage() {
+function CuratePageContent() {
     const { data: session } = useSession();
     const searchParams = useSearchParams();
     const [graphData, setGraphData] = useState<DefiGraphData | null>(null);
@@ -1100,5 +1100,17 @@ export default function CuratePage() {
             <MobileTabSpacer />
         </div>
         </CurateLayoutClient>
+    );
+}
+
+export default function CuratePage() {
+    return (
+        <Suspense fallback={
+            <div className="flex items-center justify-center min-h-screen">
+                <Loader2 className="h-8 w-8 text-cyan-400 animate-spin" />
+            </div>
+        }>
+            <CuratePageContent />
+        </Suspense>
     );
 }
