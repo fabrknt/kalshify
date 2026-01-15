@@ -105,7 +105,7 @@ export default function AboutPage() {
                 </section>
 
                 {/* Trust & Security */}
-                <section className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8">
+                <section id="trust" className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8 scroll-mt-20">
                     <div className="flex items-center gap-3 mb-6">
                         <Shield className="h-6 w-6 text-green-400" />
                         <h2 className="text-xl font-semibold text-white">Trust & Security</h2>
