@@ -28,14 +28,16 @@ Want to learn instead? FABRKNT also teaches you *how to think* about yield strat
 
 ## Navigation
 
-The app is organized into four tabs:
+The app is organized into four connected tabs:
 
 | Tab | Purpose | What You'll Find |
 |-----|---------|------------------|
 | **Get Started** | "Your allocation in 30 seconds" | Quick start flow with personalized recommendations |
-| **Insights** | "Learn from the best" | Curation principles, curator strategies with reasoning |
-| **Explore** | "Browse all pools" | Full pool table with filters, search, watchlist, backtesting |
-| **Learn** | "Build your skills" | Principles, Strategy Builder, comparison tools |
+| **Insights** | "Understand why" | Compare your allocation vs curators, see their reasoning |
+| **Explore** | "Find alternatives" | Browse pools, swap out positions from your allocation |
+| **Learn** | "Build your own" | Principles, Strategy Builder pre-filled with your allocation |
+
+**Connected Experience:** Your allocation persists across all tabs. See your pools highlighted in Explore, compare to curators in Insights, or load it into the Strategy Builder to customize.
 
 **Mobile:** Bottom tab navigation with hamburger menu for site links.
 
@@ -66,7 +68,31 @@ The fastest way to get a DeFi allocation:
 - Copy-paste amounts
 - Progress tracking (mark steps completed)
 
+### Connected Tabs Experience
+
+Once you have an allocation, all tabs work together:
+
+| Feature | Where | Description |
+|---------|-------|-------------|
+| **Allocation Banner** | Insights, Explore, Learn | Summary bar showing your allocation with "View allocation" link |
+| **Your Allocation vs Curator** | Insights | Side-by-side comparison with matching curator (by risk profile) |
+| **"In your allocation" Badge** | Explore | Pools in your allocation are highlighted in the pool table |
+| **Load My Allocation** | Learn > Practice | One-click import into Strategy Builder for customization |
+| **Back to Allocation Button** | All tabs (except Start) | Floating button for quick navigation back to your allocation |
+
+This connected experience lets you:
+- **Validate**: See how your allocation compares to professionals
+- **Customize**: Swap pools in Explore, see alternatives
+- **Learn**: Understand why curators make similar or different choices
+- **Iterate**: Refine your strategy in the Builder with real-time feedback
+
 ### Insights Tab
+
+#### Your Allocation vs Curator
+If you have an allocation from Get Started:
+- Side-by-side comparison with a curator matching your risk profile
+- See expected APY and risk level differences
+- Understand how your choices compare to professionals
 
 #### Curation Principles
 Six mental models that guide professional curators:
@@ -86,19 +112,17 @@ Learn from professional DeFi curators:
 - Principle badges show which mental models each curator applies
 - Historical performance metrics (return, max drawdown, Sharpe ratio)
 
-#### Welcome Banner
-First-time visitors see an intro explaining FABRKNT's learning approach. Dismissible after reading.
-
 ### Explore Tab
 
 #### Explore Hero
-Overview of available pools with key stats (total pools, low-risk count).
+Overview of available pools with key stats (total pools, low-risk count). Messaging changes based on whether you have an allocation: "Customize or find alternatives."
 
 #### Pool Table
 Comprehensive pool listing with intelligent defaults:
 - Filter by protocol, risk level, TVL
 - Sort by TVL, APY, risk score
 - APY change alerts (badges when APY drops 20%+ or rises 30%+)
+- **"In your allocation" badge** — Pools from your allocation are highlighted
 - Watchlist for tracking favorites
 
 #### Pool Comparison & Backtesting
@@ -118,6 +142,7 @@ The Learn tab is divided into three sub-sections:
 
 #### Practice
 - **Strategy Builder** — Build your own allocation strategy
+  - **"Load my allocation"** — Import your Get Started allocation with one click
   - Select from available pools
   - Set allocation percentages
   - Get real-time feedback and grading (A-F)

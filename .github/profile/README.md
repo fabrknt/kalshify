@@ -15,6 +15,12 @@ We help Solana users find the right yield strategies. Tell us your amount and ri
 - **Get your allocation** — Personalized recommendations with expected yields
 - **Execute** — Step-by-step instructions with protocol links
 
+### Connected Experience
+Your allocation persists across all tabs:
+- **Insights** — Compare your allocation vs professional curators
+- **Explore** — Pools in your allocation are highlighted; find alternatives
+- **Learn** — Load your allocation into Strategy Builder to customize
+
 ### Learn (Optional)
 - **Curation Principles** — Six mental models that guide professional curators
 - **Curator Strategies** — See how Gauntlet, Steakhouse, and RE7 allocate—and *why*
@@ -23,6 +29,7 @@ We help Solana users find the right yield strategies. Tell us your amount and ri
 
 ### Explore
 - **Pool Browser** — 200+ Solana yield pools with risk scoring
+- **"In your allocation" Badge** — Highlights pools from your allocation
 - **Pool Comparison** — Compare up to 3 pools side-by-side
 - **Backtest** — Historical performance testing (7/30/90 days)
 - **Watchlist** — Save and track pools with APY change alerts

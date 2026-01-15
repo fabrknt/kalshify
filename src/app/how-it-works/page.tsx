@@ -85,6 +85,14 @@ export default function HowItWorksPage() {
                             <p className="text-xs text-slate-400">Step-by-step instructions</p>
                         </div>
                     </div>
+                    <div className="mt-6 p-4 bg-slate-800/30 rounded-lg border border-cyan-500/20">
+                        <h3 className="text-white font-medium mb-2">Your allocation persists across all tabs:</h3>
+                        <ul className="text-sm text-slate-400 space-y-1">
+                            <li>• <strong className="text-cyan-400">Insights:</strong> Compare your allocation vs professional curators</li>
+                            <li>• <strong className="text-cyan-400">Explore:</strong> Pools in your allocation are highlighted; find alternatives</li>
+                            <li>• <strong className="text-cyan-400">Learn:</strong> Load your allocation into Strategy Builder to customize</li>
+                        </ul>
+                    </div>
                 </section>
 
                 {/* Learning Flow */}
