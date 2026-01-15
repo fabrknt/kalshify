@@ -21,10 +21,10 @@ export function ExploreHero({ poolCount, lowRiskCount }: ExploreHeroProps) {
                     <div className="flex items-start justify-between gap-4">
                         <div>
                             <h2 className="text-lg font-semibold text-white mb-1">
-                                Explore Solana Yield Pools
+                                Customize or find alternatives
                             </h2>
                             <p className="text-sm text-slate-400 leading-relaxed mb-3">
-                                Browse {poolCount}+ pools across Solana DeFi. Filter by risk, TVL, and yield type to find opportunities that match your criteria.
+                                Want to swap a pool from your allocation? Browse {poolCount}+ pools across Solana DeFi. Compare, backtest, and find alternatives that fit your needs.
                             </p>
                         </div>
                         <div className="hidden sm:flex items-center gap-3 shrink-0">

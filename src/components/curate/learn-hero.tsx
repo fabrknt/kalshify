@@ -14,10 +14,10 @@ export function LearnHero() {
                 </div>
                 <div className="flex-1 min-w-0">
                     <h2 className="text-lg font-semibold text-white mb-1">
-                        Build your curation skills
+                        Build your own strategy from scratch
                     </h2>
                     <p className="text-sm text-slate-400 leading-relaxed mb-3">
-                        Learn the mental models curators use, practice building your own strategies with real-time feedback, and compare tools to analyze opportunities.
+                        Want full control? Learn the mental models curators use, build your own allocation with real-time feedback, and stress test it before deploying.
                     </p>
                     {/* Trust badges */}
                     <div className="flex items-center gap-4 text-xs text-slate-500">

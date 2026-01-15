@@ -23,19 +23,19 @@ const TABS: Tab[] = [
         id: "insights",
         label: "Insights",
         icon: <Lightbulb className="h-5 w-5" />,
-        description: "Learn from curators"
+        description: "Understand why"
     },
     {
         id: "explore",
         label: "Explore",
         icon: <Search className="h-5 w-5" />,
-        description: "Browse all pools"
+        description: "Find alternatives"
     },
     {
         id: "learn",
         label: "Learn",
         icon: <BookOpen className="h-5 w-5" />,
-        description: "Build your skills"
+        description: "Build your own"
     },
 ];
 

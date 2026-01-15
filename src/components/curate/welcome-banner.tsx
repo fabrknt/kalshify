@@ -42,10 +42,10 @@ export function WelcomeBanner() {
                 </div>
                 <div className="flex-1 min-w-0">
                     <h2 className="text-lg font-semibold text-white mb-1">
-                        Learn DeFi curation from proven strategies
+                        Understand why curators allocate the way they do
                     </h2>
                     <p className="text-sm text-slate-400 leading-relaxed mb-3">
-                        Want a quick allocation? Try <span className="text-cyan-400">Get Started</span> for personalized recommendations in 30 seconds. Or explore how top curators allocate capital below and learn their reasoning.
+                        Got your allocation from <span className="text-cyan-400">Get Started</span>? See how it compares to professional curators like Gauntlet and Steakhouse. Understand the reasoning behind each position.
                     </p>
                     {/* Trust badges */}
                     <div className="flex items-center gap-4 text-xs text-slate-500">
