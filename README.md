@@ -1,28 +1,28 @@
-# FABRKNT: Insight-Driven DeFi Yield Intelligence
+# FABRKNT: Learn DeFi Curation from Proven Strategies
 
-**DeFi insights, not just data.**
+**Learn how top curators think. Build strategies with confidence.**
 
 **Domain:** [www.fabrknt.com](https://www.fabrknt.com)
 
 ---
 
-## What is Fabrknt?
+## What is FABRKNT?
 
-Fabrknt is an **insight-driven** DeFi yield intelligence platform focused on **Solana**. Unlike data-heavy analytics tools built for pros, Fabrknt surfaces the insights you need to make informed decisions—without overwhelming you with raw data.
+FABRKNT is a **DeFi curation learning platform** focused on **Solana**. Unlike data-heavy analytics tools, FABRKNT teaches you *how to think* about yield strategies by showing you how professional curators allocate capital—and why.
 
-**Our philosophy:** Insights over data dumps. Guidance over complexity.
+**Our philosophy:** Understanding over copying. Judgment over data dumps.
 
 ---
 
 ## Navigation
 
-The app is organized into three main sections:
+The app is organized into three main tabs:
 
 | Tab | Purpose | What You'll Find |
 |-----|---------|------------------|
-| **Insights** | "What matters now" | AI picks, curator strategies, yield opportunities, discovery prompts |
-| **Explore** | "I want to browse" | Full pool table with filters, search, watchlist |
-| **Learn** | "Help me understand" | Protocol comparisons, LST comparisons, IL calculator |
+| **Insights** | "Learn from the best" | Curation principles, curator strategies with reasoning |
+| **Explore** | "Browse all pools" | Full pool table with filters, search, watchlist, backtesting |
+| **Learn** | "Build your skills" | Principles, Strategy Builder, comparison tools |
 
 **Mobile:** Bottom tab navigation with hamburger menu for site links.
 
@@ -32,73 +32,85 @@ The app is organized into three main sections:
 
 ### Insights Tab
 
-#### AI Recommendations
-Personalized pool recommendations based on risk-adjusted analysis:
-- **Curated picks** for all users (no login required)
-- **Personalized recommendations** based on your preferences (requires login)
-- Ranked by risk-adjusted returns, not raw APY
+#### Curation Principles
+Six mental models that guide professional curators:
+- **Risk/Reward Balance** — Higher yield = higher risk, always
+- **Diversification** — Spread risk across protocols and assets
+- **Yield Sustainability** — Base APY vs temporary emissions
+- **Protocol Trust** — TVL, audits, track record
+- **Liquidity Depth** — Can you exit without slippage?
+- **Correlation** — Understand how positions move together
+
+Click any principle to see a detailed explanation with examples.
 
 #### Curator Strategies
 Learn from professional DeFi curators:
 - **Gauntlet**, **Steakhouse Financial**, **RE7 Labs** profiles
-- View their allocation strategies across protocols
-- AI-generated strategy analysis and key takeaways
-- Understand how experts approach risk management
+- Each allocation shows **why this asset** and **why this percentage**
+- Principle badges show which mental models each curator applies
+- Historical performance metrics (return, max drawdown, Sharpe ratio)
 
-#### Yield Opportunities
-Cross-protocol arbitrage detection:
-- Identify APY spreads between similar pools
-- Risk-adjusted spread calculations
-- Net spread after estimated transaction costs
-- Confidence scoring (high/medium/low)
-
-#### Discovery Prompts
-Guided exploration for learning:
-- "What's the safest stablecoin yield?"
-- "Which pools have sustainable APY?"
-- Click to explore and learn
+#### Welcome Banner
+First-time visitors see an intro explaining FABRKNT's learning approach. Dismissible after reading.
 
 ### Explore Tab
 
+#### Explore Hero
+Overview of available pools with key stats (total pools, low-risk count).
+
 #### Pool Table
 Comprehensive pool listing with intelligent defaults:
-- **Low-risk pools by default** (risk score <= 20)
-- APY change alerts (badges when APY drops 20%+ or rises 30%+)
 - Filter by protocol, risk level, TVL
 - Sort by TVL, APY, risk score
+- APY change alerts (badges when APY drops 20%+ or rises 30%+)
 - Watchlist for tracking favorites
 
-#### Pool Comparison
+#### Pool Comparison & Backtesting
 Compare up to 3 pools side-by-side:
 - Risk breakdown comparison
 - APY sustainability analysis
-- Historical performance via backtesting
+- **Historical performance backtesting** (7/30/90 days)
+- Compounding options (daily, weekly, none)
 
 ### Learn Tab
 
-#### Protocol Comparison
-Compare major Solana protocols at a glance:
-- **Kamino**, **Marginfi**, **Meteora**, **Save**, and more
-- Protocol-level TVL, average APY, pool counts
-- Click to filter pools by protocol
+The Learn tab is divided into three sub-sections:
 
-#### LST Comparison
-Deep dive into Solana liquid staking tokens:
-- Compare Jito, Marinade, and other LSTs
-- MEV yield breakdown and validator decentralization
-- Peg stability and instant unstake availability
+#### Principles
+- **Why Learn Curation** — Problem statement and comparison table
+- **6 Core Principles** — Expandable cards with examples
 
-#### Alternative Yields
-Explore advanced yield strategies:
-- **Restaking** opportunities
-- **Perp LP** positions
-- Risk considerations for each type
+#### Practice
+- **Strategy Builder** — Build your own allocation strategy
+  - Select from available pools
+  - Set allocation percentages
+  - Get real-time feedback and grading (A-F)
+  - Compare your strategy to professional curators
+  - **Scenario Simulator** — Stress test with market scenarios:
+    - Market crash (-30%)
+    - Mild correction (-15%)
+    - Bull run (+50%)
+    - Rewards ending
+    - Stablecoin depeg
 
-#### IL Calculator
-Impermanent loss estimation:
-- Enter price change to see potential IL
-- Concentrated liquidity (CLMM) support
-- Position simulator with APY projections
+#### Compare (Tools)
+Card-based tool picker for cleaner navigation:
+- **Protocol Comparison** — Compare Kamino, Marginfi, Meteora, etc.
+- **LST Comparison** — Compare liquid staking tokens
+- **Yield Spreads** — Find arbitrage opportunities
+- **Alternative Yields** — Restaking, perp LP, advanced strategies
+- **IL Calculator** — Impermanent loss estimation
+
+---
+
+## Learning Flow
+
+FABRKNT is designed around a learning progression:
+
+1. **Understand the principles** — Learn the 6 mental models curators use
+2. **Study curator strategies** — See how experts apply these principles
+3. **Practice building** — Create your own strategy with feedback
+4. **Test before deploying** — Run scenarios to see how your strategy performs
 
 ---
 
@@ -171,11 +183,12 @@ Our composite risk score (0-100) evaluates:
 
 ### For Users
 
-1. **Start with Insights** — See AI picks and curator strategies
-2. **Explore Discovery Prompts** — Learn through guided questions
-3. **Browse Pools** — Use Explore tab when ready to dive deeper
-4. **Learn** — Compare protocols and understand risks
-5. **Sign In** — Unlock personalized AI recommendations
+1. **Start with Principles** — Learn the 6 mental models in the Insights tab
+2. **Study Curator Strategies** — See how experts apply these principles
+3. **Practice Building** — Use the Strategy Builder in the Learn tab
+4. **Test Your Strategy** — Run scenarios before committing capital
+5. **Explore Pools** — Browse the Explore tab when ready to dive deeper
+6. **Sign In** — Unlock personalized AI recommendations
 
 ### Development
 
@@ -226,6 +239,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 - `GET /api/curate/spreads` — Yield spread opportunities
 - `GET /api/curate/curators` — Curator profiles
 - `GET /api/curate/curators/{slug}` — Curator strategies and insights
+- `POST /api/curate/backtest` — Historical performance backtesting
 
 ### Authenticated Endpoints
 
@@ -255,4 +269,4 @@ Banking & enterprise software background. AWS certified, Stanford blockchain cer
 
 ---
 
-**DeFi insights, not just data.**
+**Learn how top curators think. Build strategies with confidence.**

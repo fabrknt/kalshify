@@ -1,5 +1,21 @@
 # FABRKNT Homepage Copy
 
+This document contains the marketing copy for FABRKNT. The content is integrated contextually throughout the app rather than as a single landing page.
+
+## Content Placement
+
+| Copy Section | Implemented In |
+|--------------|----------------|
+| Hero | Welcome Banner (Insights tab, dismissible) |
+| Problem | Learn tab > Principles > WhyLearnCuration |
+| Solution (4 ways) | Already covered by actual features |
+| Curator preview | Insights tab > CuratorSection |
+| How it works | Covered by actual UI flow |
+| Comparison table | Learn tab > Principles > WhyLearnCuration |
+| Solana focus | Throughout app (Solana-only pools) |
+| Final CTA | Not needed (users are already in app) |
+| Meta/SEO | To be added to page metadata |
+
 ---
 
 ## HERO
