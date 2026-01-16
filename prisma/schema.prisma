@@ -70,6 +70,12 @@ model User {
   website         String?
   twitter         String?
 
+  // Premium subscription
+  isPremium       Boolean  @default(false)
+  premiumTier     String?  // "basic" | "pro" | "enterprise"
+  premiumExpiresAt DateTime?
+  stripeCustomerId String?  @unique
+
   // Timestamps
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

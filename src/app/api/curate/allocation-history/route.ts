@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/db";
 import { Prisma } from "@prisma/client";
 
 // GET - Fetch user's allocation history
 export async function GET(request: NextRequest) {
     try {
-        const session = await getServerSession(authOptions);
+        const session = await auth();
         if (!session?.user?.id) {
             return NextResponse.json(
                 { success: false, error: "Unauthorized" },
@@ -64,7 +63,7 @@ export async function GET(request: NextRequest) {
 // POST - Save a new allocation
 export async function POST(request: NextRequest) {
     try {
-        const session = await getServerSession(authOptions);
+        const session = await auth();
         if (!session?.user?.id) {
             return NextResponse.json(
                 { success: false, error: "Unauthorized" },
@@ -123,7 +122,7 @@ export async function POST(request: NextRequest) {
 // DELETE - Remove an allocation from history
 export async function DELETE(request: NextRequest) {
     try {
-        const session = await getServerSession(authOptions);
+        const session = await auth();
         if (!session?.user?.id) {
             return NextResponse.json(
                 { success: false, error: "Unauthorized" },
@@ -176,7 +175,7 @@ export async function DELETE(request: NextRequest) {
 // PATCH - Update an allocation (e.g., reactivate or add notes)
 export async function PATCH(request: NextRequest) {
     try {
-        const session = await getServerSession(authOptions);
+        const session = await auth();
         if (!session?.user?.id) {
             return NextResponse.json(
                 { success: false, error: "Unauthorized" },

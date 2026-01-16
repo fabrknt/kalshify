@@ -212,9 +212,9 @@ export function AllocationComparison() {
     }
 
     // Find matching curator by risk tolerance, or use selected
-    const defaultCurator = CURATOR_PROFILES.find(c =>
-        c.matchesRiskLevels.includes(riskTolerance)
-    ) || CURATOR_PROFILES[2];
+    const defaultCurator = riskTolerance
+        ? CURATOR_PROFILES.find(c => c.matchesRiskLevels.includes(riskTolerance)) || CURATOR_PROFILES[2]
+        : CURATOR_PROFILES[2];
 
     const selectedCurator = selectedCuratorId
         ? CURATOR_PROFILES.find(c => c.id === selectedCuratorId) || defaultCurator
