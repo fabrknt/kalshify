@@ -61,6 +61,7 @@ import { AllocationComparison } from "@/components/curate/allocation-comparison"
 import { BackToAllocationButton } from "@/components/curate/back-to-allocation-button";
 import { PerformanceCard } from "@/components/curate/performance-card";
 import { RebalanceAlerts } from "@/components/curate/rebalance-alert";
+import { MarketContextCard } from "@/components/curate/market-context-card";
 import { useAllocation } from "@/contexts/allocation-context";
 import { getProtocolSlug } from "@/lib/solana/protocols";
 
@@ -714,6 +715,8 @@ function CuratePageContent() {
                         <div className="space-y-6">
                             {/* Allocation banner - show if user has allocation */}
                             <AllocationBanner onNavigateToAllocation={() => setMainTab("start")} />
+                            {/* Weekly market context - understand current conditions */}
+                            <MarketContextCard />
                             {/* Rebalance alerts - notify users of allocation health */}
                             <RebalanceAlerts />
                             {/* Allocation comparison - show if user has allocation */}
