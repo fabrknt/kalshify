@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { BookOpen, Hammer, Wrench } from "lucide-react";
+import { Hammer, Wrench } from "lucide-react";
 
-export type LearnSubTab = "principles" | "practice" | "compare";
+export type LearnSubTab = "practice" | "compare";
 
 interface LearnTabsProps {
     children: {
-        principles: React.ReactNode;
         practice: React.ReactNode;
         compare: React.ReactNode;
     };
@@ -15,17 +14,16 @@ interface LearnTabsProps {
 }
 
 const tabs: { id: LearnSubTab; label: string; icon: React.ElementType; description: string }[] = [
-    { id: "principles", label: "Principles", icon: BookOpen, description: "Core mental models" },
     { id: "practice", label: "Practice", icon: Hammer, description: "Build strategies" },
     { id: "compare", label: "Compare", icon: Wrench, description: "Analyze options" },
 ];
 
 export function LearnTabs({ children, defaultTab }: LearnTabsProps) {
-    const [activeTab, setActiveTab] = useState<LearnSubTab>(defaultTab || "principles");
+    const [activeTab, setActiveTab] = useState<LearnSubTab>(defaultTab || "practice");
 
     // Sync with defaultTab prop when it changes
     useEffect(() => {
-        if (defaultTab && ["principles", "practice", "compare"].includes(defaultTab)) {
+        if (defaultTab && ["practice", "compare"].includes(defaultTab)) {
             setActiveTab(defaultTab);
         }
     }, [defaultTab]);
@@ -59,7 +57,6 @@ export function LearnTabs({ children, defaultTab }: LearnTabsProps) {
 
             {/* Tab content */}
             <div>
-                {activeTab === "principles" && children.principles}
                 {activeTab === "practice" && children.practice}
                 {activeTab === "compare" && children.compare}
             </div>

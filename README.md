@@ -250,7 +250,7 @@ Direct links to specific tabs and features:
 - `/?tab=start` — Get Started (personalized allocation flow)
 - `/?tab=insights` — Insights tab (curator strategies)
 - `/?tab=explore` — Explore tab (pool browser)
-- `/?tab=learn&subtab=principles` — Learn > Principles
+- `/?tab=learn` — Learn tab (defaults to Practice)
 - `/?tab=learn&subtab=practice` — Learn > Practice (Strategy Builder)
 - `/?tab=learn&subtab=compare` — Learn > Compare (Tools)
 

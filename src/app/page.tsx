@@ -48,12 +48,10 @@ import { CuratorSection } from "@/components/curate/curator-section";
 import { WelcomeBanner } from "@/components/curate/welcome-banner";
 import { PrinciplesStrip } from "@/components/curate/principles-strip";
 import { ExploreHero } from "@/components/curate/explore-hero";
-import { LearnCurationSection } from "@/components/curate/learn-curation-section";
 import { LearnTabs } from "@/components/curate/learn-tabs";
 import { LearnHero } from "@/components/curate/learn-hero";
 import { ToolPicker } from "@/components/curate/tool-picker";
 import { PositionSimulator } from "@/components/curate/position-simulator";
-import { WhyLearnCuration } from "@/components/curate/why-learn-curation";
 import { StrategyBuilder } from "@/components/curate/strategy-builder";
 import { TabNavigation, TabContent, TabId, MobileTabSpacer } from "@/components/curate/tab-navigation";
 import { ActionableFlow } from "@/components/curate/actionable-flow";
@@ -1034,14 +1032,8 @@ function CuratePageContent() {
                         {/* Allocation banner - show if user has allocation */}
                         <AllocationBanner onNavigateToAllocation={() => setMainTab("start")} />
                         <LearnHero />
-                        <LearnTabs defaultTab={urlSubtab as "principles" | "practice" | "compare" | undefined}>
+                        <LearnTabs defaultTab={urlSubtab as "practice" | "compare" | undefined}>
                             {{
-                                principles: (
-                                    <div className="space-y-6">
-                                        <WhyLearnCuration />
-                                        <LearnCurationSection />
-                                    </div>
-                                ),
                                 practice: (
                                     <div className="space-y-6">
                                         <StrategyBuilder />

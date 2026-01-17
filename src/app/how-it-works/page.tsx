@@ -28,6 +28,7 @@ import {
     Calculator,
     Coins,
     Building2,
+    Wrench,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -99,12 +100,11 @@ export default function HowItWorksPage() {
                 <section className="bg-gradient-to-br from-purple-900/20 to-slate-800 border border-purple-500/30 rounded-xl p-8">
                     <h2 className="text-xl font-semibold text-white mb-2">Want to Learn Instead?</h2>
                     <p className="text-slate-400 mb-6">Build your own curation skills through our learning flow:</p>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {[
-                            { icon: BookOpen, label: "1. Learn Principles", desc: "6 mental models curators use", href: "/?tab=learn&subtab=principles" },
-                            { icon: Users, label: "2. Study Curators", desc: "See how experts allocate & why", href: "/?tab=insights" },
-                            { icon: Hammer, label: "3. Practice", desc: "Build strategies with feedback", href: "/?tab=learn&subtab=practice" },
-                            { icon: Activity, label: "4. Test", desc: "Stress test with scenarios", href: "/?tab=learn&subtab=practice" },
+                            { icon: Users, label: "1. Study Curators", desc: "See how experts allocate & why", href: "/?tab=insights" },
+                            { icon: Hammer, label: "2. Practice", desc: "Build strategies with feedback", href: "/?tab=learn&subtab=practice" },
+                            { icon: Wrench, label: "3. Compare", desc: "Analyze with specialized tools", href: "/?tab=learn&subtab=compare" },
                         ].map((step, i) => (
                             <Link key={i} href={step.href} className="text-center p-4 bg-slate-800/50 rounded-lg hover:bg-slate-700/50 transition-colors group">
                                 <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-purple-500/30 transition-colors">
@@ -119,17 +119,9 @@ export default function HowItWorksPage() {
 
                 {/* Curation Principles */}
                 <section className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8">
-                    <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-3">
-                            <BookOpen className="h-6 w-6 text-cyan-400" />
-                            <h2 className="text-xl font-semibold text-white">6 Curation Principles</h2>
-                        </div>
-                        <Link
-                            href="/?tab=learn&subtab=principles"
-                            className="flex items-center gap-1 text-sm text-cyan-400 hover:text-cyan-300 transition-colors"
-                        >
-                            View all <ArrowRight className="h-4 w-4" />
-                        </Link>
+                    <div className="flex items-center gap-3 mb-6">
+                        <BookOpen className="h-6 w-6 text-cyan-400" />
+                        <h2 className="text-xl font-semibold text-white">6 Curation Principles</h2>
                     </div>
                     <p className="text-slate-300 mb-6">
                         These mental models guide how professional curators make allocation decisions:
@@ -591,10 +583,10 @@ export default function HowItWorksPage() {
                             Browse Pools
                         </Link>
                         <Link
-                            href="/?tab=learn&subtab=principles"
+                            href="/?tab=learn"
                             className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 rounded-lg transition-colors"
                         >
-                            Learn Curation
+                            Practice Building
                         </Link>
                     </div>
                 </section>
