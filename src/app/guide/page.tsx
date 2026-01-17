@@ -51,8 +51,41 @@ export default function GuidePage() {
                     </p>
                 </div>
 
+                {/* Table of Contents */}
+                <nav className="bg-slate-900/50 border border-slate-800 rounded-xl p-6">
+                    <p className="text-xs text-slate-500 uppercase tracking-wide mb-3">Quick Links</p>
+                    <div className="flex flex-wrap gap-2">
+                        {[
+                            { id: "get-started", label: "Get Started" },
+                            { id: "learning-flow", label: "Learning Flow" },
+                            { id: "principles", label: "Principles" },
+                            { id: "curators", label: "Curators" },
+                            { id: "strategy-builder", label: "Strategy Builder" },
+                            { id: "scenario-simulator", label: "Scenarios" },
+                            { id: "pool-comparison", label: "Pool Comparison" },
+                            { id: "compare-tools", label: "Compare Tools" },
+                            { id: "ai-features", label: "AI Features" },
+                            { id: "insights-dashboard", label: "Insights" },
+                            { id: "allocation-history", label: "History" },
+                            { id: "watchlist", label: "Watchlist" },
+                            { id: "apy-history", label: "APY Charts" },
+                            { id: "risk-scoring", label: "Risk Scoring" },
+                            { id: "data-pipeline", label: "Data Pipeline" },
+                            { id: "security", label: "Security" },
+                        ].map((item) => (
+                            <a
+                                key={item.id}
+                                href={`#${item.id}`}
+                                className="px-3 py-1.5 text-sm text-slate-400 hover:text-white bg-slate-800/50 hover:bg-slate-700/50 rounded-lg transition-colors"
+                            >
+                                {item.label}
+                            </a>
+                        ))}
+                    </div>
+                </nav>
+
                 {/* Quick Start - Primary CTA */}
-                <section className="bg-gradient-to-br from-cyan-900/30 to-purple-900/30 border border-cyan-500/30 rounded-xl p-8">
+                <section id="get-started" className="bg-gradient-to-br from-cyan-900/30 to-purple-900/30 border border-cyan-500/30 rounded-xl p-8 scroll-mt-20">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <Zap className="h-6 w-6 text-cyan-400" />
@@ -102,7 +135,7 @@ export default function GuidePage() {
                 </section>
 
                 {/* Learning Flow */}
-                <section className="bg-gradient-to-br from-purple-900/20 to-slate-800 border border-purple-500/30 rounded-xl p-8">
+                <section id="learning-flow" className="bg-gradient-to-br from-purple-900/20 to-slate-800 border border-purple-500/30 rounded-xl p-8 scroll-mt-20">
                     <h2 className="text-xl font-semibold text-white mb-2">Want to Learn Instead?</h2>
                     <p className="text-slate-400 mb-6">Build your own curation skills through our learning flow:</p>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -123,7 +156,7 @@ export default function GuidePage() {
                 </section>
 
                 {/* Curation Principles */}
-                <section className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8">
+                <section id="principles" className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8 scroll-mt-20">
                     <div className="flex items-center gap-3 mb-6">
                         <BookOpen className="h-6 w-6 text-cyan-400" />
                         <h2 className="text-xl font-semibold text-white">6 Curation Principles</h2>
@@ -154,7 +187,7 @@ export default function GuidePage() {
                 </section>
 
                 {/* Curator Strategies */}
-                <section className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8">
+                <section id="curators" className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8 scroll-mt-20">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <Users className="h-6 w-6 text-purple-400" />
@@ -203,7 +236,7 @@ export default function GuidePage() {
                 </section>
 
                 {/* Strategy Builder */}
-                <section className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8">
+                <section id="strategy-builder" className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8 scroll-mt-20">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <Hammer className="h-6 w-6 text-green-400" />
@@ -236,7 +269,7 @@ export default function GuidePage() {
                 </section>
 
                 {/* Scenario Simulator */}
-                <section className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8">
+                <section id="scenario-simulator" className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8 scroll-mt-20">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <Activity className="h-6 w-6 text-orange-400" />
@@ -269,7 +302,7 @@ export default function GuidePage() {
                 </section>
 
                 {/* Pool Comparison & Backtest */}
-                <section className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8">
+                <section id="pool-comparison" className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8 scroll-mt-20">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <GitCompare className="h-6 w-6 text-blue-400" />
@@ -313,7 +346,7 @@ export default function GuidePage() {
                 </section>
 
                 {/* Compare Tools */}
-                <section className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8">
+                <section id="compare-tools" className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8 scroll-mt-20">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <Building2 className="h-6 w-6 text-purple-400" />
@@ -350,7 +383,7 @@ export default function GuidePage() {
                 </section>
 
                 {/* Insights Dashboard */}
-                <section className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8">
+                <section id="insights-dashboard" className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8 scroll-mt-20">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <Target className="h-6 w-6 text-cyan-400" />
@@ -407,7 +440,7 @@ export default function GuidePage() {
                 </section>
 
                 {/* Allocation History */}
-                <section className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8">
+                <section id="allocation-history" className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8 scroll-mt-20">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <History className="h-6 w-6 text-purple-400" />
@@ -443,7 +476,7 @@ export default function GuidePage() {
                 </section>
 
                 {/* APY History */}
-                <section className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8">
+                <section id="apy-history" className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8 scroll-mt-20">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <LineChart className="h-6 w-6 text-green-400" />
@@ -481,7 +514,7 @@ export default function GuidePage() {
                 </section>
 
                 {/* AI Features */}
-                <section className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8">
+                <section id="ai-features" className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8 scroll-mt-20">
                     <div className="flex items-center gap-3 mb-6">
                         <Sparkles className="h-6 w-6 text-yellow-400" />
                         <h2 className="text-xl font-semibold text-white">AI-Powered Features</h2>
@@ -521,7 +554,7 @@ export default function GuidePage() {
                 </section>
 
                 {/* Watchlist */}
-                <section className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8">
+                <section id="watchlist" className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8 scroll-mt-20">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <Bookmark className="h-6 w-6 text-cyan-400" />
@@ -562,7 +595,7 @@ export default function GuidePage() {
                 </section>
 
                 {/* Data Pipeline */}
-                <section className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8">
+                <section id="data-pipeline" className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8 scroll-mt-20">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl font-semibold text-white">Data Pipeline</h2>
                         <Link
@@ -591,7 +624,7 @@ export default function GuidePage() {
                 </section>
 
                 {/* Risk Scoring */}
-                <section className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8">
+                <section id="risk-scoring" className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8 scroll-mt-20">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <Shield className="h-6 w-6 text-green-400" />
@@ -676,10 +709,10 @@ export default function GuidePage() {
                 </section>
 
                 {/* What We Don't Do */}
-                <section className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8">
+                <section id="security" className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 rounded-xl p-8 scroll-mt-20">
                     <div className="flex items-center gap-3 mb-6">
                         <Shield className="h-6 w-6 text-red-400" />
-                        <h2 className="text-xl font-semibold text-white">What We Don't Do</h2>
+                        <h2 className="text-xl font-semibold text-white">What We Don&apos;t Do</h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {[
