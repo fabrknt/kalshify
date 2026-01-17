@@ -53,34 +53,88 @@ export default function GuidePage() {
 
                 {/* Table of Contents */}
                 <nav className="bg-slate-900/50 border border-slate-800 rounded-xl p-6">
-                    <p className="text-xs text-slate-500 uppercase tracking-wide mb-3">Quick Links</p>
-                    <div className="flex flex-wrap gap-2">
-                        {[
-                            { id: "get-started", label: "Get Started" },
-                            { id: "learning-flow", label: "Learning Flow" },
-                            { id: "principles", label: "Principles" },
-                            { id: "curators", label: "Curators" },
-                            { id: "strategy-builder", label: "Strategy Builder" },
-                            { id: "scenario-simulator", label: "Scenarios" },
-                            { id: "pool-comparison", label: "Pool Comparison" },
-                            { id: "compare-tools", label: "Compare Tools" },
-                            { id: "ai-features", label: "AI Features" },
-                            { id: "insights-dashboard", label: "Insights" },
-                            { id: "allocation-history", label: "History" },
-                            { id: "watchlist", label: "Watchlist" },
-                            { id: "apy-history", label: "APY Charts" },
-                            { id: "risk-scoring", label: "Risk Scoring" },
-                            { id: "data-pipeline", label: "Data Pipeline" },
-                            { id: "security", label: "Security" },
-                        ].map((item) => (
-                            <a
-                                key={item.id}
-                                href={`#${item.id}`}
-                                className="px-3 py-1.5 text-sm text-slate-400 hover:text-white bg-slate-800/50 hover:bg-slate-700/50 rounded-lg transition-colors"
-                            >
-                                {item.label}
-                            </a>
-                        ))}
+                    <div className="space-y-4">
+                        {/* Start */}
+                        <div>
+                            <p className="text-[10px] text-cyan-500 uppercase tracking-wider mb-2 font-medium">Start</p>
+                            <div className="flex flex-wrap gap-2">
+                                <a href="#get-started" className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 border border-cyan-500/20 rounded-lg transition-colors">
+                                    <Zap className="h-3.5 w-3.5" />
+                                    Get Started
+                                </a>
+                            </div>
+                        </div>
+
+                        {/* Learn */}
+                        <div>
+                            <p className="text-[10px] text-purple-500 uppercase tracking-wider mb-2 font-medium">Learn</p>
+                            <div className="flex flex-wrap gap-2">
+                                {[
+                                    { id: "learning-flow", label: "Learning Flow", icon: ArrowRight },
+                                    { id: "principles", label: "Principles", icon: BookOpen },
+                                    { id: "curators", label: "Curators", icon: Users },
+                                    { id: "strategy-builder", label: "Strategy Builder", icon: Hammer },
+                                    { id: "scenario-simulator", label: "Scenarios", icon: Activity },
+                                ].map((item) => (
+                                    <a key={item.id} href={`#${item.id}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 border border-purple-500/20 rounded-lg transition-colors">
+                                        <item.icon className="h-3.5 w-3.5" />
+                                        {item.label}
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Tools */}
+                        <div>
+                            <p className="text-[10px] text-green-500 uppercase tracking-wider mb-2 font-medium">Tools</p>
+                            <div className="flex flex-wrap gap-2">
+                                {[
+                                    { id: "pool-comparison", label: "Pool Comparison", icon: GitCompare },
+                                    { id: "compare-tools", label: "Compare Tools", icon: Building2 },
+                                    { id: "apy-history", label: "APY Charts", icon: LineChart },
+                                ].map((item) => (
+                                    <a key={item.id} href={`#${item.id}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm bg-green-500/10 text-green-400 hover:bg-green-500/20 border border-green-500/20 rounded-lg transition-colors">
+                                        <item.icon className="h-3.5 w-3.5" />
+                                        {item.label}
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Track */}
+                        <div>
+                            <p className="text-[10px] text-orange-500 uppercase tracking-wider mb-2 font-medium">Track</p>
+                            <div className="flex flex-wrap gap-2">
+                                {[
+                                    { id: "insights-dashboard", label: "Insights", icon: Target },
+                                    { id: "allocation-history", label: "History", icon: History },
+                                    { id: "watchlist", label: "Watchlist", icon: Bookmark },
+                                    { id: "ai-features", label: "AI Features", icon: Sparkles },
+                                ].map((item) => (
+                                    <a key={item.id} href={`#${item.id}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm bg-orange-500/10 text-orange-400 hover:bg-orange-500/20 border border-orange-500/20 rounded-lg transition-colors">
+                                        <item.icon className="h-3.5 w-3.5" />
+                                        {item.label}
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Reference */}
+                        <div>
+                            <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-2 font-medium">Reference</p>
+                            <div className="flex flex-wrap gap-2">
+                                {[
+                                    { id: "risk-scoring", label: "Risk Scoring", icon: Shield },
+                                    { id: "data-pipeline", label: "Data Pipeline", icon: Database },
+                                    { id: "security", label: "Security", icon: Shield },
+                                ].map((item) => (
+                                    <a key={item.id} href={`#${item.id}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm bg-slate-500/10 text-slate-400 hover:bg-slate-500/20 border border-slate-500/20 rounded-lg transition-colors">
+                                        <item.icon className="h-3.5 w-3.5" />
+                                        {item.label}
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </nav>
 
