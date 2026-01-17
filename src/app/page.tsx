@@ -48,8 +48,8 @@ import { CuratorSection } from "@/components/curate/curator-section";
 import { WelcomeBanner } from "@/components/curate/welcome-banner";
 import { PrinciplesStrip } from "@/components/curate/principles-strip";
 import { ExploreHero } from "@/components/curate/explore-hero";
-import { LearnTabs } from "@/components/curate/learn-tabs";
 import { LearnHero } from "@/components/curate/learn-hero";
+import { CompareHero } from "@/components/curate/compare-hero";
 import { ToolPicker } from "@/components/curate/tool-picker";
 import { PositionSimulator } from "@/components/curate/position-simulator";
 import { StrategyBuilder } from "@/components/curate/strategy-builder";
@@ -394,14 +394,17 @@ function CuratePageContent() {
     const [expandedPool, setExpandedPool] = useState<string | null>(null);
 
     // Read tab from URL params
-    const urlTab = searchParams.get("tab") as TabId | null;
-    const urlSubtab = searchParams.get("subtab");
+    const urlTabRaw = searchParams.get("tab");
     const urlPoolId = searchParams.get("pool");
 
-    // Main navigation tab state (4 tabs: start, insights, explore, learn)
+    // Main navigation tab state (5 tabs: start, insights, explore, practice, compare)
     const [mainTab, setMainTab] = useState<TabId>(() => {
-        if (urlTab && ["start", "insights", "explore", "learn"].includes(urlTab)) {
-            return urlTab;
+        if (urlTabRaw && ["start", "insights", "explore", "practice", "compare"].includes(urlTabRaw)) {
+            return urlTabRaw as TabId;
+        }
+        // Handle legacy "learn" tab URL param
+        if (urlTabRaw === "learn") {
+            return "practice";
         }
         return "start";
     });
@@ -445,10 +448,12 @@ function CuratePageContent() {
 
     // Sync tab state with URL params when they change
     useEffect(() => {
-        if (urlTab && ["start", "insights", "explore", "learn"].includes(urlTab)) {
-            setMainTab(urlTab);
+        if (urlTabRaw && ["start", "insights", "explore", "practice", "compare"].includes(urlTabRaw)) {
+            setMainTab(urlTabRaw as TabId);
+        } else if (urlTabRaw === "learn") {
+            setMainTab("practice");
         }
-    }, [urlTab]);
+    }, [urlTabRaw]);
 
     // Handle pool param - expand and scroll to pool
     useEffect(() => {
@@ -676,7 +681,7 @@ function CuratePageContent() {
                     start: (
                         <ActionableFlow
                             onExplore={() => setMainTab("explore")}
-                            onLearn={() => setMainTab("learn")}
+                            onLearn={() => setMainTab("practice")}
                         />
                     ),
 
@@ -1026,34 +1031,33 @@ function CuratePageContent() {
                         </div>
                     ),
 
-                    /* LEARN TAB - Educational content */
-                    learn: (
-                        <>
-                        {/* Allocation banner - show if user has allocation */}
-                        <AllocationBanner onNavigateToAllocation={() => setMainTab("start")} />
-                        <LearnHero />
-                        <LearnTabs defaultTab={urlSubtab as "practice" | "compare" | undefined}>
-                            {{
-                                practice: (
-                                    <div className="space-y-6">
-                                        <StrategyBuilder />
-                                    </div>
-                                ),
-                                compare: (
-                                    <ToolPicker>
-                                        {{
-                                            "protocol-comparison": <ProtocolComparison onProtocolClick={(slug) => filterPoolsByProtocol(slug)} />,
-                                            "lst-comparison": <LSTComparison />,
-                                            "yield-spreads": <YieldSpreadsPanel />,
-                                            "alternative-yields": <AlternativeYields />,
-                                            "il-calculator": <QuickILCalculator />,
-                                            "position-simulator": <PositionSimulator standalone />,
-                                        }}
-                                    </ToolPicker>
-                                ),
-                            }}
-                        </LearnTabs>
-                        </>
+                    /* PRACTICE TAB - Build strategies */
+                    practice: (
+                        <div className="space-y-6">
+                            {/* Allocation banner - show if user has allocation */}
+                            <AllocationBanner onNavigateToAllocation={() => setMainTab("start")} />
+                            <LearnHero />
+                            <StrategyBuilder />
+                        </div>
+                    ),
+
+                    /* COMPARE TAB - Analyze options */
+                    compare: (
+                        <div className="space-y-6">
+                            {/* Allocation banner - show if user has allocation */}
+                            <AllocationBanner onNavigateToAllocation={() => setMainTab("start")} />
+                            <CompareHero />
+                            <ToolPicker>
+                                {{
+                                    "protocol-comparison": <ProtocolComparison onProtocolClick={(slug) => filterPoolsByProtocol(slug)} />,
+                                    "lst-comparison": <LSTComparison />,
+                                    "yield-spreads": <YieldSpreadsPanel />,
+                                    "alternative-yields": <AlternativeYields />,
+                                    "il-calculator": <QuickILCalculator />,
+                                    "position-simulator": <PositionSimulator standalone />,
+                                }}
+                            </ToolPicker>
+                        </div>
                     ),
                 }}
             </TabContent>

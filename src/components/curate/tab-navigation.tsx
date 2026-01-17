@@ -1,9 +1,9 @@
 "use client";
 
 import { ReactNode } from "react";
-import { Lightbulb, Search, BookOpen, Zap } from "lucide-react";
+import { Lightbulb, Search, Hammer, Wrench, Zap } from "lucide-react";
 
-export type TabId = "start" | "insights" | "explore" | "learn";
+export type TabId = "start" | "insights" | "explore" | "practice" | "compare";
 
 interface Tab {
     id: TabId;
@@ -32,10 +32,16 @@ const TABS: Tab[] = [
         description: "Find alternatives"
     },
     {
-        id: "learn",
-        label: "Learn",
-        icon: <BookOpen className="h-5 w-5" />,
-        description: "Build your own"
+        id: "practice",
+        label: "Practice",
+        icon: <Hammer className="h-5 w-5" />,
+        description: "Build strategies"
+    },
+    {
+        id: "compare",
+        label: "Compare",
+        icon: <Wrench className="h-5 w-5" />,
+        description: "Analyze options"
     },
 ];
 
@@ -75,7 +81,7 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
                         <button
                             key={tab.id}
                             onClick={() => onTabChange(tab.id)}
-                            className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all min-w-[72px] ${
+                            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all min-w-[60px] ${
                                 activeTab === tab.id
                                     ? "text-cyan-400 bg-cyan-500/10"
                                     : "text-slate-500 hover:text-slate-300"
