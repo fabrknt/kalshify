@@ -29,6 +29,7 @@ interface CuratedPool {
     riskMitigation: string;      // How risk is managed
     tradeoff: string;            // What you give up
     competitorIds?: string[];    // IDs of alternative pools we considered
+    url?: string;                // Link to protocol/pool
 }
 
 // Pre-curated pools for recommendations
@@ -52,6 +53,7 @@ const CURATED_POOLS: CuratedPool[] = [
         riskMitigation: "USDC maintains a 1:1 peg to USD. Kamino has been audited multiple times and uses conservative collateral ratios to prevent bad debt.",
         tradeoff: "Lower yields compared to volatile assets or LP positions. Your capital doesn't benefit from potential SOL price appreciation.",
         competitorIds: ["marginfi-usdc", "save-usdc"],
+        url: "https://app.kamino.finance/lending",
     },
     {
         id: "marginfi-usdc",
@@ -69,6 +71,7 @@ const CURATED_POOLS: CuratedPool[] = [
         riskMitigation: "Multiple audits by OtterSec and Neodyme. Conservative liquidation parameters protect lenders from bad debt.",
         tradeoff: "Slightly lower APY than Kamino. Requires managing positions across two protocols.",
         competitorIds: ["kamino-usdc-lending", "save-usdc"],
+        url: "https://app.marginfi.com/",
     },
     {
         id: "save-usdc",
@@ -86,6 +89,7 @@ const CURATED_POOLS: CuratedPool[] = [
         riskMitigation: "Battle-tested over multiple market cycles. Conservative risk parameters after learning from past events.",
         tradeoff: "Lower yields than newer competitors. Less active development compared to Kamino/Marginfi.",
         competitorIds: ["kamino-usdc-lending", "marginfi-usdc"],
+        url: "https://save.finance/",
     },
 
     // === Low Risk (Steady) - Risk Score 15-25 ===
@@ -105,6 +109,7 @@ const CURATED_POOLS: CuratedPool[] = [
         riskMitigation: "You keep full SOL exposure - no impermanent loss. Kamino's lending is overcollateralized.",
         tradeoff: "SOL price volatility affects your USD value. Lower yields than liquid staking alternatives.",
         competitorIds: ["marinade-msol", "jito-jitosol"],
+        url: "https://app.kamino.finance/lending",
     },
     {
         id: "kamino-usdt-lending",
@@ -122,6 +127,7 @@ const CURATED_POOLS: CuratedPool[] = [
         riskMitigation: "USDT is the most liquid stablecoin globally. Kamino's lending protects against borrower defaults.",
         tradeoff: "USDT has more centralization risk than USDC. Yields may be lower during low demand periods.",
         competitorIds: ["kamino-usdc-lending"],
+        url: "https://app.kamino.finance/lending",
     },
     {
         id: "marinade-msol",
@@ -139,6 +145,7 @@ const CURATED_POOLS: CuratedPool[] = [
         riskMitigation: "Validator diversification reduces slashing risk. mSOL maintains a tight peg to SOL value.",
         tradeoff: "No MEV rewards unlike JitoSOL. Unstaking takes 1-2 epochs unless using instant unstake (small fee).",
         competitorIds: ["jito-jitosol", "sanctum-inf"],
+        url: "https://marinade.finance/app/stake/",
     },
 
     // === Medium Risk (Balanced) - Risk Score 25-35 ===
@@ -158,6 +165,7 @@ const CURATED_POOLS: CuratedPool[] = [
         riskMitigation: "Jito validators are high-quality and well-monitored. The MEV mechanism is transparent and audited.",
         tradeoff: "More concentrated validator set than Marinade. MEV rewards can vary based on network activity.",
         competitorIds: ["marinade-msol", "sanctum-inf"],
+        url: "https://www.jito.network/staking/",
     },
     {
         id: "sanctum-inf",
@@ -175,6 +183,7 @@ const CURATED_POOLS: CuratedPool[] = [
         riskMitigation: "Diversified across multiple LST protocols. Sanctum handles rebalancing to capture best yields.",
         tradeoff: "Slightly higher smart contract risk due to additional abstraction layer. May not always match the highest-yielding individual LST.",
         competitorIds: ["jito-jitosol", "marinade-msol"],
+        url: "https://app.sanctum.so/infinity",
     },
     {
         id: "kamino-jitosol-lending",
@@ -192,6 +201,7 @@ const CURATED_POOLS: CuratedPool[] = [
         riskMitigation: "JitoSOL maintains peg to SOL. Lending is overcollateralized with conservative LTV ratios.",
         tradeoff: "Lower lending yield than USDC. Your JitoSOL may be borrowed, affecting instant liquidity.",
         competitorIds: ["jito-jitosol"],
+        url: "https://app.kamino.finance/lending",
     },
 
     // === Higher Risk (Growth) - Risk Score 35-50 ===
@@ -211,6 +221,7 @@ const CURATED_POOLS: CuratedPool[] = [
         riskMitigation: "USDC maintains stable value. Insurance fund has first-loss protection mechanisms.",
         tradeoff: "Insurance funds can take losses during extreme volatility events. Yields depend on trading activity.",
         competitorIds: ["kamino-usdc-lending", "jupiter-jlp"],
+        url: "https://app.drift.trade/earn",
     },
     {
         id: "jupiter-jlp",
@@ -228,6 +239,7 @@ const CURATED_POOLS: CuratedPool[] = [
         riskMitigation: "Jupiter is the largest DEX on Solana. JLP is diversified across SOL, ETH, BTC, and stables.",
         tradeoff: "You're the counterparty to traders - if they win big, JLP loses. Significant exposure to crypto price movements.",
         competitorIds: ["drift-usdc-perp", "meteora-sol-usdc"],
+        url: "https://jup.ag/perps-earn",
     },
     {
         id: "meteora-sol-usdc",
@@ -245,6 +257,7 @@ const CURATED_POOLS: CuratedPool[] = [
         riskMitigation: "Most liquid pair means easy entry/exit. Meteora's dynamic fees help offset IL during volatility.",
         tradeoff: "Impermanent loss when SOL price moves significantly. LP yields can drop during low-volume periods.",
         competitorIds: ["orca-sol-usdc-clmm", "raydium-sol-usdc-clmm"],
+        url: "https://app.meteora.ag/pools",
     },
 
     // === High Risk (Maximizer) - Risk Score 50+ ===
@@ -264,6 +277,7 @@ const CURATED_POOLS: CuratedPool[] = [
         riskMitigation: "Orca is a battle-tested AMM. Wide price ranges reduce rebalancing frequency.",
         tradeoff: "Requires active management - your liquidity goes out of range if price moves. Higher IL than standard AMM.",
         competitorIds: ["meteora-sol-usdc", "raydium-sol-usdc-clmm"],
+        url: "https://www.orca.so/pools",
     },
     {
         id: "raydium-sol-usdc-clmm",
@@ -281,6 +295,7 @@ const CURATED_POOLS: CuratedPool[] = [
         riskMitigation: "Raydium is established infrastructure on Solana. Multiple audits completed.",
         tradeoff: "Same CLMM risks as Orca - requires active management and has amplified IL. Interface is less user-friendly.",
         competitorIds: ["orca-sol-usdc-clmm", "meteora-sol-usdc"],
+        url: "https://raydium.io/clmm/pools/",
     },
     {
         id: "kamino-multiply-sol",
@@ -298,6 +313,7 @@ const CURATED_POOLS: CuratedPool[] = [
         riskMitigation: "Kamino's vaults auto-deleverage during high volatility. Multiple audits on the leverage mechanism.",
         tradeoff: "Leverage amplifies both gains and losses. Can face liquidation during rapid SOL price drops.",
         competitorIds: ["jito-jitosol", "jupiter-jlp"],
+        url: "https://app.kamino.finance/liquidity/multiply",
     },
     {
         id: "meteora-dlmm-sol-usdc",
@@ -315,6 +331,7 @@ const CURATED_POOLS: CuratedPool[] = [
         riskMitigation: "Meteora's DLMM has built-in fee optimization. Can set wider bins to reduce management needs.",
         tradeoff: "Highest complexity and management requirements. IL can be severe if not actively monitored.",
         competitorIds: ["orca-sol-usdc-clmm", "raydium-sol-usdc-clmm"],
+        url: "https://app.meteora.ag/dlmm",
     },
 ];
 
@@ -533,6 +550,7 @@ export function generateRecommendation(
             riskScore: pool.riskScore,
             reasoning: pool.reasoning,
             enhancedReasoning,
+            url: pool.url,
         });
         remainingAllocation -= allocation;
     };

@@ -6,19 +6,22 @@ import {
     RecommendationDisplay,
     AllocationRecommendation,
 } from "./recommendation-display";
-import { ExecutionSteps } from "./execution-steps";
+import { PaperPortfolio } from "./paper-portfolio";
 import { generateRecommendation } from "@/lib/curate/recommendation-engine";
 import { useAllocation } from "@/contexts/allocation-context";
 import {
     ArrowLeft,
+    ArrowRight,
     CheckCircle,
-    Circle,
     Lightbulb,
     BookOpen,
     ChevronRight,
+    Zap,
+    Eye,
+    Rocket,
 } from "lucide-react";
 
-type FlowStep = "input" | "recommendation" | "execution";
+type FlowStep = "input" | "recommendation";
 
 interface ActionableFlowProps {
     onExplore?: () => void; // Callback to switch to explore mode
@@ -26,7 +29,13 @@ interface ActionableFlowProps {
 }
 
 export function ActionableFlow({ onExplore, onLearn }: ActionableFlowProps) {
-    const { allocation: savedAllocation, riskTolerance: savedRisk, setAllocation, clearAllocation, hasAllocation } = useAllocation();
+    const { allocation: savedAllocation, riskTolerance: savedRisk, setAllocation, clearAllocation, hasAllocation, paperHistory, saveToPaperHistory, allPoolsCompleted } = useAllocation();
+
+    // Check if current allocation is saved to paper portfolio
+    const isAllocationSaved = savedAllocation && paperHistory.some(
+        entry => entry.allocation.summary.totalAmount === savedAllocation.summary.totalAmount &&
+            entry.allocation.summary.expectedApy === savedAllocation.summary.expectedApy
+    );
 
     // Initialize from context if allocation exists
     const [step, setStep] = useState<FlowStep>(() => hasAllocation ? "recommendation" : "input");
@@ -62,6 +71,11 @@ export function ActionableFlow({ onExplore, onLearn }: ActionableFlowProps) {
         // Save to context for other tabs
         setAllocation(rec, risk);
 
+        // Auto-save to paper portfolio
+        setTimeout(() => {
+            saveToPaperHistory();
+        }, 100);
+
         setStep("recommendation");
         setIsLoading(false);
     };
@@ -77,55 +91,85 @@ export function ActionableFlow({ onExplore, onLearn }: ActionableFlowProps) {
         clearAllocation();
     };
 
-    const handleProceedToExecution = () => {
-        setStep("execution");
+    // Journey progress: Try (got allocation) → Track (saved to paper) → Trade (execute)
+    const journeyState = {
+        tryComplete: step === "recommendation",
+        trackComplete: isAllocationSaved,
+        tradeComplete: allPoolsCompleted,
     };
-
-    // Progress indicator
-    const steps: { key: FlowStep; label: string }[] = [
-        { key: "input", label: "Your Preferences" },
-        { key: "recommendation", label: "Your Allocation" },
-        { key: "execution", label: "Execute" },
-    ];
-
-    const currentStepIndex = steps.findIndex(s => s.key === step);
 
     return (
         <div className="min-h-[80vh] py-8">
-            {/* Progress Steps */}
-            <div className="max-w-2xl mx-auto mb-8 px-4">
-                <div className="relative">
-                    {/* Progress line - positioned to connect circle centers */}
-                    <div className="absolute left-[16.67%] right-[16.67%] top-4 h-0.5 bg-slate-700" />
-                    <div
-                        className="absolute left-[16.67%] top-4 h-0.5 bg-gradient-to-r from-cyan-500 to-purple-500 transition-all"
-                        style={{ width: `${(currentStepIndex / (steps.length - 1)) * 66.67}%` }}
-                    />
-
-                    <div className="flex">
-                        {steps.map((s, idx) => (
-                            <div key={s.key} className="flex-1 flex flex-col items-center relative">
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
-                                    idx < currentStepIndex
-                                        ? "bg-green-500 text-white"
-                                        : idx === currentStepIndex
-                                        ? "bg-gradient-to-r from-cyan-500 to-purple-500 text-white"
-                                        : "bg-slate-800 border-2 border-slate-600 text-slate-500"
-                                }`}>
-                                    {idx < currentStepIndex ? (
-                                        <CheckCircle className="h-5 w-5" />
-                                    ) : (
-                                        <span className="text-sm font-medium">{idx + 1}</span>
-                                    )}
-                                </div>
-                                <span className={`text-xs mt-2 text-center ${
-                                    idx <= currentStepIndex ? "text-white" : "text-slate-500"
-                                }`}>
-                                    {s.label}
-                                </span>
+            {/* Journey Progress Bar */}
+            <div className="max-w-3xl mx-auto mb-8 px-4">
+                <div className="bg-gradient-to-r from-purple-900/30 to-cyan-900/30 border border-purple-500/30 rounded-xl p-4">
+                    <div className="flex items-center justify-center gap-3 md:gap-6">
+                        {/* Try */}
+                        <div className="flex items-center gap-2">
+                            <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
+                                journeyState.tryComplete
+                                    ? "bg-green-500"
+                                    : step === "input"
+                                    ? "bg-gradient-to-r from-purple-500 to-cyan-500 ring-2 ring-purple-400/50 ring-offset-2 ring-offset-slate-900"
+                                    : "bg-slate-700"
+                            }`}>
+                                {journeyState.tryComplete ? (
+                                    <CheckCircle className="h-5 w-5 text-white" />
+                                ) : (
+                                    <Zap className="h-5 w-5 text-white" />
+                                )}
                             </div>
-                        ))}
+                            <span className={`text-sm font-medium ${
+                                journeyState.tryComplete ? "text-green-400" : step === "input" ? "text-purple-400" : "text-slate-500"
+                            }`}>Try</span>
+                        </div>
+                        <ArrowRight className="h-4 w-4 text-slate-600" />
+                        {/* Track */}
+                        <div className={`flex items-center gap-2 ${!journeyState.tryComplete && "opacity-50"}`}>
+                            <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
+                                journeyState.trackComplete
+                                    ? "bg-green-500"
+                                    : journeyState.tryComplete
+                                    ? "bg-gradient-to-r from-purple-500 to-cyan-500 ring-2 ring-purple-400/50 ring-offset-2 ring-offset-slate-900"
+                                    : "bg-slate-700"
+                            }`}>
+                                {journeyState.trackComplete ? (
+                                    <CheckCircle className="h-5 w-5 text-white" />
+                                ) : (
+                                    <Eye className="h-5 w-5 text-white" />
+                                )}
+                            </div>
+                            <span className={`text-sm font-medium ${
+                                journeyState.trackComplete ? "text-green-400" : journeyState.tryComplete ? "text-purple-400" : "text-slate-500"
+                            }`}>Track</span>
+                        </div>
+                        <ArrowRight className={`h-4 w-4 text-slate-600 ${!journeyState.tryComplete && "opacity-50"}`} />
+                        {/* Trade */}
+                        <div className={`flex items-center gap-2 ${!journeyState.trackComplete && "opacity-50"}`}>
+                            <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
+                                journeyState.tradeComplete
+                                    ? "bg-green-500"
+                                    : journeyState.trackComplete
+                                    ? "bg-gradient-to-r from-cyan-500 to-purple-500 ring-2 ring-cyan-400/50 ring-offset-2 ring-offset-slate-900"
+                                    : "bg-slate-700"
+                            }`}>
+                                {journeyState.tradeComplete ? (
+                                    <CheckCircle className="h-5 w-5 text-white" />
+                                ) : (
+                                    <Rocket className={`h-5 w-5 ${journeyState.trackComplete ? "text-white" : "text-slate-500"}`} />
+                                )}
+                            </div>
+                            <span className={`text-sm font-medium ${
+                                journeyState.tradeComplete ? "text-green-400" : journeyState.trackComplete ? "text-cyan-400" : "text-slate-500"
+                            }`}>Trade</span>
+                        </div>
                     </div>
+                    <p className="text-center text-sm text-slate-400 mt-3">
+                        {!journeyState.tryComplete && "Get your personalized allocation to start"}
+                        {journeyState.tryComplete && !journeyState.trackComplete && "Save to Paper Portfolio to track performance"}
+                        {journeyState.trackComplete && !journeyState.tradeComplete && "Track performance, then execute when ready"}
+                        {journeyState.tradeComplete && "All positions executed! Track your portfolio performance."}
+                    </p>
                 </div>
             </div>
 
@@ -133,7 +177,7 @@ export function ActionableFlow({ onExplore, onLearn }: ActionableFlowProps) {
             {step !== "input" && (
                 <div className="max-w-3xl mx-auto mb-4 px-4">
                     <button
-                        onClick={() => setStep(step === "execution" ? "recommendation" : "input")}
+                        onClick={() => setStep("input")}
                         className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
                     >
                         <ArrowLeft className="h-4 w-4" />
@@ -202,27 +246,11 @@ export function ActionableFlow({ onExplore, onLearn }: ActionableFlowProps) {
                             onViewDetails={handleViewDetails}
                         />
 
-                        {/* Proceed to execution */}
-                        <div className="max-w-3xl mx-auto mt-8 text-center">
-                            <button
-                                onClick={handleProceedToExecution}
-                                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white font-semibold rounded-xl transition-all"
-                            >
-                                Ready to Execute
-                                <ChevronRight className="h-5 w-5" />
-                            </button>
-                            <p className="text-xs text-slate-500 mt-3">
-                                We&apos;ll show you step-by-step instructions
-                            </p>
+                        {/* Paper Portfolio Section */}
+                        <div className="max-w-3xl mx-auto mt-8">
+                            <PaperPortfolio />
                         </div>
                     </>
-                )}
-
-                {step === "execution" && recommendation && (
-                    <ExecutionSteps
-                        allocations={recommendation.allocations}
-                        totalAmount={amount}
-                    />
                 )}
             </div>
         </div>

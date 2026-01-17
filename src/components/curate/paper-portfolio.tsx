@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     FlaskConical,
     ChevronDown,
@@ -9,9 +9,16 @@ import {
     Save,
     Calendar,
     TrendingUp,
+    TrendingDown,
     Clock,
+    ArrowUpRight,
+    ArrowDownRight,
+    Minus,
+    BarChart3,
+    Shield,
+    X,
 } from "lucide-react";
-import { useAllocation, PaperPortfolioEntry } from "@/contexts/allocation-context";
+import { useAllocation, PaperPortfolioEntry, PerformanceMetrics } from "@/contexts/allocation-context";
 import { RiskTolerance } from "./quick-start";
 
 const RISK_LABELS: Record<RiskTolerance, string> = {
@@ -53,12 +60,39 @@ function formatDate(dateStr: string): string {
     });
 }
 
+function TrendIndicator({ trend, change }: { trend: "up" | "down" | "stable"; change: number }) {
+    if (trend === "up") {
+        return (
+            <span className="flex items-center gap-0.5 text-green-400">
+                <ArrowUpRight className="h-3 w-3" />
+                <span className="text-xs">+{change.toFixed(1)}%</span>
+            </span>
+        );
+    }
+    if (trend === "down") {
+        return (
+            <span className="flex items-center gap-0.5 text-red-400">
+                <ArrowDownRight className="h-3 w-3" />
+                <span className="text-xs">{change.toFixed(1)}%</span>
+            </span>
+        );
+    }
+    return (
+        <span className="flex items-center gap-0.5 text-slate-400">
+            <Minus className="h-3 w-3" />
+            <span className="text-xs">Stable</span>
+        </span>
+    );
+}
+
 function PaperPortfolioItem({
     entry,
+    metrics,
     onRestore,
     onDelete,
 }: {
     entry: PaperPortfolioEntry;
+    metrics: PerformanceMetrics | null;
     onRestore: () => void;
     onDelete: () => void;
 }) {
@@ -85,11 +119,14 @@ function PaperPortfolioItem({
                             <div className="flex items-center gap-3 mt-1 text-xs text-slate-400">
                                 <span className="flex items-center gap-1">
                                     <TrendingUp className="h-3 w-3" />
-                                    {entry.allocation.summary.expectedApy.toFixed(1)}% APY
+                                    {metrics?.currentApy.toFixed(1) ?? entry.allocation.summary.expectedApy.toFixed(1)}% APY
                                 </span>
+                                {metrics && (
+                                    <TrendIndicator trend={metrics.apyTrend} change={metrics.apyChange} />
+                                )}
                                 <span className="flex items-center gap-1">
                                     <Calendar className="h-3 w-3" />
-                                    {formatDate(entry.createdAt)}
+                                    {metrics ? `${metrics.daysSinceCreated}d` : formatDate(entry.createdAt)}
                                 </span>
                             </div>
                         </div>
@@ -100,7 +137,50 @@ function PaperPortfolioItem({
 
             {isExpanded && (
                 <div className="px-3 pb-3 border-t border-slate-700/50">
-                    <div className="pt-3 space-y-1.5">
+                    {/* Performance Summary */}
+                    {metrics && metrics.daysSinceCreated > 0 && (
+                        <div className="pt-3 pb-2 mb-2 border-b border-slate-700/30">
+                            <div className="flex items-center gap-2 mb-2">
+                                <BarChart3 className="h-3 w-3 text-purple-400" />
+                                <span className="text-xs font-medium text-purple-400">Performance</span>
+                            </div>
+                            <div className="grid grid-cols-3 gap-3">
+                                <div>
+                                    <p className="text-xs text-slate-500">Tracking</p>
+                                    <p className="text-sm text-white">{metrics.daysSinceCreated} days</p>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-slate-500">Est. Yield</p>
+                                    <p className="text-sm text-green-400">
+                                        +{formatCurrency(metrics.expectedYieldToDate)}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-slate-500">APY Trend</p>
+                                    <div className="flex items-center gap-1">
+                                        {metrics.apyTrend === "up" && <TrendingUp className="h-3 w-3 text-green-400" />}
+                                        {metrics.apyTrend === "down" && <TrendingDown className="h-3 w-3 text-red-400" />}
+                                        {metrics.apyTrend === "stable" && <Minus className="h-3 w-3 text-slate-400" />}
+                                        <span className={`text-sm ${
+                                            metrics.apyTrend === "up" ? "text-green-400" :
+                                            metrics.apyTrend === "down" ? "text-red-400" : "text-slate-400"
+                                        }`}>
+                                            {metrics.apyTrend === "up" ? "Rising" :
+                                             metrics.apyTrend === "down" ? "Falling" : "Stable"}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            {metrics.snapshots.length > 1 && (
+                                <p className="text-xs text-slate-500 mt-2">
+                                    {metrics.snapshots.length} data points collected
+                                </p>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Pool breakdown */}
+                    <div className="pt-2 space-y-1.5">
                         {entry.allocation.allocations.map((alloc, idx) => (
                             <div key={idx} className="flex items-center justify-between text-sm">
                                 <div className="flex items-center gap-2">
@@ -141,6 +221,40 @@ function PaperPortfolioItem({
     );
 }
 
+// Prompt to sign in after tracking for a while
+function SignInPrompt({ trackingDays, onDismiss }: { trackingDays: number; onDismiss: () => void }) {
+    return (
+        <div className="p-4 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 rounded-lg relative">
+            <button
+                onClick={onDismiss}
+                className="absolute top-2 right-2 p-1 text-slate-500 hover:text-white transition-colors"
+            >
+                <X className="h-4 w-4" />
+            </button>
+            <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-cyan-500/20 rounded-full flex items-center justify-center shrink-0">
+                    <Shield className="h-5 w-5 text-cyan-400" />
+                </div>
+                <div>
+                    <h4 className="text-sm font-medium text-white mb-1">
+                        Protect your {trackingDays}-day track record
+                    </h4>
+                    <p className="text-xs text-slate-400 mb-3">
+                        Sign in to preserve your portfolio history and access it from any device.
+                        Your data stays safe even if you clear your browser.
+                    </p>
+                    <a
+                        href="/auth/signin"
+                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyan-500 text-white rounded-lg text-sm font-medium hover:bg-cyan-400 transition-colors"
+                    >
+                        Sign in to save
+                    </a>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 export function PaperPortfolio() {
     const {
         allocation,
@@ -148,10 +262,36 @@ export function PaperPortfolio() {
         saveToPaperHistory,
         deleteFromPaperHistory,
         restoreFromPaperHistory,
+        captureSnapshot,
+        getPerformanceMetrics,
+        trackingDays,
     } = useAllocation();
 
     const [showSaveDialog, setShowSaveDialog] = useState(false);
     const [notes, setNotes] = useState("");
+    const [dismissedSignInPrompt, setDismissedSignInPrompt] = useState(() => {
+        if (typeof window !== "undefined") {
+            return localStorage.getItem("fabrknt_signin_prompt_dismissed") === "true";
+        }
+        return false;
+    });
+
+    const handleDismissSignInPrompt = () => {
+        setDismissedSignInPrompt(true);
+        if (typeof window !== "undefined") {
+            localStorage.setItem("fabrknt_signin_prompt_dismissed", "true");
+        }
+    };
+
+    // Show sign-in prompt after 7+ days of tracking
+    const shouldShowSignInPrompt = trackingDays >= 7 && !dismissedSignInPrompt && paperHistory.length > 0;
+
+    // Capture snapshots for all portfolios on mount
+    useEffect(() => {
+        paperHistory.forEach(entry => {
+            captureSnapshot(entry.id);
+        });
+    }, [paperHistory, captureSnapshot]);
 
     const handleSave = () => {
         saveToPaperHistory(notes || undefined);
@@ -181,6 +321,31 @@ export function PaperPortfolio() {
             <p className="text-sm text-slate-400">
                 Track allocations over time without real money. See how recommendations perform before investing.
             </p>
+
+            {/* Sign-in prompt after tracking for a while */}
+            {shouldShowSignInPrompt && (
+                <SignInPrompt
+                    trackingDays={trackingDays}
+                    onDismiss={handleDismissSignInPrompt}
+                />
+            )}
+
+            {/* Tracking summary */}
+            {trackingDays > 0 && paperHistory.length > 0 && !shouldShowSignInPrompt && (
+                <div className="p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <BarChart3 className="h-4 w-4 text-purple-400" />
+                            <span className="text-sm text-purple-300">
+                                Tracking for {trackingDays} day{trackingDays !== 1 ? "s" : ""}
+                            </span>
+                        </div>
+                        <span className="text-xs text-slate-400">
+                            {paperHistory.length} allocation{paperHistory.length !== 1 ? "s" : ""}
+                        </span>
+                    </div>
+                </div>
+            )}
 
             {/* Save current allocation */}
             {allocation && !isCurrentSaved && (
@@ -236,6 +401,7 @@ export function PaperPortfolio() {
                         <PaperPortfolioItem
                             key={entry.id}
                             entry={entry}
+                            metrics={getPerformanceMetrics(entry.id)}
                             onRestore={() => restoreFromPaperHistory(entry.id)}
                             onDelete={() => deleteFromPaperHistory(entry.id)}
                         />

@@ -149,9 +149,9 @@ export default function GuidePage() {
                         <h2 className="text-xl font-semibold text-white">Recommended: Start with Paper Trading</h2>
                     </div>
                     <p className="text-slate-300 mb-6">
-                        New to DeFi? Test strategies without risking real money. Track your paper portfolio over time, build confidence, then invest when ready.
+                        New to DeFi? Test strategies without risking real money. Track your paper portfolio, then invest when ready.
                     </p>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="text-center p-4 bg-slate-800/50 rounded-lg border border-purple-500/20">
                             <div className="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
                                 <Zap className="h-5 w-5 text-purple-400" />
@@ -166,18 +166,11 @@ export default function GuidePage() {
                             <h3 className="text-white font-medium mb-1">2. Track</h3>
                             <p className="text-xs text-slate-400">Save to Paper Portfolio and watch performance</p>
                         </div>
-                        <div className="text-center p-4 bg-slate-800/50 rounded-lg border border-purple-500/20">
-                            <div className="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                                <CheckCircle className="h-5 w-5 text-purple-400" />
-                            </div>
-                            <h3 className="text-white font-medium mb-1">3. Trust</h3>
-                            <p className="text-xs text-slate-400">Build confidence over weeks or months</p>
-                        </div>
-                        <div className="text-center p-4 bg-slate-800/50 rounded-lg border border-purple-500/20">
+                        <div className="text-center p-4 bg-slate-800/50 rounded-lg border border-cyan-500/20">
                             <div className="w-10 h-10 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
                                 <Rocket className="h-5 w-5 text-cyan-400" />
                             </div>
-                            <h3 className="text-white font-medium mb-1">4. Trade</h3>
+                            <h3 className="text-white font-medium mb-1">3. Trade</h3>
                             <p className="text-xs text-slate-400">Execute with real money when ready</p>
                         </div>
                     </div>

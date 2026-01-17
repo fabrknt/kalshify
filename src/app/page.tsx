@@ -62,7 +62,6 @@ import { PerformanceCard } from "@/components/curate/performance-card";
 import { RebalanceAlerts } from "@/components/curate/rebalance-alert";
 import { MarketContextCard } from "@/components/curate/market-context-card";
 import { AllocationHistory } from "@/components/curate/allocation-history";
-import { PaperPortfolio } from "@/components/curate/paper-portfolio";
 import { useAllocation } from "@/contexts/allocation-context";
 import { getProtocolSlug } from "@/lib/solana/protocols";
 
@@ -694,8 +693,6 @@ function CuratePageContent() {
                             <AllocationComparison />
                             {/* Performance tracking - build trust through transparency */}
                             <PerformanceCard compact />
-                            {/* Paper portfolio - track allocations without sign-in */}
-                            <PaperPortfolio />
                             {/* User allocation history - track saved allocations (requires sign-in) */}
                             <AllocationHistory />
                             {/* Welcome banner - dismissible one-time intro */}

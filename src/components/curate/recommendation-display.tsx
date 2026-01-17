@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useAllocation } from "@/contexts/allocation-context";
 import {
     TrendingUp,
     Shield,
@@ -8,12 +9,14 @@ import {
     ChevronDown,
     PieChart,
     CheckCircle,
+    Check,
     Info,
     RefreshCw,
     Lightbulb,
     Scale,
     XCircle,
     ArrowRight,
+    ExternalLink,
 } from "lucide-react";
 import { RiskTolerance } from "./quick-start";
 
@@ -184,15 +187,12 @@ export function RecommendationDisplay({
 }: RecommendationDisplayProps) {
     const { allocations, summary, insights, warnings } = recommendation;
     const [expandedPool, setExpandedPool] = useState<string | null>(null);
+    const { completedPools, togglePoolComplete, allPoolsCompleted, completedCount } = useAllocation();
 
     return (
         <div className="max-w-3xl mx-auto space-y-6">
             {/* Header */}
             <div className="text-center">
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full text-green-400 text-sm mb-3">
-                    <CheckCircle className="h-4 w-4" />
-                    Your personalized allocation is ready
-                </div>
                 <h2 className="text-2xl font-bold text-white mb-2">
                     Here&apos;s Where to Put Your {formatCurrency(summary.totalAmount)}
                 </h2>
@@ -233,9 +233,26 @@ export function RecommendationDisplay({
 
             {/* Allocation Visual */}
             <div className="bg-slate-900/70 border border-slate-700 rounded-xl p-6">
-                <div className="flex items-center gap-2 mb-4">
-                    <PieChart className="h-5 w-5 text-slate-500" />
-                    <h3 className="text-lg font-semibold text-white">Your Allocation</h3>
+                <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                        <PieChart className="h-5 w-5 text-slate-500" />
+                        <h3 className="text-lg font-semibold text-white">Your Allocation</h3>
+                    </div>
+                    {/* Completion status */}
+                    <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm ${
+                        allPoolsCompleted
+                            ? "bg-green-500/20 text-green-400"
+                            : "bg-slate-700/50 text-slate-400"
+                    }`}>
+                        {allPoolsCompleted ? (
+                            <>
+                                <CheckCircle className="h-4 w-4" />
+                                <span>All executed</span>
+                            </>
+                        ) : (
+                            <span>{completedCount}/{allocations.length} done</span>
+                        )}
+                    </div>
                 </div>
 
                 {/* Allocation Bar */}
@@ -255,28 +272,35 @@ export function RecommendationDisplay({
                     ))}
                 </div>
 
-                {/* Allocation List */}
+                {/* Allocation List with Execute Actions */}
                 <div className="space-y-3">
                     {allocations.map((alloc, idx) => (
                         <div
                             key={alloc.poolId}
-                            className={`p-4 bg-slate-800/50 rounded-xl transition-colors ${
+                            className={`p-4 bg-slate-800/50 rounded-xl transition-colors border border-slate-700/50 ${
                                 expandedPool === alloc.poolId ? "bg-slate-800" : ""
                             }`}
                         >
-                            <div className="flex items-center gap-4">
-                                {/* Color indicator */}
-                                <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${ALLOCATION_COLORS[idx % ALLOCATION_COLORS.length]} shrink-0`} />
+                            <div className="flex items-start gap-4">
+                                {/* Step number */}
+                                <div className={`w-8 h-8 rounded-full bg-gradient-to-r ${ALLOCATION_COLORS[idx % ALLOCATION_COLORS.length]} flex items-center justify-center shrink-0`}>
+                                    <span className="text-sm font-bold text-white">{idx + 1}</span>
+                                </div>
 
                                 {/* Pool info */}
                                 <div className="flex-1 min-w-0">
-                                    <div className="flex items-center gap-2 flex-wrap">
+                                    <div className="flex items-center gap-2 flex-wrap mb-1">
                                         <span className="font-medium text-white">{alloc.poolName}</span>
                                         <span className="text-sm text-slate-500">{alloc.protocol}</span>
                                         <span className={`text-xs px-1.5 py-0.5 rounded border ${RISK_COLORS[alloc.riskLevel]}`}>
                                             {alloc.riskLevel}
                                         </span>
                                     </div>
+                                    <p className="text-sm text-slate-400">
+                                        {alloc.apy.toFixed(1)}% APY
+                                    </p>
+
+                                    {/* Reasoning panel */}
                                     <AllocationReasoningPanel
                                         alloc={alloc}
                                         isExpanded={expandedPool === alloc.poolId}
@@ -286,37 +310,68 @@ export function RecommendationDisplay({
                                     />
                                 </div>
 
-                                {/* Allocation & APY */}
-                                <div className="text-right shrink-0">
-                                    <p className="text-lg font-bold text-white">{alloc.allocation}%</p>
-                                    <p className="text-sm text-green-400">{alloc.apy.toFixed(1)}% APY</p>
-                                    <p className="text-xs text-slate-500">
-                                        {formatCurrency(summary.totalAmount * alloc.allocation / 100)}
-                                    </p>
+                                {/* Allocation, Amount & Execute */}
+                                <div className="text-right shrink-0 flex flex-col items-end gap-2">
+                                    <div>
+                                        <p className="text-lg font-bold text-white">{alloc.allocation}%</p>
+                                        <p className="text-lg font-bold text-cyan-400">
+                                            {formatCurrency(summary.totalAmount * alloc.allocation / 100)}
+                                        </p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        {alloc.url && (
+                                            <a
+                                                href={alloc.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-700/50 text-slate-400 hover:bg-cyan-500/20 hover:text-cyan-400 rounded-lg text-xs font-medium transition-colors"
+                                            >
+                                                Go to {alloc.protocol} <ExternalLink className="h-3 w-3" />
+                                            </a>
+                                        )}
+                                        <button
+                                            onClick={() => togglePoolComplete(alloc.poolId)}
+                                            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                                                completedPools.has(alloc.poolId)
+                                                    ? "bg-green-500/20 text-green-400"
+                                                    : "bg-slate-700/50 text-slate-400 hover:bg-slate-600/50"
+                                            }`}
+                                        >
+                                            <Check className="h-3 w-3" />
+                                            {completedPools.has(alloc.poolId) ? "Done" : "Mark done"}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
-            </div>
 
-            {/* Insights */}
-            {insights.length > 0 && (
-                <div className="bg-cyan-500/10 border border-cyan-500/20 rounded-xl p-4">
-                    <div className="flex items-center gap-2 mb-3">
-                        <Info className="h-4 w-4 text-cyan-400" />
-                        <span className="text-sm font-medium text-cyan-400">Why this allocation?</span>
+                {/* Insights - Why this allocation */}
+                {insights.length > 0 && (
+                    <div className="mt-4 p-4 bg-cyan-500/10 border border-cyan-500/20 rounded-lg">
+                        <div className="flex items-center gap-2 mb-3">
+                            <Info className="h-4 w-4 text-cyan-400" />
+                            <span className="text-sm font-medium text-cyan-400">Why this allocation?</span>
+                        </div>
+                        <ul className="space-y-2">
+                            {insights.map((insight, idx) => (
+                                <li key={idx} className="flex items-start gap-2 text-sm text-cyan-300">
+                                    <CheckCircle className="h-4 w-4 text-cyan-400 shrink-0 mt-0.5" />
+                                    <span>{insight}</span>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
-                    <ul className="space-y-2">
-                        {insights.map((insight, idx) => (
-                            <li key={idx} className="flex items-start gap-2 text-sm text-cyan-300">
-                                <CheckCircle className="h-4 w-4 text-cyan-400 shrink-0 mt-0.5" />
-                                <span>{insight}</span>
-                            </li>
-                        ))}
-                    </ul>
+                )}
+
+                {/* Note about self-custody */}
+                <div className="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                    <p className="text-xs text-yellow-300">
+                        <strong>Note:</strong> You execute all transactions yourself using your own wallet. We never touch your funds.
+                    </p>
                 </div>
-            )}
+            </div>
 
             {/* Warnings */}
             {warnings.length > 0 && (

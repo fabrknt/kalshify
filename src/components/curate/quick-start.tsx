@@ -13,7 +13,6 @@ import {
     TrendingUp,
     Rocket,
     FlaskConical,
-    CheckCircle,
 } from "lucide-react";
 
 // 5-level risk tolerance system for granular allocation control
@@ -137,35 +136,28 @@ export function QuickStart({ onSubmit, isLoading }: QuickStartProps) {
                     <h2 className="text-lg font-semibold text-white">Recommended: Start with Paper Trading</h2>
                 </div>
                 <p className="text-sm text-slate-300 mb-5">
-                    New to DeFi? Test strategies without risking real money. Track your paper portfolio over time, build confidence, then invest when ready.
+                    New to DeFi? Test strategies without risking real money. Track your paper portfolio, then invest when ready.
                 </p>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="grid grid-cols-3 gap-3">
                     <div className="text-center p-3 bg-slate-800/50 rounded-lg border border-purple-500/20">
                         <div className="w-8 h-8 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
                             <Zap className="h-4 w-4 text-purple-400" />
                         </div>
                         <p className="text-sm font-medium text-white">1. Try</p>
-                        <p className="text-xs text-slate-400 mt-0.5">Get a free allocation</p>
+                        <p className="text-xs text-slate-400 mt-0.5">Get allocation</p>
                     </div>
                     <div className="text-center p-3 bg-slate-800/50 rounded-lg border border-purple-500/20">
                         <div className="w-8 h-8 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
                             <Eye className="h-4 w-4 text-purple-400" />
                         </div>
                         <p className="text-sm font-medium text-white">2. Track</p>
-                        <p className="text-xs text-slate-400 mt-0.5">Save & watch performance</p>
-                    </div>
-                    <div className="text-center p-3 bg-slate-800/50 rounded-lg border border-purple-500/20">
-                        <div className="w-8 h-8 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                            <CheckCircle className="h-4 w-4 text-purple-400" />
-                        </div>
-                        <p className="text-sm font-medium text-white">3. Trust</p>
-                        <p className="text-xs text-slate-400 mt-0.5">Build confidence</p>
+                        <p className="text-xs text-slate-400 mt-0.5">Watch performance</p>
                     </div>
                     <div className="text-center p-3 bg-slate-800/50 rounded-lg border border-cyan-500/20">
                         <div className="w-8 h-8 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
                             <Rocket className="h-4 w-4 text-cyan-400" />
                         </div>
-                        <p className="text-sm font-medium text-white">4. Trade</p>
+                        <p className="text-sm font-medium text-white">3. Trade</p>
                         <p className="text-xs text-slate-400 mt-0.5">Execute when ready</p>
                     </div>
                 </div>
