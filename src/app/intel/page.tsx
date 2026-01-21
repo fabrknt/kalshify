@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { TerminalContainer } from '@/components/intel/terminal-container';
 import { TerminalHeader } from '@/components/intel/terminal-header';
 import { SignalCard } from '@/components/intel/signal-card';
 import { ScanAnimation } from '@/components/intel/scan-animation';
-import { RefreshCw, Filter, ChevronDown } from 'lucide-react';
+import { RefreshCw, Filter, ChevronDown, Radio } from 'lucide-react';
 
 interface IntelSignal {
   id: string;
@@ -57,6 +57,11 @@ export default function IntelPage() {
   const [showTypeDropdown, setShowTypeDropdown] = useState(false);
   const [showSeverityDropdown, setShowSeverityDropdown] = useState(false);
 
+  // Live Mode
+  const [isLiveMode, setIsLiveMode] = useState(false);
+  const [newSignalIds, setNewSignalIds] = useState<Set<string>>(new Set());
+  const previousSignalIds = useRef<Set<string>>(new Set());
+
   const fetchSignals = useCallback(async () => {
     try {
       const params = new URLSearchParams();
@@ -69,6 +74,27 @@ export default function IntelPage() {
       if (!response.ok) throw new Error('Failed to fetch signals');
 
       const data: IntelResponse = await response.json();
+
+      // Track new signals for highlighting
+      const currentIds = new Set(data.signals.map((s) => s.id));
+      const newIds = new Set<string>();
+
+      if (previousSignalIds.current.size > 0) {
+        data.signals.forEach((signal) => {
+          if (!previousSignalIds.current.has(signal.id)) {
+            newIds.add(signal.id);
+          }
+        });
+      }
+
+      previousSignalIds.current = currentIds;
+      setNewSignalIds(newIds);
+
+      // Clear new signal highlighting after 5 seconds
+      if (newIds.size > 0) {
+        setTimeout(() => setNewSignalIds(new Set()), 5000);
+      }
+
       setSignals(data.signals);
       setUnreadCount(data.unreadCount);
       setError(null);
@@ -83,11 +109,11 @@ export default function IntelPage() {
     fetchSignals();
   }, [fetchSignals]);
 
-  // Auto-refresh every 60 seconds
+  // Auto-refresh: 10 seconds in live mode, 60 seconds otherwise
   useEffect(() => {
-    const interval = setInterval(fetchSignals, 60000);
+    const interval = setInterval(fetchSignals, isLiveMode ? 10000 : 60000);
     return () => clearInterval(interval);
-  }, [fetchSignals]);
+  }, [fetchSignals, isLiveMode]);
 
   const handleScan = async () => {
     setIsScanning(true);
@@ -129,7 +155,7 @@ export default function IntelPage() {
   return (
     <TerminalContainer>
       <TerminalHeader
-        status={isScanning ? 'SCANNING' : 'ONLINE'}
+        status={isScanning ? 'SCANNING' : isLiveMode ? 'LIVE' : 'ONLINE'}
         lastScan={lastScan}
         signalsCount={signals.length}
       />
@@ -216,6 +242,19 @@ export default function IntelPage() {
             </div>
           </div>
 
+          {/* Live Mode Toggle */}
+          <button
+            onClick={() => setIsLiveMode(!isLiveMode)}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded text-xs font-mono border transition-colors ${
+              isLiveMode
+                ? 'bg-red-500/20 border-red-500/50 text-red-400'
+                : 'bg-green-500/10 border-green-500/30 text-green-600 hover:bg-green-500/20'
+            }`}
+          >
+            <Radio className={`w-3 h-3 ${isLiveMode ? 'animate-pulse' : ''}`} />
+            {isLiveMode ? 'LIVE' : 'LIVE MODE'}
+          </button>
+
           {/* Unread badge */}
           {unreadCount > 0 && (
             <span className="px-2 py-1 bg-amber-500/20 text-amber-400 text-xs font-mono rounded border border-amber-500/30">
@@ -276,7 +315,11 @@ export default function IntelPage() {
           <>
             <div className="space-y-4">
               {signals.map((signal) => (
-                <SignalCard key={signal.id} signal={signal} />
+                <SignalCard
+                  key={signal.id}
+                  signal={signal}
+                  isNew={newSignalIds.has(signal.id)}
+                />
               ))}
             </div>
 

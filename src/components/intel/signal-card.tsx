@@ -1,7 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Brain, Loader2, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
 interface SignalData {
   id: string;
@@ -18,11 +19,22 @@ interface SignalData {
   sourceUrl?: string | null;
 }
 
-interface SignalCardProps {
-  signal: SignalData;
+interface AnalysisResult {
+  text: string;
+  recommendation: string;
+  confidence: string;
 }
 
-export function SignalCard({ signal }: SignalCardProps) {
+interface SignalCardProps {
+  signal: SignalData;
+  isNew?: boolean;
+}
+
+export function SignalCard({ signal, isNew }: SignalCardProps) {
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
+  const [showAnalysis, setShowAnalysis] = useState(false);
+
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'CRITICAL':
@@ -64,6 +76,29 @@ export function SignalCard({ signal }: SignalCardProps) {
     return badges[type] || { label: type, color: 'bg-gray-500/20 text-gray-400 border-gray-500/50' };
   };
 
+  const getRecommendationIcon = (rec: string) => {
+    if (rec.includes('BUY YES') || rec.includes('BULLISH')) {
+      return <TrendingUp className="w-4 h-4 text-green-400" />;
+    }
+    if (rec.includes('BUY NO') || rec.includes('BEARISH') || rec.includes('AVOID')) {
+      return <TrendingDown className="w-4 h-4 text-red-400" />;
+    }
+    return <Minus className="w-4 h-4 text-yellow-400" />;
+  };
+
+  const getConfidenceColor = (confidence: string) => {
+    switch (confidence) {
+      case 'HIGH':
+        return 'text-green-400';
+      case 'MEDIUM':
+        return 'text-yellow-400';
+      case 'LOW':
+        return 'text-red-400';
+      default:
+        return 'text-gray-400';
+    }
+  };
+
   const formatTime = (dateStr: string | Date) => {
     const date = typeof dateStr === 'string' ? new Date(dateStr) : dateStr;
     return date.toLocaleTimeString('en-US', {
@@ -86,11 +121,47 @@ export function SignalCard({ signal }: SignalCardProps) {
     return `${Math.floor(hours / 24)}d ago`;
   };
 
+  const handleAnalyze = async () => {
+    if (analysis) {
+      setShowAnalysis(!showAnalysis);
+      return;
+    }
+
+    setIsAnalyzing(true);
+    setShowAnalysis(true);
+
+    try {
+      const response = await fetch('/api/intel/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ signal }),
+      });
+
+      if (!response.ok) throw new Error('Analysis failed');
+
+      const data = await response.json();
+      setAnalysis(data.analysis);
+    } catch (err) {
+      console.error('Analysis error:', err);
+      setAnalysis({
+        text: 'Analysis unavailable. Please try again.',
+        recommendation: 'HOLD',
+        confidence: 'LOW',
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
   const typeBadge = getTypeBadge(signal.type);
   const severityColors = getSeverityColor(signal.severity);
 
   return (
-    <div className={`border rounded ${severityColors} font-mono`}>
+    <div
+      className={`border rounded ${severityColors} font-mono transition-all duration-500 ${
+        isNew ? 'animate-pulse ring-2 ring-green-500/50' : ''
+      }`}
+    >
       {/* Header row */}
       <div className="flex items-center justify-between px-3 py-2 border-b border-inherit">
         <div className="flex items-center gap-2 flex-wrap">
@@ -101,6 +172,11 @@ export function SignalCard({ signal }: SignalCardProps) {
             {typeBadge.label}
           </span>
           <span className="text-xs opacity-60">{formatTime(signal.createdAt)}</span>
+          {isNew && (
+            <span className="px-2 py-0.5 text-xs bg-green-500/30 text-green-300 border border-green-500/50 rounded animate-pulse">
+              NEW
+            </span>
+          )}
         </div>
         <span className="text-xs opacity-60 hidden sm:inline">{formatTimeAgo(signal.createdAt)}</span>
       </div>
@@ -147,17 +223,64 @@ export function SignalCard({ signal }: SignalCardProps) {
           </div>
         )}
 
+        {/* AI Analysis Section */}
+        {showAnalysis && (
+          <div className="mb-3 p-3 bg-purple-500/10 border border-purple-500/30 rounded">
+            <div className="flex items-center gap-2 mb-2">
+              <Brain className="w-4 h-4 text-purple-400" />
+              <span className="text-xs text-purple-400 font-bold">AI ANALYSIS</span>
+            </div>
+
+            {isAnalyzing ? (
+              <div className="flex items-center gap-2 text-purple-300 text-sm">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span className="animate-pulse">Analyzing market data...</span>
+              </div>
+            ) : analysis ? (
+              <div className="space-y-2">
+                <p className="text-sm text-purple-200 leading-relaxed">{analysis.text}</p>
+                <div className="flex items-center gap-4 pt-2 border-t border-purple-500/20">
+                  <div className="flex items-center gap-1">
+                    {getRecommendationIcon(analysis.recommendation)}
+                    <span className="text-xs font-bold">{analysis.recommendation}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-xs opacity-60">Confidence:</span>
+                    <span className={`text-xs font-bold ${getConfidenceColor(analysis.confidence)}`}>
+                      {analysis.confidence}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        )}
+
         {/* Action buttons */}
-        {signal.ticker && (
-          <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
+          {/* AI Analyze Button */}
+          <button
+            onClick={handleAnalyze}
+            disabled={isAnalyzing}
+            className="px-3 py-1.5 text-xs border border-purple-500/50 text-purple-400 hover:bg-purple-500/10 disabled:opacity-50 rounded transition-colors flex items-center gap-1"
+          >
+            {isAnalyzing ? (
+              <Loader2 className="w-3 h-3 animate-spin" />
+            ) : (
+              <Brain className="w-3 h-3" />
+            )}
+            {analysis ? (showAnalysis ? '[HIDE ANALYSIS]' : '[SHOW ANALYSIS]') : '[ANALYZE]'}
+          </button>
+
+          {signal.ticker && (
             <Link
               href={`/markets/${signal.ticker}`}
               className="px-3 py-1.5 text-xs border border-green-500/50 text-green-400 hover:bg-green-500/10 rounded transition-colors"
             >
               [VIEW MARKET]
             </Link>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

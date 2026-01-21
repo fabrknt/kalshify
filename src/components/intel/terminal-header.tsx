@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { TrendingUp } from 'lucide-react';
 
 interface TerminalHeaderProps {
-  status?: 'ONLINE' | 'SCANNING' | 'OFFLINE';
+  status?: 'ONLINE' | 'SCANNING' | 'OFFLINE' | 'LIVE';
   marketsCount?: number;
   lastScan?: Date | null;
   signalsCount?: number;
@@ -33,6 +33,8 @@ export function TerminalHeader({
         return 'text-green-500';
       case 'SCANNING':
         return 'text-amber-500';
+      case 'LIVE':
+        return 'text-red-500';
       case 'OFFLINE':
         return 'text-red-500';
       default:
@@ -92,8 +94,15 @@ export function TerminalHeader({
 
             <div className="flex items-center gap-3 text-xs text-green-600">
               <span className="flex items-center gap-1.5">
-                <span className={`w-2 h-2 rounded-full ${status === 'ONLINE' ? 'bg-green-500 animate-pulse' : status === 'SCANNING' ? 'bg-amber-500 animate-pulse' : 'bg-red-500'}`} />
-                <span className={getStatusColor()}>{status}</span>
+                <span className={`w-2 h-2 rounded-full ${
+                  status === 'ONLINE' ? 'bg-green-500 animate-pulse' :
+                  status === 'SCANNING' ? 'bg-amber-500 animate-pulse' :
+                  status === 'LIVE' ? 'bg-red-500 animate-pulse' :
+                  'bg-red-500'
+                }`} />
+                <span className={`${getStatusColor()} ${status === 'LIVE' ? 'animate-pulse font-bold' : ''}`}>
+                  {status === 'LIVE' ? '● LIVE' : status}
+                </span>
               </span>
               <span className="hidden sm:inline text-green-700">|</span>
               <span className="hidden sm:inline">Signals: {signalsCount}</span>
