@@ -2,9 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, Plus, Trophy, Target, Flame } from 'lucide-react';
 import { PaperPortfolioDashboard } from '@/components/portfolio/paper-portfolio-dashboard';
 import { PaperPositionData } from '@/components/portfolio/paper-position-card';
+import { WinCelebration, WinCelebrationData } from '@/components/portfolio/win-celebration';
+import { AchievementQueue } from '@/components/achievements/achievement-toast';
+import { Achievement } from '@/lib/achievements/definitions';
+import { getLoadingMessage } from '@/lib/copy/microcopy';
+
+// LocalStorage key for unlocked achievements
+const ACHIEVEMENTS_STORAGE_KEY = 'kalshify_unlocked_achievements';
 
 interface TraderStats {
   visitorId: string;
@@ -23,6 +31,33 @@ export default function PortfolioPage() {
   const [rank, setRank] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSimulating, setIsSimulating] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('Loading...');
+  const [celebration, setCelebration] = useState<WinCelebrationData | null>(null);
+  const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
+  const [unlockedAchievements, setUnlockedAchievements] = useState<string[]>([]);
+
+  // Load unlocked achievements from localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem(ACHIEVEMENTS_STORAGE_KEY);
+    if (stored) {
+      try {
+        setUnlockedAchievements(JSON.parse(stored));
+      } catch {
+        setUnlockedAchievements([]);
+      }
+    }
+  }, []);
+
+  // Rotate loading messages
+  useEffect(() => {
+    if (isLoading) {
+      setLoadingMessage(getLoadingMessage());
+      const interval = setInterval(() => {
+        setLoadingMessage(getLoadingMessage());
+      }, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [isLoading]);
 
   const fetchStats = async () => {
     try {
@@ -80,20 +115,48 @@ export default function PortfolioPage() {
     try {
       const response = await fetch(`/api/portfolio/paper/positions?id=${positionId}`, {
         method: 'DELETE',
+        headers: {
+          'x-unlocked-achievements': unlockedAchievements.join(','),
+        },
       });
 
       if (response.ok) {
-        // Refresh positions
         const data = await response.json();
+
+        // Update positions
         setPositions((prev) =>
           prev.map((p) => (p.id === positionId ? { ...p, ...data.position } : p))
         );
+
         // Refresh stats after closing a position
         fetchStats();
+
+        // Show celebration for winning trades
+        if (data.celebration) {
+          setCelebration(data.celebration);
+        }
+
+        // Handle new achievements
+        if (data.newAchievements && data.newAchievements.length > 0) {
+          // Add to unlocked list and save to localStorage
+          const newUnlockedIds = data.newAchievements.map((a: Achievement) => a.id);
+          const updatedUnlocked = [...unlockedAchievements, ...newUnlockedIds];
+          setUnlockedAchievements(updatedUnlocked);
+          localStorage.setItem(ACHIEVEMENTS_STORAGE_KEY, JSON.stringify(updatedUnlocked));
+
+          // Queue achievements for display (show after celebration closes)
+          setTimeout(() => {
+            setNewAchievements(data.newAchievements);
+          }, data.celebration ? 2000 : 0);
+        }
       }
     } catch (error) {
       console.error('Failed to close position:', error);
     }
+  };
+
+  const handleCloseCelebration = () => {
+    setCelebration(null);
   };
 
   return (
@@ -190,21 +253,51 @@ export default function PortfolioPage() {
               </div>
               <div className="bg-white/10 rounded-lg p-3">
                 <div className="flex items-center gap-2 text-blue-100 text-xs mb-1">
-                  <Flame className="w-3 h-3" />
+                  <motion.div
+                    animate={stats.currentStreak >= 3 ? {
+                      scale: [1, 1.2, 1],
+                      rotate: [0, -5, 5, 0],
+                    } : {}}
+                    transition={{ repeat: Infinity, duration: 1.5 }}
+                  >
+                    <Flame className={`w-3 h-3 ${stats.currentStreak >= 5 ? 'text-yellow-300' : stats.currentStreak >= 3 ? 'text-orange-300' : ''}`} />
+                  </motion.div>
                   Current Streak
                 </div>
-                <p className="text-xl font-bold">
+                <motion.p
+                  className="text-xl font-bold"
+                  key={stats.currentStreak}
+                  initial={{ scale: 1.2, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ type: 'spring', stiffness: 200 }}
+                >
                   {stats.currentStreak > 0 ? '+' : ''}{stats.currentStreak}
-                </p>
+                  {stats.currentStreak >= 5 && ' 🔥'}
+                </motion.p>
               </div>
             </div>
           </div>
         )}
 
         {isLoading ? (
-          <div className="flex items-center justify-center py-12">
+          <motion.div
+            className="flex flex-col items-center justify-center py-12 gap-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-          </div>
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={loadingMessage}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="text-zinc-500 dark:text-zinc-400 text-sm"
+              >
+                {loadingMessage}
+              </motion.p>
+            </AnimatePresence>
+          </motion.div>
         ) : (
           <PaperPortfolioDashboard
             positions={positions}
@@ -217,6 +310,20 @@ export default function PortfolioPage() {
           />
         )}
       </main>
+
+      {/* Win Celebration Modal */}
+      <WinCelebration
+        data={celebration}
+        onClose={handleCloseCelebration}
+      />
+
+      {/* Achievement Toasts */}
+      {newAchievements.length > 0 && (
+        <AchievementQueue
+          achievements={newAchievements}
+          onClear={() => setNewAchievements([])}
+        />
+      )}
     </div>
   );
 }

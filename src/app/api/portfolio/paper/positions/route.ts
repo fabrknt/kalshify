@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getKalshiClient } from '@/lib/kalshi/client';
-import { recordTrade, createSnapshot, getOrCreateTraderStats } from '@/lib/kalshi/performance-tracker';
+import { recordTrade, createSnapshot, getOrCreateTraderStats, checkAchievements } from '@/lib/kalshi/performance-tracker';
 import { resolveUserId } from '@/lib/auth/visitor';
 import { prisma } from '@/lib/db';
 
@@ -292,8 +292,8 @@ export async function DELETE(request: NextRequest) {
       }
     }
 
-    // Run recordTrade and createSnapshot in parallel (fire-and-forget for speed)
-    Promise.all([
+    // Run recordTrade and createSnapshot, then get updated stats
+    await Promise.all([
       recordTrade(userId, realizedPnl),
       createSnapshot(userId, {
         portfolioValue,
@@ -305,9 +305,47 @@ export async function DELETE(request: NextRequest) {
         winCount,
         lossCount,
       }),
-    ]).catch(console.error);
+    ]);
 
-    return NextResponse.json({ position: closedPosition });
+    // Get updated stats for celebration data
+    const updatedStats = await getOrCreateTraderStats(userId);
+
+    // Calculate P&L percentage
+    const pnlPercent = position.entryPrice > 0
+      ? ((exitPrice - position.entryPrice) / position.entryPrice) * 100
+      : 0;
+
+    // Check for newly unlocked achievements
+    // The client passes previously unlocked achievement IDs in a header
+    const previouslyUnlockedHeader = request.headers.get('x-unlocked-achievements');
+    const previouslyUnlocked = previouslyUnlockedHeader
+      ? previouslyUnlockedHeader.split(',').filter(Boolean)
+      : [];
+
+    const newAchievements = await checkAchievements(userId, previouslyUnlocked);
+
+    return NextResponse.json({
+      position: closedPosition,
+      celebration: realizedPnl > 0 ? {
+        id: closedPosition.id,
+        marketTitle: closedPosition.marketTitle,
+        pnlCents: realizedPnl,
+        pnlPercent,
+        streak: updatedStats.currentStreak,
+        position: closedPosition.position,
+        quantity: closedPosition.quantity,
+        entryPrice: closedPosition.entryPrice,
+        exitPrice,
+      } : null,
+      newAchievements: newAchievements.map(a => ({
+        id: a.id,
+        name: a.name,
+        description: a.description,
+        icon: a.icon,
+        rarity: a.rarity,
+        message: a.message,
+      })),
+    });
   } catch (error) {
     console.error('Failed to close position:', error);
     return NextResponse.json(

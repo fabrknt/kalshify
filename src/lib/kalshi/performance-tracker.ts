@@ -7,6 +7,12 @@
  */
 
 import { prisma } from '@/lib/db';
+import {
+  Achievement,
+  ACHIEVEMENTS,
+  getNewlyUnlockedAchievements,
+  TraderProgress,
+} from '@/lib/achievements/definitions';
 
 export interface PerformanceSnapshot {
   id: string;
@@ -483,5 +489,63 @@ export async function getPerformanceSummary(userId: string): Promise<{
     snapshots,
     rank,
     percentile,
+  };
+}
+
+/**
+ * Check for newly unlocked achievements after a trade
+ */
+export async function checkAchievements(
+  userId: string,
+  previouslyUnlockedIds: string[] = []
+): Promise<Achievement[]> {
+  const stats = await getTraderStats(userId);
+  if (!stats) return [];
+
+  // Get user's rank
+  const leaderboard = await getLeaderboard('pnl', 100);
+  const rankEntry = leaderboard.find(e => e.visitorId === stats.visitorId);
+  const rank = rankEntry?.rank || null;
+
+  // Build progress object
+  const progress: TraderProgress = {
+    totalTrades: stats.totalTrades,
+    winCount: stats.winCount,
+    currentStreak: stats.currentStreak,
+    bestStreak: stats.bestStreak,
+    totalPnl: stats.totalPnl,
+    rank,
+    hasFirstTrade: stats.totalTrades >= 1,
+    hasFirstWin: stats.winCount >= 1,
+  };
+
+  // Get newly unlocked achievements
+  return getNewlyUnlockedAchievements(previouslyUnlockedIds, progress);
+}
+
+/**
+ * Get user's unlocked achievement IDs (stored in localStorage on client)
+ * This function is for getting progress data to check achievements
+ */
+export async function getTraderProgressForAchievements(
+  userId: string
+): Promise<TraderProgress | null> {
+  const stats = await getTraderStats(userId);
+  if (!stats) return null;
+
+  // Get user's rank
+  const leaderboard = await getLeaderboard('pnl', 100);
+  const rankEntry = leaderboard.find(e => e.visitorId === stats.visitorId);
+  const rank = rankEntry?.rank || null;
+
+  return {
+    totalTrades: stats.totalTrades,
+    winCount: stats.winCount,
+    currentStreak: stats.currentStreak,
+    bestStreak: stats.bestStreak,
+    totalPnl: stats.totalPnl,
+    rank,
+    hasFirstTrade: stats.totalTrades >= 1,
+    hasFirstWin: stats.winCount >= 1,
   };
 }

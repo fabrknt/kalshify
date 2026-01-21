@@ -1,6 +1,8 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import { format } from 'date-fns';
+import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -38,14 +40,46 @@ export function PaperPositionCard({
   const currentValue = position.currentPrice * position.quantity;
   const costBasis = position.entryPrice * position.quantity;
 
+  // Track price changes for flash effect
+  const prevPriceRef = useRef(position.currentPrice);
+  const [flash, setFlash] = useState<'up' | 'down' | null>(null);
+
+  useEffect(() => {
+    if (position.currentPrice !== prevPriceRef.current) {
+      setFlash(position.currentPrice > prevPriceRef.current ? 'up' : 'down');
+      prevPriceRef.current = position.currentPrice;
+      const timeout = setTimeout(() => setFlash(null), 600);
+      return () => clearTimeout(timeout);
+    }
+  }, [position.currentPrice]);
+
   return (
-    <div
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
       className={cn(
-        'bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4',
+        'bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 relative overflow-hidden',
         position.status === 'closed' && 'opacity-75',
         className
       )}
     >
+      {/* Flash overlay */}
+      <AnimatePresence>
+        {flash && (
+          <motion.div
+            initial={{ opacity: 0.4 }}
+            animate={{ opacity: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
+            className={cn(
+              'absolute inset-0 pointer-events-none',
+              flash === 'up' ? 'bg-green-500' : 'bg-red-500'
+            )}
+          />
+        )}
+      </AnimatePresence>
       {/* Header */}
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex-1 min-w-0">
@@ -142,7 +176,7 @@ export function PaperPositionCard({
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -156,8 +190,42 @@ export function PaperPositionRow({
   const isProfit = unrealizedPnl > 0;
   const isLoss = unrealizedPnl < 0;
 
+  // Track price changes for flash effect
+  const prevPriceRef = useRef(position.currentPrice);
+  const [flash, setFlash] = useState<'up' | 'down' | null>(null);
+
+  useEffect(() => {
+    if (position.currentPrice !== prevPriceRef.current) {
+      setFlash(position.currentPrice > prevPriceRef.current ? 'up' : 'down');
+      prevPriceRef.current = position.currentPrice;
+      const timeout = setTimeout(() => setFlash(null), 600);
+      return () => clearTimeout(timeout);
+    }
+  }, [position.currentPrice]);
+
   return (
-    <div className="flex items-center gap-4 p-3 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800">
+    <motion.div
+      layout
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      className="flex items-center gap-4 p-3 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 relative overflow-hidden"
+    >
+      {/* Flash overlay */}
+      <AnimatePresence>
+        {flash && (
+          <motion.div
+            initial={{ opacity: 0.3 }}
+            animate={{ opacity: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
+            className={cn(
+              'absolute inset-0 pointer-events-none',
+              flash === 'up' ? 'bg-green-500' : 'bg-red-500'
+            )}
+          />
+        )}
+      </AnimatePresence>
       <span
         className={cn(
           'w-12 text-center px-2 py-1 rounded text-xs font-bold uppercase',
@@ -195,14 +263,16 @@ export function PaperPositionRow({
       </div>
 
       {position.status === 'open' && onClose && (
-        <button
+        <motion.button
           onClick={() => onClose(position.id)}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           className="flex items-center gap-1 px-2.5 py-1.5 bg-amber-100 dark:bg-amber-900/30 hover:bg-amber-200 dark:hover:bg-amber-900/50 rounded-lg transition-colors text-amber-700 dark:text-amber-400 text-xs font-medium"
         >
           <DollarSign className="w-3.5 h-3.5" />
           Sell
-        </button>
+        </motion.button>
       )}
-    </div>
+    </motion.div>
   );
 }

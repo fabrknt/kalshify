@@ -1,6 +1,9 @@
+"use client"
+
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
+import { motion, HTMLMotionProps } from "framer-motion"
 
 import { cn } from "@/lib/utils"
 
@@ -37,20 +40,83 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
+  animated?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, animated = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
+
+    // Non-animated version for asChild or when animation is disabled
+    if (asChild || !animated) {
+      return (
+        <Comp
+          className={cn(buttonVariants({ variant, size, className }))}
+          ref={ref}
+          {...props}
+        />
+      )
+    }
+
+    // Animated version with micro-interactions
     return (
-      <Comp
+      <motion.button
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
-        {...props}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+        {...(props as HTMLMotionProps<"button">)}
       />
     )
   }
 )
 Button.displayName = "Button"
 
-export { Button, buttonVariants }
+// Animated button with success state
+interface AnimatedButtonProps extends ButtonProps {
+  isSuccess?: boolean
+  isLoading?: boolean
+  successText?: string
+}
+
+const AnimatedButton = React.forwardRef<HTMLButtonElement, AnimatedButtonProps>(
+  ({ children, isSuccess, isLoading, successText = "Done!", className, ...props }, ref) => {
+    return (
+      <motion.button
+        ref={ref}
+        className={cn(
+          buttonVariants({ variant: props.variant, size: props.size }),
+          isSuccess && "bg-green-600 hover:bg-green-600",
+          className
+        )}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+        disabled={props.disabled || isLoading}
+        {...(props as HTMLMotionProps<"button">)}
+      >
+        {isLoading ? (
+          <motion.div
+            className="h-4 w-4 border-2 border-current border-t-transparent rounded-full"
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          />
+        ) : isSuccess ? (
+          <motion.span
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
+            {successText}
+          </motion.span>
+        ) : (
+          children
+        )}
+      </motion.button>
+    )
+  }
+)
+AnimatedButton.displayName = "AnimatedButton"
+
+export { Button, AnimatedButton, buttonVariants }
