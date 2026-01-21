@@ -2,12 +2,15 @@
  * Performance Tracker for Paper Trading
  * Tracks historical performance of paper trading portfolios
  * with leaderboard support for gamification
+ *
+ * Uses Prisma for persistent storage
  */
 
-// In-memory stores (demo mode - would use database in production)
+import { prisma } from '@/lib/db';
+
 export interface PerformanceSnapshot {
   id: string;
-visitorId: string;
+  visitorId: string;
   date: Date;
   portfolioValue: number;
   totalCost: number;
@@ -45,21 +48,11 @@ export interface LeaderboardEntry {
   trend: 'up' | 'down' | 'stable';
 }
 
-// In-memory stores
-const snapshots: Map<string, PerformanceSnapshot[]> = new Map();
-const traderStats: Map<string, TraderStats> = new Map();
-
-// Generate unique ID
-function generateId(): string {
-  return `snap_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-}
-
 // Generate display name from visitor ID
 function generateDisplayName(visitorId: string): string {
   const adjectives = ['Swift', 'Bold', 'Wise', 'Lucky', 'Sharp', 'Keen', 'Quick', 'Smart'];
   const nouns = ['Trader', 'Prophet', 'Oracle', 'Analyst', 'Predictor', 'Sage', 'Maven', 'Guru'];
 
-  // Use visitor ID to deterministically pick words
   const hash = visitorId.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
   const adj = adjectives[hash % adjectives.length];
   const noun = nouns[(hash * 7) % nouns.length];
@@ -69,10 +62,10 @@ function generateDisplayName(visitorId: string): string {
 }
 
 /**
- * Create a performance snapshot for a visitor
+ * Create a performance snapshot for a user
  */
-export function createSnapshot(
-  visitorId: string,
+export async function createSnapshot(
+  userId: string,
   portfolioData: {
     portfolioValue: number;
     totalCost: number;
@@ -83,30 +76,47 @@ export function createSnapshot(
     winCount: number;
     lossCount: number;
   }
-): PerformanceSnapshot {
-  const snapshot: PerformanceSnapshot = {
-    id: generateId(),
-    visitorId,
-    date: new Date(),
-    ...portfolioData,
-  };
-
-  // Get or create visitor's snapshot array
-  const visitorSnapshots = snapshots.get(visitorId) || [];
-  visitorSnapshots.push(snapshot);
-  snapshots.set(visitorId, visitorSnapshots);
+): Promise<PerformanceSnapshot> {
+  const snapshot = await prisma.portfolioSnapshot.create({
+    data: {
+      userId,
+      totalValue: portfolioData.portfolioValue,
+      totalCost: portfolioData.totalCost,
+      unrealizedPnl: portfolioData.unrealizedPnl,
+      realizedPnl: portfolioData.realizedPnl,
+      openPositions: portfolioData.openPositions,
+      closedPositions: portfolioData.closedPositions,
+      winCount: portfolioData.winCount,
+      lossCount: portfolioData.lossCount,
+    },
+    include: {
+      user: true,
+    },
+  });
 
   // Update trader stats
-  updateTraderStats(visitorId, portfolioData);
+  await updateTraderStats(userId, portfolioData);
 
-  return snapshot;
+  return {
+    id: snapshot.id,
+    visitorId: snapshot.user.visitorId || snapshot.userId,
+    date: snapshot.snapshotAt,
+    portfolioValue: snapshot.totalValue,
+    totalCost: snapshot.totalCost,
+    unrealizedPnl: snapshot.unrealizedPnl,
+    realizedPnl: snapshot.realizedPnl,
+    openPositions: snapshot.openPositions,
+    closedPositions: snapshot.closedPositions,
+    winCount: snapshot.winCount,
+    lossCount: snapshot.lossCount,
+  };
 }
 
 /**
  * Update trader statistics
  */
-function updateTraderStats(
-  visitorId: string,
+async function updateTraderStats(
+  userId: string,
   data: {
     realizedPnl: number;
     winCount: number;
@@ -114,13 +124,15 @@ function updateTraderStats(
     openPositions: number;
     closedPositions: number;
   }
-): void {
-  const existing = traderStats.get(visitorId);
+): Promise<void> {
+  const existing = await prisma.traderStats.findUnique({
+    where: { userId },
+  });
+
   const now = new Date();
+  const totalTrades = data.winCount + data.lossCount;
 
   if (existing) {
-    // Update existing stats
-    const totalTrades = data.winCount + data.lossCount;
     const newWins = data.winCount - existing.winCount;
     const newLosses = data.lossCount - existing.lossCount;
 
@@ -131,35 +143,45 @@ function updateTraderStats(
     } else if (newLosses > 0 && newWins === 0) {
       currentStreak = Math.min(0, currentStreak) - newLosses;
     } else if (newWins > 0 && newLosses > 0) {
-      // Mixed results - reset streak
       currentStreak = newWins > newLosses ? newWins : -newLosses;
     }
 
-    traderStats.set(visitorId, {
-      ...existing,
-      totalTrades,
-      winCount: data.winCount,
-      lossCount: data.lossCount,
-      totalPnl: data.realizedPnl,
-      currentStreak,
-      bestStreak: Math.max(existing.bestStreak, currentStreak),
-      lastActiveAt: now,
+    await prisma.traderStats.update({
+      where: { userId },
+      data: {
+        totalTrades,
+        winCount: data.winCount,
+        lossCount: data.lossCount,
+        totalPnl: data.realizedPnl,
+        currentStreak,
+        bestStreak: Math.max(existing.bestStreak, currentStreak),
+        lastActiveAt: now,
+      },
     });
   } else {
-    // Create new trader stats
-    traderStats.set(visitorId, {
-      visitorId,
-      displayName: generateDisplayName(visitorId),
-      totalTrades: data.winCount + data.lossCount,
-      winCount: data.winCount,
-      lossCount: data.lossCount,
-      totalPnl: data.realizedPnl,
-      bestTrade: 0,
-      worstTrade: 0,
-      currentStreak: data.winCount > 0 ? data.winCount : (data.lossCount > 0 ? -data.lossCount : 0),
-      bestStreak: data.winCount,
-      joinedAt: now,
-      lastActiveAt: now,
+    // Get user's display name
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { displayName: true, visitorId: true },
+    });
+
+    const displayName = user?.displayName || generateDisplayName(user?.visitorId || userId);
+
+    await prisma.traderStats.create({
+      data: {
+        userId,
+        displayName,
+        totalTrades,
+        winCount: data.winCount,
+        lossCount: data.lossCount,
+        totalPnl: data.realizedPnl,
+        bestTrade: 0,
+        worstTrade: 0,
+        currentStreak: data.winCount > 0 ? data.winCount : (data.lossCount > 0 ? -data.lossCount : 0),
+        bestStreak: data.winCount,
+        joinedAt: now,
+        lastActiveAt: now,
+      },
     });
   }
 }
@@ -167,133 +189,202 @@ function updateTraderStats(
 /**
  * Record a completed trade for stats tracking
  */
-export function recordTrade(
-  visitorId: string,
+export async function recordTrade(
+  userId: string,
   pnl: number
-): void {
-  const stats = traderStats.get(visitorId);
+): Promise<void> {
+  const stats = await prisma.traderStats.findUnique({
+    where: { userId },
+  });
+
   if (!stats) return;
 
   const isWin = pnl > 0;
+  const newBestTrade = pnl > stats.bestTrade ? pnl : stats.bestTrade;
+  const newWorstTrade = pnl < stats.worstTrade ? pnl : stats.worstTrade;
 
-  // Update best/worst trades
-  if (pnl > stats.bestTrade) {
-    stats.bestTrade = pnl;
-  }
-  if (pnl < stats.worstTrade) {
-    stats.worstTrade = pnl;
-  }
-
-  // Update streak
+  let newStreak = stats.currentStreak;
   if (isWin) {
-    stats.currentStreak = Math.max(0, stats.currentStreak) + 1;
+    newStreak = Math.max(0, newStreak) + 1;
   } else {
-    stats.currentStreak = Math.min(0, stats.currentStreak) - 1;
+    newStreak = Math.min(0, newStreak) - 1;
   }
-  stats.bestStreak = Math.max(stats.bestStreak, stats.currentStreak);
 
-  // Update counts
-  if (isWin) {
-    stats.winCount++;
-  } else {
-    stats.lossCount++;
-  }
-  stats.totalTrades++;
-  stats.totalPnl += pnl;
-  stats.lastActiveAt = new Date();
-
-  traderStats.set(visitorId, stats);
+  await prisma.traderStats.update({
+    where: { userId },
+    data: {
+      bestTrade: newBestTrade,
+      worstTrade: newWorstTrade,
+      currentStreak: newStreak,
+      bestStreak: Math.max(stats.bestStreak, newStreak),
+      winCount: isWin ? stats.winCount + 1 : stats.winCount,
+      lossCount: isWin ? stats.lossCount : stats.lossCount + 1,
+      totalTrades: stats.totalTrades + 1,
+      totalPnl: stats.totalPnl + pnl,
+      lastActiveAt: new Date(),
+    },
+  });
 }
 
 /**
- * Get snapshots for a visitor
+ * Get snapshots for a user
  */
-export function getSnapshots(
-  visitorId: string,
+export async function getSnapshots(
+  userId: string,
   limit: number = 30
-): PerformanceSnapshot[] {
-  const visitorSnapshots = snapshots.get(visitorId) || [];
-  return visitorSnapshots.slice(-limit);
+): Promise<PerformanceSnapshot[]> {
+  const snapshots = await prisma.portfolioSnapshot.findMany({
+    where: { userId },
+    orderBy: { snapshotAt: 'desc' },
+    take: limit,
+    include: { user: true },
+  });
+
+  return snapshots.reverse().map((s) => ({
+    id: s.id,
+    visitorId: s.user.visitorId || s.userId,
+    date: s.snapshotAt,
+    portfolioValue: s.totalValue,
+    totalCost: s.totalCost,
+    unrealizedPnl: s.unrealizedPnl,
+    realizedPnl: s.realizedPnl,
+    openPositions: s.openPositions,
+    closedPositions: s.closedPositions,
+    winCount: s.winCount,
+    lossCount: s.lossCount,
+  }));
 }
 
 /**
  * Get trader stats
  */
-export function getTraderStats(visitorId: string): TraderStats | null {
-  return traderStats.get(visitorId) || null;
+export async function getTraderStats(userId: string): Promise<TraderStats | null> {
+  const stats = await prisma.traderStats.findUnique({
+    where: { userId },
+    include: { user: true },
+  });
+
+  if (!stats) return null;
+
+  return {
+    visitorId: stats.user.visitorId || stats.userId,
+    displayName: stats.displayName,
+    totalTrades: stats.totalTrades,
+    winCount: stats.winCount,
+    lossCount: stats.lossCount,
+    totalPnl: stats.totalPnl,
+    bestTrade: stats.bestTrade,
+    worstTrade: stats.worstTrade,
+    currentStreak: stats.currentStreak,
+    bestStreak: stats.bestStreak,
+    joinedAt: stats.joinedAt,
+    lastActiveAt: stats.lastActiveAt,
+  };
 }
 
 /**
  * Get or create trader stats
  */
-export function getOrCreateTraderStats(visitorId: string): TraderStats {
-  let stats = traderStats.get(visitorId);
+export async function getOrCreateTraderStats(userId: string): Promise<TraderStats> {
+  let stats = await prisma.traderStats.findUnique({
+    where: { userId },
+    include: { user: true },
+  });
+
   if (!stats) {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { displayName: true, visitorId: true },
+    });
+
+    const displayName = user?.displayName || generateDisplayName(user?.visitorId || userId);
     const now = new Date();
-    stats = {
-      visitorId,
-      displayName: generateDisplayName(visitorId),
-      totalTrades: 0,
-      winCount: 0,
-      lossCount: 0,
-      totalPnl: 0,
-      bestTrade: 0,
-      worstTrade: 0,
-      currentStreak: 0,
-      bestStreak: 0,
-      joinedAt: now,
-      lastActiveAt: now,
-    };
-    traderStats.set(visitorId, stats);
+
+    stats = await prisma.traderStats.create({
+      data: {
+        userId,
+        displayName,
+        totalTrades: 0,
+        winCount: 0,
+        lossCount: 0,
+        totalPnl: 0,
+        bestTrade: 0,
+        worstTrade: 0,
+        currentStreak: 0,
+        bestStreak: 0,
+        joinedAt: now,
+        lastActiveAt: now,
+      },
+      include: { user: true },
+    });
   }
-  return stats;
+
+  return {
+    visitorId: stats.user.visitorId || stats.userId,
+    displayName: stats.displayName,
+    totalTrades: stats.totalTrades,
+    winCount: stats.winCount,
+    lossCount: stats.lossCount,
+    totalPnl: stats.totalPnl,
+    bestTrade: stats.bestTrade,
+    worstTrade: stats.worstTrade,
+    currentStreak: stats.currentStreak,
+    bestStreak: stats.bestStreak,
+    joinedAt: stats.joinedAt,
+    lastActiveAt: stats.lastActiveAt,
+  };
 }
 
 /**
- * Get leaderboard sorted by total P&L
+ * Get leaderboard sorted by specified metric
  */
-export function getLeaderboard(
+export async function getLeaderboard(
   sortBy: 'pnl' | 'winRate' | 'trades' | 'streak' = 'pnl',
   limit: number = 50
-): LeaderboardEntry[] {
-  const allTraders = Array.from(traderStats.values());
+): Promise<LeaderboardEntry[]> {
+  // Build orderBy clause based on sortBy
+  let orderBy: any = { totalPnl: 'desc' };
+  if (sortBy === 'trades') {
+    orderBy = { totalTrades: 'desc' };
+  } else if (sortBy === 'streak') {
+    orderBy = { bestStreak: 'desc' };
+  }
+  // For winRate, we'll sort in memory after fetching
 
-  // Sort by specified metric
-  const sorted = allTraders.sort((a, b) => {
-    switch (sortBy) {
-      case 'pnl':
-        return b.totalPnl - a.totalPnl;
-      case 'winRate':
-        const aWinRate = a.totalTrades > 0 ? a.winCount / a.totalTrades : 0;
-        const bWinRate = b.totalTrades > 0 ? b.winCount / b.totalTrades : 0;
-        return bWinRate - aWinRate;
-      case 'trades':
-        return b.totalTrades - a.totalTrades;
-      case 'streak':
-        return b.bestStreak - a.bestStreak;
-      default:
-        return b.totalPnl - a.totalPnl;
-    }
+  const allStats = await prisma.traderStats.findMany({
+    orderBy,
+    take: sortBy === 'winRate' ? 1000 : limit,
+    include: { user: true },
   });
 
-  return sorted.slice(0, limit).map((trader, index) => {
-    const winRate = trader.totalTrades > 0
-      ? (trader.winCount / trader.totalTrades) * 100
+  let sorted = allStats;
+
+  // Sort by win rate in memory if needed
+  if (sortBy === 'winRate') {
+    sorted = allStats.sort((a, b) => {
+      const aWinRate = a.totalTrades > 0 ? a.winCount / a.totalTrades : 0;
+      const bWinRate = b.totalTrades > 0 ? b.winCount / b.totalTrades : 0;
+      return bWinRate - aWinRate;
+    }).slice(0, limit);
+  }
+
+  return sorted.map((stats, index) => {
+    const winRate = stats.totalTrades > 0
+      ? (stats.winCount / stats.totalTrades) * 100
       : 0;
 
-    // Determine trend based on recent activity
     let trend: 'up' | 'down' | 'stable' = 'stable';
-    if (trader.currentStreak > 2) trend = 'up';
-    else if (trader.currentStreak < -2) trend = 'down';
+    if (stats.currentStreak > 2) trend = 'up';
+    else if (stats.currentStreak < -2) trend = 'down';
 
     return {
       rank: index + 1,
-      visitorId: trader.visitorId,
-      displayName: trader.displayName,
-      totalPnl: trader.totalPnl,
+      visitorId: stats.user.visitorId || stats.userId,
+      displayName: stats.displayName,
+      totalPnl: stats.totalPnl,
       winRate: Math.round(winRate * 10) / 10,
-      totalTrades: trader.totalTrades,
-      streak: trader.currentStreak,
+      totalTrades: stats.totalTrades,
+      streak: stats.currentStreak,
       trend,
     };
   });
@@ -302,7 +393,7 @@ export function getLeaderboard(
 /**
  * Seed demo leaderboard data
  */
-export function seedDemoLeaderboard(): void {
+export async function seedDemoLeaderboard(): Promise<void> {
   const demoTraders = [
     { pnl: 4523, wins: 28, losses: 12, streak: 5 },
     { pnl: 3891, wins: 35, losses: 20, streak: 3 },
@@ -316,47 +407,71 @@ export function seedDemoLeaderboard(): void {
     { pnl: -523, wins: 8, losses: 14, streak: -4 },
   ];
 
-  demoTraders.forEach((trader, i) => {
+  const now = new Date();
+
+  for (let i = 0; i < demoTraders.length; i++) {
+    const trader = demoTraders[i];
     const visitorId = `demo_${i}_${Date.now()}`;
-    const now = new Date();
+    const displayName = generateDisplayName(visitorId);
     const joinedAt = new Date(now.getTime() - Math.random() * 30 * 24 * 60 * 60 * 1000);
 
-    traderStats.set(visitorId, {
-      visitorId,
-      displayName: generateDisplayName(visitorId),
-      totalTrades: trader.wins + trader.losses,
-      winCount: trader.wins,
-      lossCount: trader.losses,
-      totalPnl: trader.pnl,
-      bestTrade: Math.abs(trader.pnl) * 0.3,
-      worstTrade: -Math.abs(trader.pnl) * 0.1,
-      currentStreak: trader.streak,
-      bestStreak: Math.max(trader.streak, 5),
-      joinedAt,
-      lastActiveAt: now,
+    // Create demo user
+    const user = await prisma.user.create({
+      data: {
+        visitorId,
+        displayName,
+        isDemo: true,
+      },
     });
-  });
+
+    // Create trader stats
+    await prisma.traderStats.create({
+      data: {
+        userId: user.id,
+        displayName,
+        totalTrades: trader.wins + trader.losses,
+        winCount: trader.wins,
+        lossCount: trader.losses,
+        totalPnl: trader.pnl,
+        bestTrade: Math.abs(trader.pnl) * 0.3,
+        worstTrade: -Math.abs(trader.pnl) * 0.1,
+        currentStreak: trader.streak,
+        bestStreak: Math.max(trader.streak, 5),
+        joinedAt,
+        lastActiveAt: now,
+      },
+    });
+  }
 }
 
 /**
- * Get performance summary for a visitor
+ * Check if demo data has already been seeded
  */
-export function getPerformanceSummary(visitorId: string): {
+export async function isDemoSeeded(): Promise<boolean> {
+  const count = await prisma.user.count({
+    where: { isDemo: true },
+  });
+  return count > 0;
+}
+
+/**
+ * Get performance summary for a user
+ */
+export async function getPerformanceSummary(userId: string): Promise<{
   stats: TraderStats | null;
   snapshots: PerformanceSnapshot[];
   rank: number | null;
   percentile: number | null;
-} {
-  const stats = traderStats.get(visitorId) || null;
-  const visitorSnapshots = snapshots.get(visitorId) || [];
+}> {
+  const stats = await getTraderStats(userId);
+  const snapshots = await getSnapshots(userId, 30);
 
-  // Calculate rank
   let rank: number | null = null;
   let percentile: number | null = null;
 
   if (stats) {
-    const leaderboard = getLeaderboard('pnl', 1000);
-    const entry = leaderboard.find(e => e.visitorId === visitorId);
+    const leaderboard = await getLeaderboard('pnl', 1000);
+    const entry = leaderboard.find(e => e.visitorId === (stats.visitorId));
     if (entry) {
       rank = entry.rank;
       percentile = Math.round((1 - (rank - 1) / leaderboard.length) * 100);
@@ -365,7 +480,7 @@ export function getPerformanceSummary(visitorId: string): {
 
   return {
     stats,
-    snapshots: visitorSnapshots.slice(-30),
+    snapshots,
     rank,
     percentile,
   };

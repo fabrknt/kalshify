@@ -22,6 +22,10 @@ model User {
   // Web3 wallet (for Solana/DFlow integration)
   walletAddress   String?  @unique
 
+  // Anonymous visitor tracking
+  visitorId       String?  @unique
+  isDemo          Boolean  @default(false)
+
   // Profile fields
   displayName     String?
   bio             String?
@@ -40,9 +44,11 @@ model User {
   predictionPreferences UserPredictionPreferences?
   paperPositions      PaperPosition[]
   portfolioSnapshots  PortfolioSnapshot[]
+  traderStats         TraderStats?
 
   @@index([walletAddress])
   @@index([email])
+  @@index([visitorId])
 }
 
 // NextAuth models
@@ -166,6 +172,8 @@ model PaperPosition {
   position        String   // "yes" | "no"
   quantity        Int      // Number of contracts
   entryPrice      Float    // Entry price (0-100 cents)
+  simulatedPrice  Float?   // Simulated price for simulation mode
+  currentPrice    Float?   // Current market price
 
   // Status
   status          String   @default("open") // "open" | "closed"
@@ -198,8 +206,11 @@ model PortfolioSnapshot {
   unrealizedPnl   Float    // Current unrealized P&L
   realizedPnl     Float    // Cumulative realized P&L
 
-  // Position count
+  // Position counts
   openPositions   Int      // Number of open positions
+  closedPositions Int      @default(0) // Number of closed positions
+  winCount        Int      @default(0) // Number of winning trades
+  lossCount       Int      @default(0) // Number of losing trades
 
   // Timestamp
   snapshotAt      DateTime @default(now())
@@ -247,4 +258,38 @@ model BuilderCodeMetrics {
 
   @@unique([date])
   @@index([date])
+}
+
+// Trader Stats - Leaderboard and performance tracking
+model TraderStats {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+
+  // Display info
+  displayName     String
+
+  // Trade counts
+  totalTrades     Int      @default(0)
+  winCount        Int      @default(0)
+  lossCount       Int      @default(0)
+
+  // P&L tracking
+  totalPnl        Float    @default(0)
+  bestTrade       Float    @default(0)
+  worstTrade      Float    @default(0)
+
+  // Streak tracking
+  currentStreak   Int      @default(0)
+  bestStreak      Int      @default(0)
+
+  // Timestamps
+  joinedAt        DateTime @default(now())
+  lastActiveAt    DateTime @default(now())
+
+  // Relations
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([totalPnl])
+  @@index([winCount])
 }

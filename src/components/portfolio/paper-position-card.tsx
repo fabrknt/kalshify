@@ -1,7 +1,7 @@
 'use client';
 
 import { format } from 'date-fns';
-import { TrendingUp, TrendingDown, X } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface PaperPositionData {
@@ -72,10 +72,10 @@ export function PaperPositionCard({
         {position.status === 'open' && onClose && (
           <button
             onClick={() => onClose(position.id)}
-            className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors text-zinc-400 hover:text-zinc-600"
-            title="Close position"
+            className="flex items-center gap-1 px-2.5 py-1.5 bg-amber-100 dark:bg-amber-900/30 hover:bg-amber-200 dark:hover:bg-amber-900/50 rounded-lg transition-colors text-amber-700 dark:text-amber-400 text-xs font-medium"
           >
-            <X className="w-4 h-4" />
+            <DollarSign className="w-3.5 h-3.5" />
+            Sell
           </button>
         )}
       </div>
@@ -197,9 +197,10 @@ export function PaperPositionRow({
       {position.status === 'open' && onClose && (
         <button
           onClick={() => onClose(position.id)}
-          className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded transition-colors text-zinc-400 hover:text-zinc-600"
+          className="flex items-center gap-1 px-2.5 py-1.5 bg-amber-100 dark:bg-amber-900/30 hover:bg-amber-200 dark:hover:bg-amber-900/50 rounded-lg transition-colors text-amber-700 dark:text-amber-400 text-xs font-medium"
         >
-          <X className="w-4 h-4" />
+          <DollarSign className="w-3.5 h-3.5" />
+          Sell
         </button>
       )}
     </div>

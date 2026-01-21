@@ -7,29 +7,31 @@ import {
   getOrCreateTraderStats,
   recordTrade,
 } from '@/lib/kalshi/performance-tracker';
-
-// Demo visitor ID for unauthenticated users
-const DEMO_VISITOR_ID = 'demo_visitor_001';
-
-// Get visitor ID from cookies or use demo
-function getVisitorId(request: NextRequest): string {
-  const visitorId = request.cookies.get('visitor_id')?.value;
-  return visitorId || DEMO_VISITOR_ID;
-}
+import { resolveUserId } from '@/lib/auth/visitor';
 
 // GET - Fetch performance snapshots and stats
 export async function GET(request: NextRequest) {
   try {
-    const visitorId = getVisitorId(request);
+    const userId = await resolveUserId();
+    if (!userId) {
+      return NextResponse.json({
+        visitorId: null,
+        snapshots: [],
+        stats: null,
+        rank: null,
+        percentile: null,
+      });
+    }
+
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get('limit') || '30');
     const includeStats = searchParams.get('stats') !== 'false';
 
-    const snapshotData = getSnapshots(visitorId, limit);
-    const summary = includeStats ? getPerformanceSummary(visitorId) : null;
+    const snapshotData = await getSnapshots(userId, limit);
+    const summary = includeStats ? await getPerformanceSummary(userId) : null;
 
     return NextResponse.json({
-      visitorId,
+      visitorId: summary?.stats?.visitorId || userId,
       snapshots: snapshotData,
       stats: summary?.stats || null,
       rank: summary?.rank || null,
@@ -47,7 +49,14 @@ export async function GET(request: NextRequest) {
 // POST - Create a new performance snapshot
 export async function POST(request: NextRequest) {
   try {
-    const visitorId = getVisitorId(request);
+    const userId = await resolveUserId();
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'User identification required' },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
 
     const {
@@ -69,7 +78,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const snapshot = createSnapshot(visitorId, {
+    const snapshot = await createSnapshot(userId, {
       portfolioValue: portfolioValue || 0,
       totalCost: totalCost || 0,
       unrealizedPnl: unrealizedPnl || 0,
@@ -93,7 +102,14 @@ export async function POST(request: NextRequest) {
 // PATCH - Record a trade or update stats
 export async function PATCH(request: NextRequest) {
   try {
-    const visitorId = getVisitorId(request);
+    const userId = await resolveUserId();
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'User identification required' },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const { action, pnl } = body;
 
@@ -105,12 +121,12 @@ export async function PATCH(request: NextRequest) {
             { status: 400 }
           );
         }
-        recordTrade(visitorId, pnl);
-        const stats = getTraderStats(visitorId);
+        await recordTrade(userId, pnl);
+        const stats = await getTraderStats(userId);
         return NextResponse.json({ success: true, stats });
 
       case 'get_or_create_stats':
-        const traderStats = getOrCreateTraderStats(visitorId);
+        const traderStats = await getOrCreateTraderStats(userId);
         return NextResponse.json({ stats: traderStats });
 
       default:

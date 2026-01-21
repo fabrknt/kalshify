@@ -89,7 +89,7 @@ export default function ForYouPage() {
                 href="/for-you"
                 className="text-sm font-medium text-blue-600 dark:text-blue-400"
               >
-                For You
+                AI Picks
               </Link>
             </div>
           </div>
@@ -104,7 +104,7 @@ export default function ForYouPage() {
             AI-Powered Recommendations
           </div>
           <h1 className="text-3xl font-bold text-zinc-900 dark:text-white mb-2">
-            Markets For You
+            AI Market Picks
           </h1>
           <p className="text-zinc-600 dark:text-zinc-400">
             Get personalized market recommendations based on your preferences

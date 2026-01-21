@@ -3,25 +3,15 @@ import {
   getLeaderboard,
   seedDemoLeaderboard,
   getPerformanceSummary,
+  isDemoSeeded,
   LeaderboardEntry,
 } from '@/lib/kalshi/performance-tracker';
-
-// Track if demo data has been seeded
-let demoSeeded = false;
-
-// Demo visitor ID for unauthenticated users
-const DEMO_VISITOR_ID = 'demo_visitor_001';
-
-// Get visitor ID from cookies or use demo
-function getVisitorId(request: NextRequest): string {
-  const visitorId = request.cookies.get('visitor_id')?.value;
-  return visitorId || DEMO_VISITOR_ID;
-}
+import { resolveUserId } from '@/lib/auth/visitor';
 
 // GET - Fetch leaderboard
 export async function GET(request: NextRequest) {
   try {
-    const visitorId = getVisitorId(request);
+    const userId = await resolveUserId();
     const { searchParams } = new URL(request.url);
 
     const sortBy = (searchParams.get('sortBy') || 'pnl') as 'pnl' | 'winRate' | 'trades' | 'streak';
@@ -29,21 +19,21 @@ export async function GET(request: NextRequest) {
     const includeUserRank = searchParams.get('includeUserRank') !== 'false';
 
     // Seed demo data if empty
-    if (!demoSeeded) {
-      seedDemoLeaderboard();
-      demoSeeded = true;
+    const seeded = await isDemoSeeded();
+    if (!seeded) {
+      await seedDemoLeaderboard();
     }
 
-    const leaderboard = getLeaderboard(sortBy, limit);
+    const leaderboard = await getLeaderboard(sortBy, limit);
 
     // Get current user's rank if requested
     let userRank: LeaderboardEntry | null = null;
     let userPercentile: number | null = null;
 
-    if (includeUserRank) {
-      const summary = getPerformanceSummary(visitorId);
+    if (includeUserRank && userId) {
+      const summary = await getPerformanceSummary(userId);
       if (summary.rank) {
-        userRank = leaderboard.find(e => e.visitorId === visitorId) || null;
+        userRank = leaderboard.find(e => e.visitorId === summary.stats?.visitorId) || null;
         userPercentile = summary.percentile;
 
         // If user not in top results, add them separately
@@ -87,8 +77,14 @@ export async function POST(request: NextRequest) {
 
     switch (action) {
       case 'seed_demo':
-        seedDemoLeaderboard();
-        demoSeeded = true;
+        const alreadySeeded = await isDemoSeeded();
+        if (alreadySeeded) {
+          return NextResponse.json({
+            success: false,
+            message: 'Demo data already seeded',
+          });
+        }
+        await seedDemoLeaderboard();
         return NextResponse.json({
           success: true,
           message: 'Demo leaderboard data seeded',
@@ -96,7 +92,7 @@ export async function POST(request: NextRequest) {
 
       case 'refresh':
         // Force refresh leaderboard
-        const leaderboard = getLeaderboard('pnl', 50);
+        const leaderboard = await getLeaderboard('pnl', 50);
         return NextResponse.json({
           success: true,
           leaderboard,
