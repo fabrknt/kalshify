@@ -277,6 +277,115 @@ export function detectWhaleActivity(
   return signals;
 }
 
+// Check if market is a multi-leg parlay (has many comma-separated outcomes in title)
+function isMultiLegParlay(title: string): boolean {
+  // Multi-leg parlays typically have multiple comma-separated "yes/no" outcomes
+  const commaCount = (title.match(/,/g) || []).length;
+  // Only filter extreme parlays (5+ legs) to avoid filtering useful 2-3 leg combinations
+  return commaCount >= 5 && (title.toLowerCase().includes('yes ') || title.toLowerCase().includes('no '));
+}
+
+// Detect trending/notable markets based on absolute metrics (no historical data needed)
+export function detectTrendingMarkets(
+  currentMarkets: MarketWithSnapshot[]
+): IntelSignalData[] {
+  const signals: IntelSignalData[] = [];
+
+  // Filter out extreme multi-leg parlays and markets with 0 probability (likely settled)
+  const validMarkets = currentMarkets.filter(m =>
+    !isMultiLegParlay(m.title) &&
+    m.yesAsk > 0 // Must have valid ask price
+  );
+
+  // Sort markets by volume to find top performers
+  const sortedByVolume = [...validMarkets].sort((a, b) => b.volume24h - a.volume24h);
+
+  // Top 5 by volume get highlighted
+  for (let i = 0; i < Math.min(5, sortedByVolume.length); i++) {
+    const market = sortedByVolume[i];
+    // Only report if volume is substantial (>$500)
+    if (market.volume24h > 50000) { // 50000 cents = $500
+      signals.push({
+        type: 'VOLUME_SPIKE',
+        severity: i === 0 ? 'HIGH' : 'MEDIUM',
+        ticker: market.ticker,
+        marketTitle: market.title,
+        title: i === 0 ? 'HIGHEST VOLUME MARKET' : 'HIGH VOLUME MARKET',
+        description: `${market.title} - 24h Volume: ${formatCurrency(market.volume24h)} | Yes: ${market.yesBid}¢/${market.yesAsk}¢`,
+        data: {
+          rank: i + 1,
+          volume24h: market.volume24h,
+          yesBid: market.yesBid,
+          yesAsk: market.yesAsk,
+        },
+        sourceType: 'SYSTEM',
+      });
+    }
+  }
+
+  // Detect markets with extreme probabilities (>90% or <10%)
+  // Skip 0% and 100% as those are likely settled/invalid
+  for (const market of validMarkets) {
+    const probability = market.yesAsk;
+
+    if (probability >= 90 && probability < 100) {
+      signals.push({
+        type: 'PRICE_MOVE',
+        severity: probability >= 95 ? 'HIGH' : 'MEDIUM',
+        ticker: market.ticker,
+        marketTitle: market.title,
+        title: 'NEAR CERTAINTY',
+        description: `${market.title} - Trading at ${probability}% YES | Market expects YES outcome`,
+        data: {
+          probability,
+          yesBid: market.yesBid,
+          yesAsk: market.yesAsk,
+        },
+        sourceType: 'SYSTEM',
+      });
+    } else if (probability <= 10 && probability > 0) {
+      signals.push({
+        type: 'PRICE_MOVE',
+        severity: probability <= 5 ? 'HIGH' : 'MEDIUM',
+        ticker: market.ticker,
+        marketTitle: market.title,
+        title: 'NEAR CERTAINTY (NO)',
+        description: `${market.title} - Trading at ${probability}% YES | Market expects NO outcome`,
+        data: {
+          probability,
+          yesBid: market.yesBid,
+          yesAsk: market.yesAsk,
+        },
+        sourceType: 'SYSTEM',
+      });
+    }
+  }
+
+  // Detect markets with very wide spreads (>10 cents) - liquidity concern
+  for (const market of validMarkets) {
+    const spread = market.yesAsk - market.yesBid;
+    if (spread >= 10 && market.volume24h > 50000) { // Only flag if it has some volume
+      signals.push({
+        type: 'SPREAD_CHANGE',
+        severity: spread >= 15 ? 'MEDIUM' : 'LOW',
+        ticker: market.ticker,
+        marketTitle: market.title,
+        title: 'WIDE SPREAD ALERT',
+        description: `${market.title} - Spread: ${spread}¢ | Low liquidity, trade with caution`,
+        data: {
+          spread,
+          yesBid: market.yesBid,
+          yesAsk: market.yesAsk,
+          volume24h: market.volume24h,
+        },
+        sourceType: 'SYSTEM',
+      });
+    }
+  }
+
+  return signals;
+}
+
 export function runDetection(
   currentMarkets: MarketWithSnapshot[],
   previousSnapshots: MarketSnapshot[],

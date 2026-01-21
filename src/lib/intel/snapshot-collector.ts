@@ -12,16 +12,8 @@ export async function collectMarketSnapshots(limit: number = 100): Promise<{
 }> {
   const client = getKalshiClient();
 
-  // Fetch top markets by volume
-  const response = await client.getMarkets({
-    limit,
-    status: 'open',
-  });
-
-  // Sort by volume and take top markets
-  const topMarkets = response.markets
-    .sort((a, b) => b.volume_24h - a.volume_24h)
-    .slice(0, limit);
+  // Fetch top markets by volume (using events endpoint for real data)
+  const topMarkets = await client.getActiveMarketsFromEvents(limit);
 
   const snapshots: MarketSnapshotData[] = topMarkets.map((market) => ({
     ticker: market.ticker,
@@ -60,13 +52,26 @@ export async function collectMarketSnapshots(limit: number = 100): Promise<{
 
 export async function getPreviousSnapshots(
   minutesAgo: number = TIME_WINDOWS.VOLUME_COMPARISON
-) {
+): Promise<{ snapshots: Array<{
+  id: string;
+  ticker: string;
+  recordedAt: Date;
+  yesBid: number;
+  yesAsk: number;
+  noBid: number;
+  noAsk: number;
+  lastPrice: number;
+  volume24h: number;
+  openInterest: number;
+  spread: number;
+  probability: number;
+}>; actualMinutesAgo: number }> {
   const targetTime = new Date(Date.now() - minutesAgo * 60 * 1000);
   const windowStart = new Date(targetTime.getTime() - 5 * 60 * 1000); // 5 minute window
   const windowEnd = new Date(targetTime.getTime() + 5 * 60 * 1000);
 
-  // Get the most recent snapshot for each ticker within the time window
-  const snapshots = await prisma.$queryRaw<
+  // First, try to get snapshots from the ideal time window
+  let snapshots = await prisma.$queryRaw<
     Array<{
       id: string;
       ticker: string;
@@ -88,7 +93,42 @@ export async function getPreviousSnapshots(
     ORDER BY ticker, "recordedAt" DESC
   `;
 
-  return snapshots;
+  // If no snapshots found, fall back to the most recent previous snapshots
+  // (but not from the last 30 seconds to avoid comparing with just-collected data)
+  if (snapshots.length === 0) {
+    const thirtySecondsAgo = new Date(Date.now() - 30 * 1000);
+
+    snapshots = await prisma.$queryRaw<
+      Array<{
+        id: string;
+        ticker: string;
+        recordedAt: Date;
+        yesBid: number;
+        yesAsk: number;
+        noBid: number;
+        noAsk: number;
+        lastPrice: number;
+        volume24h: number;
+        openInterest: number;
+        spread: number;
+        probability: number;
+      }>
+    >`
+      SELECT DISTINCT ON (ticker) *
+      FROM "MarketSnapshot"
+      WHERE "recordedAt" < ${thirtySecondsAgo}
+      ORDER BY ticker, "recordedAt" DESC
+    `;
+  }
+
+  // Calculate actual time difference based on oldest snapshot
+  let actualMinutesAgo = minutesAgo;
+  if (snapshots.length > 0) {
+    const oldestTime = Math.min(...snapshots.map(s => new Date(s.recordedAt).getTime()));
+    actualMinutesAgo = Math.round((Date.now() - oldestTime) / (60 * 1000));
+  }
+
+  return { snapshots, actualMinutesAgo };
 }
 
 export async function getLatestSnapshots() {

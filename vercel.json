@@ -10,11 +10,11 @@
     "crons": [
         {
             "path": "/api/cron/scan-markets",
-            "schedule": "*/5 * * * *"
+            "schedule": "0 8 * * *"
         },
         {
             "path": "/api/cron/scan-social",
-            "schedule": "*/10 * * * *"
+            "schedule": "0 20 * * *"
         }
     ],
     "functions": {

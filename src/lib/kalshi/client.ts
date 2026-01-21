@@ -151,6 +151,31 @@ export class KalshiClient {
       .sort((a, b) => new Date(a.close_time).getTime() - new Date(b.close_time).getTime())
       .slice(0, limit);
   }
+
+  // Get active markets from events with nested markets (returns actual trading data)
+  async getActiveMarketsFromEvents(limit = 100): Promise<KalshiMarket[]> {
+    const allMarkets: KalshiMarket[] = [];
+
+    // Fetch events with nested markets - this returns real trading data
+    const response = await this.getEvents({
+      status: 'open',
+      with_nested_markets: true,
+      limit: Math.min(limit, 200), // API limit
+    });
+
+    // Extract markets from events
+    for (const event of response.events) {
+      if (event.markets) {
+        allMarkets.push(...event.markets);
+      }
+    }
+
+    // Sort by volume and return top markets
+    return allMarkets
+      .filter(m => m.yes_ask > 0) // Only markets with valid prices
+      .sort((a, b) => b.volume_24h - a.volume_24h)
+      .slice(0, limit);
+  }
 }
 
 // Singleton instance for use throughout the app

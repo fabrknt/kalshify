@@ -4,7 +4,7 @@
 import { prisma } from '@/lib/db';
 import { getKalshiClient } from '@/lib/kalshi/client';
 import { IntelSignalData, SignalSeverity, SignalType, TIME_WINDOWS } from './types';
-import { runDetection, MarketWithSnapshot } from './smart-money-detector';
+import { runDetection, detectTrendingMarkets, MarketWithSnapshot } from './smart-money-detector';
 import {
   collectMarketSnapshots,
   getPreviousSnapshots,
@@ -80,14 +80,9 @@ export async function scanMarkets(): Promise<ScanResult> {
   const allSignals: IntelSignalData[] = [];
 
   try {
-    // Step 1: Fetch current markets from Kalshi
+    // Step 1: Fetch current markets from Kalshi (using events endpoint for real data)
     const client = getKalshiClient();
-    const response = await client.getMarkets({ limit: 100, status: 'open' });
-
-    // Sort by volume and take top markets
-    const topMarkets = response.markets
-      .sort((a, b) => b.volume_24h - a.volume_24h)
-      .slice(0, 100);
+    const topMarkets = await client.getActiveMarketsFromEvents(100);
 
     // Convert to snapshot format
     const currentMarkets: MarketWithSnapshot[] = topMarkets.map((m) => ({
@@ -103,17 +98,21 @@ export async function scanMarkets(): Promise<ScanResult> {
     }));
 
     // Step 2: Get previous snapshots for comparison
-    const previousSnapshots = await getPreviousSnapshots(TIME_WINDOWS.VOLUME_COMPARISON);
+    const { snapshots: previousSnapshots, actualMinutesAgo } = await getPreviousSnapshots(TIME_WINDOWS.VOLUME_COMPARISON);
 
     // Step 3: Run detection algorithms
     if (previousSnapshots.length > 0) {
       const detectionResult = runDetection(
         currentMarkets,
         previousSnapshots,
-        TIME_WINDOWS.VOLUME_COMPARISON
+        actualMinutesAgo // Use actual time difference for accurate descriptions
       );
       allSignals.push(...detectionResult.signals);
     }
+
+    // Step 3b: Also detect trending markets (works without historical data)
+    const trendingSignals = detectTrendingMarkets(currentMarkets);
+    allSignals.push(...trendingSignals);
 
     // Step 4: Collect new snapshots
     const snapshotResult = await collectMarketSnapshots(100);
