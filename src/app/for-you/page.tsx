@@ -80,6 +80,12 @@ export default function ForYouPage() {
                 Portfolio
               </Link>
               <Link
+                href="/leaderboard"
+                className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
+              >
+                Leaderboard
+              </Link>
+              <Link
                 href="/for-you"
                 className="text-sm font-medium text-blue-600 dark:text-blue-400"
               >

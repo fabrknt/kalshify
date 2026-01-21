@@ -19,7 +19,7 @@ Kalshify lets you **experience Kalshi prediction markets** from anywhere in the 
 ### Markets Explorer
 Browse live Kalshi prediction markets with real-time data:
 - Filter by category (Politics, Economics, Climate, Sports, etc.)
-- View probability charts and orderbook data
+- View probability charts (simulated history) and orderbook data
 - See volume, open interest, and market status
 
 ### Paper Trading
@@ -82,11 +82,6 @@ No sign-up required. Start trading immediately.
 ### Performance & Leaderboard
 - `GET /api/portfolio/paper/snapshots` — Performance snapshots
 - `GET /api/leaderboard` — Leaderboard rankings
-
-### Watchlist
-- `GET /api/portfolio/watchlist` — Get watchlist
-- `POST /api/portfolio/watchlist/[marketId]` — Add to watchlist
-- `DELETE /api/portfolio/watchlist/[marketId]` — Remove from watchlist
 
 ### AI Features
 - `POST /api/kalshi/ai/recommendations` — Get AI recommendations
