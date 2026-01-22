@@ -16,39 +16,60 @@ Kalshify lets you **experience Kalshi prediction markets** from anywhere in the 
 
 ## Features
 
+### Intel Terminal (New!)
+Real-time market intelligence in a hacker-style terminal interface:
+- **Smart Money Detection** — Volume spikes, whale alerts, price movements
+- **AI Market Analyst** — Claude-powered analysis of each signal
+- **Live Demo Mode** — Auto-refresh every 10 seconds with new signal highlights
+- Terminal aesthetic with green/amber/red severity indicators
+
 ### Markets Explorer
 Browse live Kalshi prediction markets with real-time data:
+- **Grid, List, and Heatmap views** — Color-coded market visualization
+- **Mini Sparkline Charts** — Price trend indicators on every card
 - Filter by category (Politics, Economics, Climate, Sports, etc.)
-- View probability charts (simulated history) and orderbook data
-- See volume, open interest, and market status
+- View probability charts and orderbook data
 
 ### Paper Trading
 Practice trading without real money:
 - Buy YES or NO positions at current market prices
 - Track unrealized and realized P&L
+- **Portfolio Donut Chart** — Visual category exposure breakdown
+- **Confetti celebration** on profitable trades
 - Simulate price movements to test strategies
-- Close positions and see results
 
 ### AI Recommendations
 Get personalized market suggestions powered by Claude AI:
 - Set your risk tolerance and interests
+- **Flip Card Animation** — Tap to reveal AI analysis
 - Receive curated market picks with reasoning
 - Understand why each market matches your profile
 
 ### Leaderboard
 Compete with traders worldwide:
+- **Top 3 Podium** — Gold, silver, bronze styled rankings
 - Rankings by total P&L, win rate, trades, or streak
 - Track your progress and percentile
-- Win streaks and performance trends
+- **Animated numbers** for live updates
+
+### Visual Enhancements
+Modern, polished UI across all pages:
+- **Live Price Ticker** — Scrolling marquee of trending markets
+- **Sparkline Charts** — Mini trend graphs on market cards
+- **Heatmap View** — Color-coded market grid by price change
+- **Donut Chart** — Portfolio category breakdown
+- **Card Flip Animation** — Interactive AI recommendation cards
+- **Podium Animation** — Animated leaderboard entrance
 
 ---
 
 ## Quick Start
 
 1. **Browse Markets** — Explore live Kalshi prediction markets at `/markets`
-2. **Place Paper Trades** — Click a market, buy YES or NO positions
-3. **Track Portfolio** — View your positions and P&L at `/portfolio`
-4. **Climb the Leaderboard** — Close positions to record trades at `/leaderboard`
+2. **Check Intel** — See real-time market signals at `/intel`
+3. **Place Paper Trades** — Click a market, buy YES or NO positions
+4. **Track Portfolio** — View your positions and P&L at `/portfolio`
+5. **Climb the Leaderboard** — Close positions to record trades at `/leaderboard`
 
 No sign-up required. Start trading immediately.
 
@@ -59,11 +80,12 @@ No sign-up required. Start trading immediately.
 | Page | Description |
 |------|-------------|
 | `/` | Landing page with value proposition |
-| `/markets` | Browse all Kalshi markets with filters |
+| `/intel` | **Intel Terminal** — Real-time market signals and AI analysis |
+| `/markets` | Browse all Kalshi markets (grid, list, or heatmap view) |
 | `/markets/[ticker]` | Market detail with trading interface |
-| `/portfolio` | Paper trading portfolio and P&L |
-| `/leaderboard` | Global rankings and competition |
-| `/for-you` | AI-powered personalized recommendations |
+| `/portfolio` | Paper trading portfolio with donut chart |
+| `/leaderboard` | Global rankings with top 3 podium |
+| `/for-you` | AI-powered recommendations with flip cards |
 
 ---
 
@@ -72,6 +94,12 @@ No sign-up required. Start trading immediately.
 ### Market Data
 - `GET /api/kalshi/markets` — List markets with filters
 - `GET /api/kalshi/markets/[ticker]` — Single market details
+- `GET /api/markets/trending` — Trending markets for ticker
+
+### Intel System
+- `GET /api/intel` — Get intel signals (volume spikes, whale alerts, etc.)
+- `POST /api/intel/scan` — Trigger manual market scan
+- `POST /api/intel/analyze` — AI analysis of a signal (Claude API)
 
 ### Paper Trading
 - `GET /api/portfolio/paper/positions` — Get positions
@@ -87,14 +115,20 @@ No sign-up required. Start trading immediately.
 - `POST /api/kalshi/ai/recommendations` — Get AI recommendations
 - `GET /api/kalshi/ai/insights/[marketId]` — Market analysis
 
+### Cron Jobs
+- `GET /api/cron/scan-markets` — Scheduled market scanning
+- `GET /api/cron/scan-social` — Scheduled social intel scanning
+
 ---
 
 ## Tech Stack
 
 - **Frontend:** Next.js 16, React 19, TypeScript, Tailwind CSS
-- **AI:** Anthropic Claude API
+- **UI Components:** Radix UI, Lucide Icons, Framer Motion
+- **AI:** Anthropic Claude API (sonnet for analysis)
 - **Data:** Kalshi REST API (live market data)
-- **Hosting:** Vercel
+- **Database:** PostgreSQL with Prisma ORM
+- **Hosting:** Vercel (with cron jobs)
 
 ---
 
@@ -106,7 +140,10 @@ npm install
 
 # Set up environment variables
 cp .env.example .env.local
-# Add your KALSHI_API_KEY, ANTHROPIC_API_KEY, etc.
+# Add your KALSHI_API_KEY, ANTHROPIC_API_KEY, DATABASE_URL, etc.
+
+# Run database migrations
+npx prisma db push
 
 # Run development server
 npm run dev
@@ -121,8 +158,11 @@ npm run build
 # Kalshi API
 KALSHI_API_KEY=your-api-key
 
-# AI (for recommendations)
+# AI (for recommendations and Intel analysis)
 ANTHROPIC_API_KEY=sk-ant-...
+
+# Database
+DATABASE_URL=postgresql://...
 
 # App
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
@@ -137,8 +177,36 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 | **Global Access** | Trade from anywhere — no US residency required |
 | **Zero Risk** | Practice with simulated money |
 | **Real Data** | Live Kalshi prices and market data |
-| **AI-Powered** | Claude AI recommendations and insights |
+| **AI-Powered** | Claude AI recommendations and signal analysis |
+| **Intel Terminal** | Real-time market signals and smart money detection |
 | **Learn First** | Understand prediction markets before real trading |
+
+---
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── api/               # API routes
+│   │   ├── intel/         # Intel system endpoints
+│   │   ├── kalshi/        # Kalshi market data
+│   │   └── portfolio/     # Paper trading
+│   ├── intel/             # Intel Terminal page
+│   ├── markets/           # Markets explorer
+│   ├── portfolio/         # Portfolio dashboard
+│   ├── leaderboard/       # Rankings
+│   └── for-you/           # AI recommendations
+├── components/
+│   ├── ai/                # AI Pick cards
+│   ├── intel/             # Terminal components
+│   ├── markets/           # Market cards, heatmap
+│   ├── portfolio/         # Portfolio dashboard
+│   └── ui/                # Shared UI (sparkline, donut, ticker)
+└── lib/
+    ├── intel/             # Smart money detection
+    └── kalshi/            # Kalshi API client
+```
 
 ---
 
