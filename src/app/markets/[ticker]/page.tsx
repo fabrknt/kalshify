@@ -7,7 +7,7 @@ import { ProcessedMarket } from '@/lib/kalshi/types';
 import { ProbabilityChart } from '@/components/markets/probability-chart';
 import { OrderbookDisplay } from '@/components/markets/orderbook-display';
 import { TradeDialog } from '@/components/portfolio/trade-dialog';
-import { cn } from '@/lib/utils';
+import { cn, cleanMarketTitle } from '@/lib/utils';
 
 interface MarketDetailPageProps {
   params: Promise<{ ticker: string }>;
@@ -218,7 +218,7 @@ export default function MarketDetailPage({ params }: MarketDetailPageProps) {
                     </span>
                   </div>
                   <h1 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white mb-2">
-                    {market.title}
+                    {cleanMarketTitle(market.title)}
                   </h1>
                   {market.subtitle && (
                     <p className="text-zinc-600 dark:text-zinc-400">

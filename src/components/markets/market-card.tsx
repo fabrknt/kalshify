@@ -3,7 +3,7 @@
 import { format } from 'date-fns';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { ProcessedMarket } from '@/lib/kalshi/types';
-import { cn } from '@/lib/utils';
+import { cn, cleanMarketTitle } from '@/lib/utils';
 
 interface MarketCardProps {
   market: ProcessedMarket;
@@ -60,7 +60,7 @@ export function MarketCard({
             {market.category}
           </p>
           <h3 className="text-sm font-semibold text-zinc-900 dark:text-white line-clamp-2 leading-snug">
-            {market.title}
+            {cleanMarketTitle(market.title)}
           </h3>
         </div>
       </div>
@@ -146,7 +146,7 @@ export function MarketCardCompact({
       {/* Title */}
       <div className="flex-1 min-w-0">
         <div className="font-medium text-zinc-900 dark:text-white truncate text-sm">
-          {market.title}
+          {cleanMarketTitle(market.title)}
         </div>
       </div>
 

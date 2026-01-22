@@ -153,6 +153,7 @@ export class KalshiClient {
   }
 
   // Get active markets from events with nested markets (returns actual trading data)
+  // Uses EVENT title instead of cryptic sub-market titles
   async getActiveMarketsFromEvents(limit = 100): Promise<KalshiMarket[]> {
     const allMarkets: KalshiMarket[] = [];
 
@@ -163,10 +164,18 @@ export class KalshiClient {
       limit: Math.min(limit, 200), // API limit
     });
 
-    // Extract markets from events
+    // Extract markets from events, using EVENT title for better readability
     for (const event of response.events) {
       if (event.markets) {
-        allMarkets.push(...event.markets);
+        for (const market of event.markets) {
+          // Use event title instead of cryptic sub-market title
+          // e.g., "Will the Lakers win?" instead of "yes Lakers: 2+"
+          allMarkets.push({
+            ...market,
+            title: event.title, // Use event title
+            subtitle: market.title !== event.title ? market.title : market.subtitle, // Keep original as subtitle if different
+          });
+        }
       }
     }
 

@@ -61,17 +61,51 @@ export function processEvent(event: KalshiEvent): ProcessedEvent {
 }
 
 // Fetch and process all open markets
+// Uses events endpoint for better titles (like Intel does)
+// Deduplicates by event ticker to avoid showing many similar sub-markets
 export async function fetchOpenMarkets(limit = 100): Promise<ProcessedMarket[]> {
   const client = getKalshiClient();
-  const response = await client.getMarkets({ status: 'open', limit });
-  return response.markets.map(processMarket);
+  // Use events endpoint for better market titles
+  const rawMarkets = await client.getActiveMarketsFromEvents(limit * 2);
+  const markets = rawMarkets.map(processMarket);
+
+  // Deduplicate: keep only one market per event (the one with highest volume)
+  const eventMap = new Map<string, ProcessedMarket>();
+  for (const market of markets) {
+    const eventKey = market.eventTicker || market.ticker;
+    const existing = eventMap.get(eventKey);
+    if (!existing || market.volume24h > existing.volume24h) {
+      eventMap.set(eventKey, market);
+    }
+  }
+
+  // Sort by volume and return limited results
+  return Array.from(eventMap.values())
+    .sort((a, b) => b.volume24h - a.volume24h)
+    .slice(0, limit);
 }
 
 // Fetch trending markets (highest 24h volume)
+// Uses events endpoint for better titles, deduplicates by event
 export async function fetchTrendingMarkets(limit = 10): Promise<ProcessedMarket[]> {
   const client = getKalshiClient();
-  const markets = await client.getTrendingMarkets(limit);
-  return markets.map(processMarket);
+  // Use events endpoint for better market titles
+  const rawMarkets = await client.getActiveMarketsFromEvents(limit * 3);
+  const processed = rawMarkets.map(processMarket);
+
+  // Deduplicate: keep only one market per event (the one with highest volume)
+  const eventMap = new Map<string, ProcessedMarket>();
+  for (const market of processed) {
+    const eventKey = market.eventTicker || market.ticker;
+    const existing = eventMap.get(eventKey);
+    if (!existing || market.volume24h > existing.volume24h) {
+      eventMap.set(eventKey, market);
+    }
+  }
+
+  return Array.from(eventMap.values())
+    .sort((a, b) => b.volume24h - a.volume24h)
+    .slice(0, limit);
 }
 
 // Fetch markets by category
@@ -156,12 +190,14 @@ export async function fetchCategories(): Promise<string[]> {
 }
 
 // Search markets by title
+// Uses events endpoint for better titles
 export async function searchMarkets(query: string, limit = 20): Promise<ProcessedMarket[]> {
   const client = getKalshiClient();
-  const response = await client.getMarkets({ status: 'open', limit: 200 });
+  // Use events endpoint for better market titles
+  const rawMarkets = await client.getActiveMarketsFromEvents(200);
 
   const lowerQuery = query.toLowerCase();
-  const filtered = response.markets.filter(
+  const filtered = rawMarkets.filter(
     (m) =>
       m.title.toLowerCase().includes(lowerQuery) ||
       m.subtitle?.toLowerCase().includes(lowerQuery)

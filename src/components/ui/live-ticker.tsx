@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { TrendingUp, TrendingDown } from 'lucide-react';
+import { cleanMarketTitle } from '@/lib/utils';
 
 interface TickerMarket {
   ticker: string;
@@ -62,7 +63,7 @@ export function LiveTicker() {
                 className="flex-shrink-0 flex items-center gap-3 px-4 py-1.5 hover:bg-zinc-800/50 transition-colors border-r border-zinc-800/50"
               >
                 <span className="text-zinc-400 text-xs font-medium truncate max-w-[150px]">
-                  {market.title}
+                  {cleanMarketTitle(market.title)}
                 </span>
                 <span className="text-white text-xs font-bold data-probability">
                   {market.probability}%

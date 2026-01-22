@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { X, Plus, Minus } from 'lucide-react';
 import { ProcessedMarket } from '@/lib/kalshi/types';
-import { cn } from '@/lib/utils';
+import { cn, cleanMarketTitle } from '@/lib/utils';
 
 interface TradeDialogProps {
   market: ProcessedMarket;
@@ -54,7 +54,7 @@ export function TradeDialog({ market, isOpen, onClose, onTrade }: TradeDialogPro
             {market.category}
           </div>
           <div className="font-semibold text-zinc-900 dark:text-white">
-            {market.title}
+            {cleanMarketTitle(market.title)}
           </div>
         </div>
 

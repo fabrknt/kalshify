@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { ProcessedMarket } from '@/lib/kalshi/types';
-import { cn } from '@/lib/utils';
+import { cn, cleanMarketTitle } from '@/lib/utils';
 
 interface MarketHeatmapProps {
   markets: ProcessedMarket[];
@@ -119,7 +119,7 @@ export function MarketHeatmap({
                     getColor(market),
                     size
                   )}
-                  title={`${market.title} - ${market.probability}% (${market.probabilityChange > 0 ? '+' : ''}${market.probabilityChange.toFixed(1)}%)`}
+                  title={`${cleanMarketTitle(market.title)} - ${market.probability}% (${market.probabilityChange > 0 ? '+' : ''}${market.probabilityChange.toFixed(1)}%)`}
                 >
                   {/* Content */}
                   <div className="flex flex-col h-full">
@@ -143,7 +143,7 @@ export function MarketHeatmap({
                   <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-2">
                     <div className="text-center">
                       <div className="text-xs font-medium line-clamp-2 mb-1">
-                        {market.title}
+                        {cleanMarketTitle(market.title)}
                       </div>
                       <div className="text-xs opacity-75">
                         Vol: ${(market.volume24h / 100).toLocaleString()}
