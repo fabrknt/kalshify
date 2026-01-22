@@ -76,6 +76,8 @@
         "eslint-config-next": "14.1.0",
         "postcss": "^8.4.33",
         "prisma": "^7.2.0",
+        "puppeteer": "^24.35.0",
+        "puppeteer-screen-recorder": "^3.0.6",
         "tailwindcss-animate": "^1.0.7",
         "tsx": "^4.7.0",
         "typescript": "^5.3.3"

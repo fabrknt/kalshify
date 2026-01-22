@@ -1,16 +1,32 @@
 'use client';
 
 import { format } from 'date-fns';
-import { TrendingUp, TrendingDown, Clock, BarChart2 } from 'lucide-react';
+import { TrendingUp, TrendingDown } from 'lucide-react';
 import { ProcessedMarket } from '@/lib/kalshi/types';
 import { cn } from '@/lib/utils';
-import { Sparkline } from '@/components/ui/sparkline';
 
 interface MarketCardProps {
   market: ProcessedMarket;
   onSelect?: (market: ProcessedMarket) => void;
   showDetails?: boolean;
   className?: string;
+}
+
+// Category icons/colors mapping
+const categoryStyles: Record<string, { bg: string; emoji: string }> = {
+  Politics: { bg: 'bg-blue-100 dark:bg-blue-900/40', emoji: '🏛️' },
+  Economics: { bg: 'bg-green-100 dark:bg-green-900/40', emoji: '📈' },
+  Sports: { bg: 'bg-orange-100 dark:bg-orange-900/40', emoji: '🏈' },
+  Climate: { bg: 'bg-teal-100 dark:bg-teal-900/40', emoji: '🌍' },
+  Entertainment: { bg: 'bg-purple-100 dark:bg-purple-900/40', emoji: '🎬' },
+  Tech: { bg: 'bg-indigo-100 dark:bg-indigo-900/40', emoji: '💻' },
+  Finance: { bg: 'bg-emerald-100 dark:bg-emerald-900/40', emoji: '💰' },
+  Companies: { bg: 'bg-slate-100 dark:bg-slate-900/40', emoji: '🏢' },
+  default: { bg: 'bg-zinc-100 dark:bg-zinc-800', emoji: '📊' },
+};
+
+function getCategoryStyle(category: string) {
+  return categoryStyles[category] || categoryStyles.default;
 }
 
 export function MarketCard({
@@ -21,191 +37,158 @@ export function MarketCard({
 }: MarketCardProps) {
   const isProbabilityUp = market.probabilityChange > 0;
   const isProbabilityDown = market.probabilityChange < 0;
+  const categoryStyle = getCategoryStyle(market.category);
 
   return (
     <div
       className={cn(
-        'bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 hover:border-blue-500 dark:hover:border-blue-500 transition-colors cursor-pointer',
+        'bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 hover:shadow-lg hover:border-zinc-300 dark:hover:border-zinc-600 transition-all cursor-pointer',
         className
       )}
       onClick={() => onSelect?.(market)}
     >
-      {/* Header */}
-      <div className="flex items-start justify-between mb-3">
+      {/* Header with icon and title */}
+      <div className="flex items-start gap-3 mb-4">
+        <div className={cn(
+          'w-11 h-11 rounded-lg flex items-center justify-center text-2xl flex-shrink-0',
+          categoryStyle.bg
+        )}>
+          {categoryStyle.emoji}
+        </div>
         <div className="flex-1 min-w-0">
-          <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide">
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-0.5">
             {market.category}
-          </span>
-          <h3 className="text-base font-semibold text-zinc-900 dark:text-white mt-1 line-clamp-2">
+          </p>
+          <h3 className="text-sm font-semibold text-zinc-900 dark:text-white line-clamp-2 leading-snug">
             {market.title}
           </h3>
-          {market.subtitle && (
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5 line-clamp-1">
-              {market.subtitle}
-            </p>
-          )}
         </div>
       </div>
 
-      {/* Probability with Sparkline */}
-      <div className="flex items-center gap-4 mb-4">
-        <div className="flex-1">
-          <div className="text-3xl font-bold text-zinc-900 dark:text-white data-probability">
-            {market.probability.toFixed(0)}
-            <span className="text-lg text-zinc-400">%</span>
-          </div>
-          <div className="text-sm text-zinc-500 dark:text-zinc-400">
-            Probability
-          </div>
-        </div>
-
-        {/* Mini Sparkline */}
-        <div className="flex flex-col items-end gap-1">
-          <Sparkline
-            currentValue={market.probability}
-            change={market.probabilityChange}
-            width={64}
-            height={28}
-            color="auto"
-          />
-          {market.probabilityChange !== 0 && (
-            <div
-              className={cn(
-                'flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium data-percent',
-                isProbabilityUp && 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
-                isProbabilityDown && 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
-              )}
-            >
-              {isProbabilityUp ? (
-                <TrendingUp className="w-3 h-3" />
-              ) : (
-                <TrendingDown className="w-3 h-3" />
-              )}
-              {Math.abs(market.probabilityChange).toFixed(1)}%
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Yes/No Prices */}
-      <div className="grid grid-cols-2 gap-3 mb-4">
-        <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3">
-          <div className="text-xs text-green-600 dark:text-green-400 font-medium mb-1">
-            YES
-          </div>
-          <div className="flex items-baseline gap-1 data-price">
-            <span className="text-lg font-bold text-green-700 dark:text-green-300">
-              {market.yesBid}
-            </span>
-            <span className="text-sm text-green-600 dark:text-green-400">
-              / {market.yesAsk}
-            </span>
-          </div>
-        </div>
-        <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-3">
-          <div className="text-xs text-red-600 dark:text-red-400 font-medium mb-1">
-            NO
-          </div>
-          <div className="flex items-baseline gap-1 data-price">
-            <span className="text-lg font-bold text-red-700 dark:text-red-300">
-              {market.noBid}
-            </span>
-            <span className="text-sm text-red-600 dark:text-red-400">
-              / {market.noAsk}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats */}
-      {showDetails && (
-        <div className="flex items-center justify-between text-sm text-zinc-500 dark:text-zinc-400 pt-3 border-t border-zinc-100 dark:border-zinc-800">
-          <div className="flex items-center gap-1">
-            <BarChart2 className="w-4 h-4" />
-            <span className="data-volume">${(market.volume24h / 100).toLocaleString()}</span>
-            <span className="text-xs">24h vol</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Clock className="w-4 h-4" />
-            <span>{format(market.closeTime, 'MMM d')}</span>
-          </div>
-        </div>
-      )}
-
-      {/* Spread indicator */}
-      <div className="mt-3 pt-3 border-t border-zinc-100 dark:border-zinc-800">
-        <div className="flex items-center justify-between text-xs">
-          <span className="text-zinc-500 dark:text-zinc-400">Spread</span>
+      {/* Probability row */}
+      <div className="flex items-center gap-3 mb-4">
+        <span className="text-2xl font-bold text-zinc-900 dark:text-white">
+          {market.probability.toFixed(0)}%
+        </span>
+        {market.probabilityChange !== 0 && (
           <span
             className={cn(
-              'font-medium data-price',
-              market.spread <= 3 && 'text-green-600 dark:text-green-400',
-              market.spread > 3 && market.spread <= 6 && 'text-yellow-600 dark:text-yellow-400',
-              market.spread > 6 && 'text-red-600 dark:text-red-400'
+              'flex items-center gap-0.5 text-sm font-medium',
+              isProbabilityUp && 'text-green-600 dark:text-green-400',
+              isProbabilityDown && 'text-red-500 dark:text-red-400'
             )}
           >
-            {market.spread}¢
+            {isProbabilityUp ? (
+              <TrendingUp className="w-3.5 h-3.5" />
+            ) : (
+              <TrendingDown className="w-3.5 h-3.5" />
+            )}
+            {Math.abs(market.probabilityChange).toFixed(0)}
           </span>
-        </div>
+        )}
       </div>
+
+      {/* YES/NO Buttons - Kalshi style */}
+      <div className="flex items-center gap-2">
+        <button
+          className="flex-1 py-2 px-3 rounded-lg bg-[#16a34a] hover:bg-[#15803d] text-white font-semibold text-sm transition-colors"
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelect?.(market);
+          }}
+        >
+          Yes {market.yesBid}¢
+        </button>
+        <button
+          className="flex-1 py-2 px-3 rounded-lg bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 font-semibold text-sm transition-colors"
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelect?.(market);
+          }}
+        >
+          No {market.noBid}¢
+        </button>
+      </div>
+
+      {/* Bottom stats */}
+      {showDetails && (
+        <div className="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400 mt-3 pt-3 border-t border-zinc-100 dark:border-zinc-800">
+          <span>${(market.volume24h / 100).toLocaleString()} vol</span>
+          <span>{format(market.closeTime, 'MMM d')}</span>
+        </div>
+      )}
     </div>
   );
 }
 
-// Compact version for lists
+// Compact version for lists - Kalshi style horizontal row
 export function MarketCardCompact({
   market,
   onSelect,
 }: MarketCardProps) {
   const isProbabilityUp = market.probabilityChange > 0;
   const isProbabilityDown = market.probabilityChange < 0;
+  const categoryStyle = getCategoryStyle(market.category);
 
   return (
     <div
-      className="flex items-center gap-4 p-3 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-blue-500 dark:hover:border-blue-500 transition-colors cursor-pointer"
+      className="flex items-center gap-3 p-3 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:shadow-md hover:border-zinc-300 dark:hover:border-zinc-600 transition-all cursor-pointer"
       onClick={() => onSelect?.(market)}
     >
+      {/* Category icon */}
+      <div className={cn(
+        'w-10 h-10 rounded-lg flex items-center justify-center text-xl flex-shrink-0',
+        categoryStyle.bg
+      )}>
+        {categoryStyle.emoji}
+      </div>
+
+      {/* Title */}
       <div className="flex-1 min-w-0">
-        <div className="text-xs text-zinc-500 dark:text-zinc-400 uppercase tracking-wide">
-          {market.category}
-        </div>
-        <div className="font-medium text-zinc-900 dark:text-white truncate">
+        <div className="font-medium text-zinc-900 dark:text-white truncate text-sm">
           {market.title}
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
-        {/* Mini Sparkline */}
-        <Sparkline
-          currentValue={market.probability}
-          change={market.probabilityChange}
-          width={48}
-          height={20}
-          color="auto"
-        />
-
-        <div className="text-right">
-          <div className="text-lg font-bold text-zinc-900 dark:text-white data-probability">
-            {market.probability.toFixed(0)}%
-          </div>
-        </div>
-
+      {/* Probability + Change */}
+      <div className="flex items-center gap-2">
+        <span className="text-lg font-bold text-zinc-900 dark:text-white">
+          {market.probability.toFixed(0)}%
+        </span>
         {market.probabilityChange !== 0 && (
-          <div
+          <span
             className={cn(
-              'flex items-center gap-0.5 text-sm font-medium data-percent',
+              'flex items-center gap-0.5 text-xs font-medium',
               isProbabilityUp && 'text-green-600 dark:text-green-400',
-              isProbabilityDown && 'text-red-600 dark:text-red-400'
+              isProbabilityDown && 'text-red-500 dark:text-red-400'
             )}
           >
-            {isProbabilityUp ? (
-              <TrendingUp className="w-3 h-3" />
-            ) : (
-              <TrendingDown className="w-3 h-3" />
-            )}
-            {Math.abs(market.probabilityChange).toFixed(1)}
-          </div>
+            {isProbabilityUp ? '↑' : '↓'}
+            {Math.abs(market.probabilityChange).toFixed(0)}
+          </span>
         )}
+      </div>
+
+      {/* YES/NO buttons */}
+      <div className="flex items-center gap-1.5">
+        <button
+          className="px-3 py-1.5 rounded-md text-xs font-semibold bg-[#16a34a] hover:bg-[#15803d] text-white transition-colors"
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelect?.(market);
+          }}
+        >
+          Yes {market.yesBid}¢
+        </button>
+        <button
+          className="px-3 py-1.5 rounded-md text-xs font-semibold bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 transition-colors"
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelect?.(market);
+          }}
+        >
+          No {market.noBid}¢
+        </button>
       </div>
     </div>
   );

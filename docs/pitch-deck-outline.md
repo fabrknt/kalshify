@@ -60,12 +60,13 @@ Experience Kalshi Prediction Markets From Anywhere
 
 *Visual: Screenshot of /markets page*
 
-- Real-time probability data
+- **Kalshi-style market cards** — Familiar UI for Kalshi users
+- **YES/NO buttons** — Solid green YES, outlined NO (matching Kalshi)
+- **Category emoji thumbnails** — Quick visual recognition
+- Real-time probability data with change indicators
 - Filter by category (Politics, Economics, Sports, etc.)
-- Volume and open interest
-- Market status indicators
 
-"Same markets, same data—paper trades instead of real money."
+"Same markets, same UI—paper trades instead of real money."
 
 ---
 
@@ -204,8 +205,8 @@ Core Features:
 - Live Demo Mode — Auto-refresh with animations
 
 **Visual Enhancements:**
+- Kalshi-style market cards (YES/NO buttons, category emojis)
 - Live price ticker (scrolling marquee)
-- Mini sparkline charts on market cards
 - Heatmap view for markets
 - Portfolio donut chart
 - AI Pick flip card animations
@@ -293,7 +294,7 @@ kalshify-fabrknt.vercel.app | @psyto
 Show the US-only restriction. No way to practice. High barrier to entry.
 
 **0:30-1:00 - Markets & Trading Demo**
-Walk through: Markets (show heatmap view, sparklines) → Place trade → Track P&L
+Walk through: Markets (show Kalshi-style cards, heatmap view) → Place trade → Track P&L
 
 **1:00-1:30 - Intel Terminal (KEY FEATURE!)**
 Show /intel page: "This is our Bloomberg Terminal for prediction markets."

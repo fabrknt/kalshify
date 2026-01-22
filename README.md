@@ -43,10 +43,11 @@ Real-time market intelligence in a hacker-style terminal interface:
 
 ### Markets Explorer
 Browse live Kalshi prediction markets with real-time data:
-- **Grid, List, and Heatmap views** — Color-coded market visualization
-- **Mini Sparkline Charts** — Price trend indicators on every card
+- **Kalshi-style Market Cards** — Clean design matching Kalshi's UI
+- **Category Thumbnails** — Emoji icons for quick category recognition
+- **YES/NO Buttons** — Solid green YES, outlined NO (just like Kalshi)
+- **Grid, List, and Heatmap views** — Multiple visualization options
 - Filter by category (Politics, Economics, Climate, Sports, etc.)
-- View probability charts and orderbook data
 
 ### Paper Trading
 Practice trading without real money:
@@ -71,9 +72,10 @@ Compete with traders worldwide:
 - **Animated numbers** for live updates
 
 ### Visual Enhancements
-Modern, polished UI across all pages:
+Modern, polished UI matching Kalshi's design language:
+- **Kalshi-style Cards** — Clean market cards with YES/NO buttons
+- **Category Emojis** — Visual thumbnails (🏛️ Politics, 📈 Economics, 🏈 Sports)
 - **Live Price Ticker** — Scrolling marquee of trending markets
-- **Sparkline Charts** — Mini trend graphs on market cards
 - **Heatmap View** — Color-coded market grid by price change
 - **Donut Chart** — Portfolio category breakdown
 - **Card Flip Animation** — Interactive AI recommendation cards

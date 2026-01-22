@@ -60,7 +60,7 @@
 >
 > Paper trade Kalshi prediction markets from anywhere in the world.
 >
-> Same markets. Same data. Zero risk.
+> Same markets. Same data. Same UI. Zero risk.
 >
 > Let me show you how it works."
 
@@ -76,16 +76,19 @@
 >
 > Every Kalshi market, live. Politics, economics, climate, sports.
 >
+> Notice the familiar UI? Same YES/NO buttons as Kalshi.
+>
 > Real probabilities. Real volume. Real data.
 >
-> Filter by category. Search by keyword.
+> Filter by category. Switch to heatmap view.
 >
-> Click any market to see details."
+> Click any market to trade."
 
 **[VISUAL]**:
-1. Show markets list
+1. Show Kalshi-style market cards with YES/NO buttons
 2. Apply category filter
-3. Click into a market
+3. Switch to heatmap view
+4. Click into a market
 
 ---
 
